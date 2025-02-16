@@ -1,3 +1,40 @@
-/build/
-/dist/
+HELP.md
+target/
+*.mvn/
+!**/log/**
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.env
+*.test.env
+/dist
+/node_modules
 /build
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
