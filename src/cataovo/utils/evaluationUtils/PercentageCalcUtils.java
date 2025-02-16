@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:679d41ebe08dd48412ad920320eae62c00b1f20e9e0aadacafbe898a1fcd3138
-size 826
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package cataovo.utils.evaluationUtils;
+
+import cataovo.constants.Constants;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+/**
+ *
+ * @author Bianca Leopoldo Ramos
+ */
+public class PercentageCalcUtils {
+    
+    public String calculate(EvaluationCalcType calcType, Float value1, Float value2, Float value3, Float value4){
+        final DecimalFormat decimalFormat = new DecimalFormat(Constants.DECIMAL_FORMAT);
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+        
+        return decimalFormat.format(calcType.calculate(value1, value2, value3, value4));
+    }
+    
+}
