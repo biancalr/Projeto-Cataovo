@@ -4,16 +4,16 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.enums.ProcessingMode;
+import cataovo.utils.enums.ProcessingMode;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.fileHandlers.readers.Reader;
-import cataovo.externals.fileHandlers.readers.csv.csvReader.CsvFileReader;
-import cataovo.externals.libs.opencvlib.wrappers.PointWrapper;
-import cataovo.externals.libs.opencvlib.wrappers.RectWrapper;
+import cataovo.utils.fileUtils.readers.Reader;
+import cataovo.utils.fileUtils.readers.csv.csvReader.CsvFileReader;
+import cataovo.externals.libs.opencv.wrappers.PointWrapper;
+import cataovo.externals.libs.opencv.wrappers.RectWrapper;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;

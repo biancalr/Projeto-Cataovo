@@ -5,7 +5,7 @@
  */
 package cataovo.entities;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.exceptions.DirectoryNotValidException;
 import java.io.File;
 import java.io.Serializable;

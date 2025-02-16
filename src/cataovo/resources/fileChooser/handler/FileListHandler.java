@@ -5,7 +5,7 @@
  */
 package cataovo.resources.fileChooser.handler;
 
-import cataovo.enums.FileExtension;
+import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.ImageNotValidException;
 import java.io.File;
 import java.util.Collection;

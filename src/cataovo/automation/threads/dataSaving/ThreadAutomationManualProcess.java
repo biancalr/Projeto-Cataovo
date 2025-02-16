@@ -4,9 +4,9 @@
  */
 package cataovo.automation.threads.dataSaving;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.enums.FileExtension;
+import cataovo.utils.enums.FileExtension;
 
 /**
  *

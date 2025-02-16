@@ -5,7 +5,7 @@
  */
 package cataovo.resources.fileChooser.handler;
 
-import cataovo.enums.FileExtension;
+import cataovo.utils.enums.FileExtension;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
