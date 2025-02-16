@@ -55,8 +55,8 @@ public abstract class DataEvaluationThreadAutomation implements Callable<String>
         LOG.log(Level.INFO, "Starting Evaluation...");
 
         //split both strings
-        String[] regionsOnFrame = this.fileContentManual.split(Constants.QUEBRA_LINHA);
-        String[] eggsOnFrame = this.fileContentAuto.split(Constants.QUEBRA_LINHA);
+        final String[] regionsOnFrame = this.fileContentManual.split(Constants.QUEBRA_LINHA);
+        final String[] eggsOnFrame = this.fileContentAuto.split(Constants.QUEBRA_LINHA);
         int[] evaluationResult;
         StringBuilder resultString = new StringBuilder();
         evaluationResult = new int[4];

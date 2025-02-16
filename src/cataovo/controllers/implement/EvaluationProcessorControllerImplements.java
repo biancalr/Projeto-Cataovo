@@ -6,16 +6,17 @@ package cataovo.controllers.implement;
 
 import cataovo.automation.threads.dataEvaluation.DataEvaluationThreadAutomation;
 import cataovo.automation.threads.dataEvaluation.ThreadAutomationEvaluation;
+import cataovo.automation.threads.dataEvaluation.ThreadAutomationEvaluationPixel;
 import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
-import cataovo.utils.constants.Constants;
 import cataovo.controllers.EvaluationProcessorController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.resources.MainResources;
+import cataovo.resources.MainContext;
+import cataovo.utils.constants.Constants;
+import cataovo.utils.enums.FileExtension;
 import cataovo.utils.mathUtils.EvaluationCalcType;
 import cataovo.utils.mathUtils.PercentageCalcUtils;
 import java.io.File;
@@ -41,10 +42,10 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
      * Logging for EvaluationProcessorControllerImplements
      */
     private static final Logger LOG = Logger.getLogger(EvaluationProcessorControllerImplements.class.getName());
+    private boolean measureByPixel = false;
     private String evaluationResult;
 
     public EvaluationProcessorControllerImplements() {
-
     }
 
     @Override
@@ -54,14 +55,19 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
             Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-            automation = new ThreadAutomationEvaluation(fileContentManual, fileContentAuto);
-
+            if (!measureByPixel) {
+                automation = new ThreadAutomationEvaluation(fileContentManual, fileContentAuto);
+            } else {
+                automation = new ThreadAutomationEvaluationPixel(fileContentManual, fileContentAuto);
+            }
+            
             task = executorService.submit(automation);
             this.evaluationResult = task.get();
             executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
             executorService.shutdown();
             LOG.log(Level.INFO, "Calculating results in evaluation {0}", Arrays.toString(this.evaluationResult.split(Constants.QUEBRA_LINHA)));
             return this.evaluationResult;
+
         } catch (InterruptedException | ExecutionException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return "";
@@ -172,20 +178,25 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
      * @throws DirectoryNotValidException
      */
     @Override
-    public Palette getPalettDirByReport(String paletteDirectoryOnManual, String paletteDirectoryOnAuto) throws DirectoryNotValidException, ImageNotValidException{
+    public Palette getPalettDirByReport(String paletteDirectoryOnManual, String paletteDirectoryOnAuto) throws DirectoryNotValidException, ImageNotValidException {
         if (new File(paletteDirectoryOnManual).exists() && new File(paletteDirectoryOnAuto).exists()) {
-             String reportName = paletteDirectoryOnManual.substring(paletteDirectoryOnManual.lastIndexOf("\\"), paletteDirectoryOnManual.length());
-             if (paletteDirectoryOnAuto.contains(reportName)) {
-                 Palette palette = new Palette(paletteDirectoryOnAuto);
-                 File frame = palette.getDirectory().listFiles()[0];
-                 MainResources.getInstance().setCurrentFrame(new Frame(frame.getAbsolutePath()));
-                 return palette;
-             } else {
-                 throw new DirectoryNotValidException("The reports are not from the same Palette");
-             }
-         } else {
-             throw new DirectoryNotValidException("One or more reports do not exist");
-         }
+            final String reportName = paletteDirectoryOnManual.substring(paletteDirectoryOnManual.lastIndexOf("\\"), paletteDirectoryOnManual.length());
+            if (paletteDirectoryOnAuto.contains(reportName)) {
+                Palette palette = new Palette(paletteDirectoryOnAuto);
+                File frame = palette.getDirectory().listFiles()[0];
+                MainContext.getInstance().setCurrentFrame(new Frame(frame.getAbsolutePath()));
+                return palette;
+            } else {
+                throw new DirectoryNotValidException("The reports are not from the same Palette");
+            }
+        } else {
+            throw new DirectoryNotValidException("One or more reports do not exist");
+        }
+    }
+
+    @Override
+    public void toggleMeasureByPixel(boolean value) {
+        this.measureByPixel = value;
     }
 
 }

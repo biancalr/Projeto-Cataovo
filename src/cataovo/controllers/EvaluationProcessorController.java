@@ -14,6 +14,8 @@ import cataovo.exceptions.ImageNotValidException;
  * @author Bianca Leopoldo Ramos
  */
 public interface EvaluationProcessorController {
+    
+    public void toggleMeasureByPixel(boolean value);
 
     /**
      *

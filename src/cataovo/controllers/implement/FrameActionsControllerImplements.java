@@ -14,7 +14,7 @@ import cataovo.exceptions.RegionNotValidException;
 import cataovo.externals.libs.opencv.converters.Converter;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
-import cataovo.resources.MainResources;
+import cataovo.resources.MainContext;
 import cataovo.externals.libs.opencv.utils.frameUtils.FrameActionsUtils;
 import java.util.Collection;
 import javax.swing.Icon;
@@ -98,7 +98,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
         this.frameUtils = new FrameActionsUtils(currentFrame.clone());
         RectWrapper rw = new RectWrapper(region);
         Icon icon = frameUtils.drawRectangle(rw);
-        MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
+        MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
         return icon;
     }
 
@@ -115,7 +115,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
         if (currentFrame.getRegionsContainingEggs().isEmpty()) {
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
         } else {
-            MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
+            MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
                     (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());

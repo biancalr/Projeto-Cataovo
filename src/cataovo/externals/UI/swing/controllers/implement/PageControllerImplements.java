@@ -12,7 +12,7 @@ import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.externals.UI.swing.wrappers.TabbedPane;
-import cataovo.resources.MainResources;
+import cataovo.resources.MainContext;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
@@ -48,9 +48,9 @@ public class PageControllerImplements implements PageController {
      */
     @Override
     public void onNextFrameInManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError {
-        if (!MainResources.getInstance().getPalette().getFrames().isEmpty()) {
-            Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
-            MainResources.getInstance().setCurrentFrame(frame);
+        if (!MainContext.getInstance().getPalette().getFrames().isEmpty()) {
+            Frame frame = MainContext.getInstance().getPalette().getFrames().poll();
+            MainContext.getInstance().setCurrentFrame(frame);
             showFrameOnScreen(parentName, parent, frame);
         } else {
             LOG.log(Level.INFO, "The Palette was completed!");
@@ -93,7 +93,7 @@ public class PageControllerImplements implements PageController {
      */
     private void setCurrentFrameOnEvaluationScreen(File frameResult, JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
         Frame current = new Frame(frameResult.getAbsolutePath());
-        MainResources.getInstance().setCurrentFrame(current);
+        MainContext.getInstance().setCurrentFrame(current);
         showFrameOnScreen(parentName, parent, current);
         LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
     }
@@ -148,7 +148,7 @@ public class PageControllerImplements implements PageController {
                     // Buscar o diretório correspondente ao frame atual
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
-                    MainResources.getInstance().setCurrentFrame(current);
+                    MainContext.getInstance().setCurrentFrame(current);
                     setLabelText(parentName, currentFrameDirectory.getAbsolutePath().substring(currentFrameDirectory.getAbsolutePath().indexOf(Constants.FRAME_ID_TAG) + Constants.FRAME_ID_TAG.length()));
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
@@ -176,7 +176,7 @@ public class PageControllerImplements implements PageController {
                     // Buscar o diretório correspondente ao frame atual
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
-                    MainResources.getInstance().setCurrentFrame(current);
+                    MainContext.getInstance().setCurrentFrame(current);
                     setLabelText(parentName, currentFrameDirectory.getAbsolutePath().substring(currentFrameDirectory.getAbsolutePath().indexOf(Constants.FRAME_ID_TAG) + Constants.FRAME_ID_TAG.length()));
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
@@ -300,7 +300,7 @@ public class PageControllerImplements implements PageController {
     @Override
     public void onFrameFinishedManual(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
-        MainResources.getInstance().getPaletteToSave().getFrames()
+        MainContext.getInstance().getPaletteToSave().getFrames()
                 .offer(currentFrame);
         onNextFrameInManual(parentName, parent);
     }

@@ -22,20 +22,20 @@ import javax.swing.filechooser.FileSystemView;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class MainResources {
+public class MainContext {
 
-    private static final Logger LOG = Logger.getLogger(MainResources.class.getName());
+    private static final Logger LOG = Logger.getLogger(MainContext.class.getName());
     private final FileChooserUI fileChooserUI;
     private Palette palette;
     private Palette paletteToSave;
     private Frame currentFrame;
     private File savingFolder;
-    private static volatile MainResources MAIN_PAGE_RESOURCES;
+    private static volatile MainContext MAIN_PAGE_RESOURCES;
     private final PanelTabHelper panelTabHelper;
     // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
     private String[] reports;
 
-    public MainResources() throws DirectoryNotValidException {
+    public MainContext() throws DirectoryNotValidException {
         String homeDirectory = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
         LOG.log(Level.INFO, "Selecting home directory: {0}", homeDirectory);
         savingFolder = getFileFolder(new File(homeDirectory));
@@ -43,13 +43,13 @@ public class MainResources {
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
 
-    public static MainResources getInstance() throws DirectoryNotValidException {
-        MainResources PAGE_RESOURCES = MainResources.MAIN_PAGE_RESOURCES;
+    public static MainContext getInstance() throws DirectoryNotValidException {
+        MainContext PAGE_RESOURCES = MainContext.MAIN_PAGE_RESOURCES;
         if (PAGE_RESOURCES == null) {
-            synchronized (MainResources.class) {
-                PAGE_RESOURCES = MainResources.MAIN_PAGE_RESOURCES;
+            synchronized (MainContext.class) {
+                PAGE_RESOURCES = MainContext.MAIN_PAGE_RESOURCES;
                 if (PAGE_RESOURCES == null) {
-                    MainResources.MAIN_PAGE_RESOURCES = PAGE_RESOURCES = new MainResources();
+                    MainContext.MAIN_PAGE_RESOURCES = PAGE_RESOURCES = new MainContext();
                 }
             }
         }
