@@ -16,8 +16,8 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
 import cataovo.externals.UI.swing.wrappers.FileChooserUI;
 import cataovo.externals.UI.swing.wrappers.TabbedPane;
-import cataovo.resources.MainResources;
-import cataovo.resources.fileChooser.handler.FileFilterExtensions;
+import cataovo.resources.MainContext;
+import cataovo.resources.fileChooser.FileFilterExtensions;
 import cataovo.resources.fileChooser.handler.FileListHandler;
 import java.awt.Component;
 import java.awt.HeadlessException;
@@ -40,7 +40,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private final FileChooserUI fileChooser;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
-        fileChooser = MainResources.getInstance().getFileChooserUI();
+        fileChooser = MainContext.getInstance().getFileChooserUI();
     }
 
     /**
@@ -75,7 +75,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     @Override
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException {
-        if (!MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
+        if (!MainContext.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
             switch (actionCommand) {
                 case Constants.ITEM_ACTION_COMMAND_OPEN_PALETTE_PT_BR -> {
                     return actionCommandOpenFolder(isADirectoryOnly, parent);
@@ -116,17 +116,17 @@ public class FileSelectionControllerImplement implements FileSelectionController
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
 
-            MainResources.getInstance().setPalette(setNewPalette(file));
-            MainResources.getInstance().resetSavingFolder();
+            MainContext.getInstance().setPalette(setNewPalette(file));
+            MainContext.getInstance().resetSavingFolder();
 
             if (pane.getTabbedPane().getSelectedIndex() == 0) {
-                MainResources.getInstance().getPalette().getFrames().poll();
+                MainContext.getInstance().getPalette().getFrames().poll();
             }
             if (pane.getTabbedPane().getSelectedIndex() != 2) {
-                MainResources.getInstance().adjustPanelTab(tabbedPane, true);
+                MainContext.getInstance().adjustPanelTab(tabbedPane, true);
             }
 
-            MainResources.getInstance().setReports(new String[2]);
+            MainContext.getInstance().setReports(new String[2]);
             return true;
         }
         return false;
@@ -198,7 +198,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private boolean evaluationReportsFile(String nameReport, File file, int position) throws DirectoryNotValidException {
         String msg = "Relatório para " + nameReport.toUpperCase();
-        MainResources.getInstance().addReport(file.getAbsolutePath(), position);
+        MainContext.getInstance().addReport(file.getAbsolutePath(), position);
         LOG.log(Level.INFO, "{0} foi adicionado: {1}", new Object[]{msg, file.getPath()});
         return true;
     }
@@ -220,7 +220,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
         File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
             // Set the folder where the result will be saved.
-            MainResources.getInstance().setSavingFolder(file);
+            MainContext.getInstance().setSavingFolder(file);
             LOG.log(Level.INFO, "A new saving Folder {0}", file);
             return true;
         } else {
@@ -242,8 +242,8 @@ public class FileSelectionControllerImplement implements FileSelectionController
             if (selectedFile.isDirectory()) {
                 pal = new Palette(selectedFile);
                 pal.setFrames(setPaletteFrames(selectedFile.listFiles()));
-                MainResources.getInstance().setCurrentFrame(pal.getFrames().peek());
-                MainResources.getInstance().getPaletteToSave().setDirectory(pal.getDirectory());
+                MainContext.getInstance().setCurrentFrame(pal.getFrames().peek());
+                MainContext.getInstance().getPaletteToSave().setDirectory(pal.getDirectory());
             } else {
                 throw new DirectoryNotValidException("The selected file is not a directory. Please, choose a directory.");
             }

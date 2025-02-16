@@ -4,9 +4,9 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
-import cataovo.utils.constants.Constants;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
+import cataovo.utils.constants.Constants;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -25,11 +25,11 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
     }
 
     @Override
-    protected float[] evaluateFrame(String regionsLine, String eggsLine) throws NumberFormatException {
+    protected float[] evaluateFrame(String regionsInFrame, String pointsInFrame) throws NumberFormatException {
         int tp = 0;
         int tn = 0;
         int fp = 0;
-        int fn;
+        int fn = 0;
         float[] metrics = new float[4];
         List<String> eggs;
         
@@ -37,10 +37,10 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         int eggsCounter;
 
         //Separar a as regioes pela vírgula
-        List<Region> regions = split(Constants.RECT_FORMAT, regionsLine.split(Constants.SEPARATOR));
+        List<Region> regions = split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
         regionsCounter = regions.size();
         //Separa as áreas dos ovos pela cerquilha
-        eggs = new CopyOnWriteArrayList<>(List.of(eggsLine.split(Constants.OBJECT_SEPARATOR)));
+        eggs = new CopyOnWriteArrayList<>(List.of(pointsInFrame.split(Constants.OBJECT_SEPARATOR)));
         eggsCounter = eggs.size() - 1;
         // Posição zero contém apenas nome e a quantidade de ovos
 //        eggs.remove(0);
@@ -160,7 +160,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     }
 
-    private List iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
+    private List<?> iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
         List formatList = new CopyOnWriteArrayList<>();
         for (int i = atStartPoint; i < data.length; i += jumpStep) {
             if (data[i] != null && !data[i].isBlank()) {

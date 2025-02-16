@@ -15,7 +15,7 @@ import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.utils.fileUtils.readers.Reader;
 import cataovo.utils.fileUtils.readers.csv.csvReader.CsvFileReader;
-import cataovo.resources.MainResources;
+import cataovo.resources.MainContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,7 +57,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
             Future<String> task;
             ExecutorService executorService;
             String[] infos = new String[2];
-            MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+            MainContext.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
             
             for (Palette palette : splitted) {
                 executorService = Executors.newSingleThreadExecutor();

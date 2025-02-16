@@ -234,5 +234,10 @@ public class Constants {
      * A comma (',') separator.
      */
     public static String SEPARATOR = ",";
+    
+    /**
+     * Text measure by pixel
+     */
+    public static String CHECKBOX_EVALUATION_BY_PIXEL = "Medir por pixel";
 
 }

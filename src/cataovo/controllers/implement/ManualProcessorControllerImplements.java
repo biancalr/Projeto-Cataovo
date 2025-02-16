@@ -9,7 +9,7 @@ import cataovo.automation.threads.dataSaving.ThreadAutomationManualProcess;
 import cataovo.controllers.ManualProcessorController;
 import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.resources.MainResources;
+import cataovo.resources.MainContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,8 +40,8 @@ public class ManualProcessorControllerImplements implements ManualProcessorContr
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             newCreateRelatories = new ThreadAutomationManualProcess(
-                    MainResources.getInstance().getPaletteToSave(),
-                    MainResources.getInstance().getSavingFolder().getPath(),
+                    MainContext.getInstance().getPaletteToSave(),
+                    MainContext.getInstance().getSavingFolder().getPath(),
                     FileExtension.CSV,
                     parent, 
                     dateTime);
