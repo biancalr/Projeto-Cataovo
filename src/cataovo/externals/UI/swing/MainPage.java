@@ -5,23 +5,22 @@
  */
 package cataovo.externals.UI.swing;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.controllers.EvaluationProcessorController;
 import cataovo.controllers.FileReaderController;
 import cataovo.controllers.FileSelectionController;
 import cataovo.controllers.FrameActionsController;
-import cataovo.controllers.MainPageController;
 import cataovo.controllers.ManualProcessorController;
 import cataovo.controllers.implement.AutomaticProcessorControllerImplements;
 import cataovo.controllers.implement.EvaluationProcessorControllerImplements;
 import cataovo.controllers.implement.FileReaderControllerImplements;
 import cataovo.controllers.implement.FileSelectionControllerImplement;
 import cataovo.controllers.implement.FrameActionsControllerImplements;
-import cataovo.controllers.implement.MainPageControllerImplements;
+import cataovo.externals.UI.swing.controllers.implement.PageControllerImplements;
 import cataovo.controllers.implement.ManualProcessorControllerImplements;
 import cataovo.entities.Point;
-import cataovo.enums.FileExtension;
+import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -40,6 +39,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
+import cataovo.externals.UI.swing.controllers.PageController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -50,8 +50,9 @@ import org.opencv.core.Core;
 public class MainPage extends javax.swing.JFrame {
 
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
+
+    private PageController pageController = null;
     private FileSelectionController fileSelectionController = null;
-    private MainPageController mainPageController = null;
     private FrameActionsController frameActionsController = null;
     private AutomaticProcessorController automaticProcessorController = null;
     private FileReaderController fileReaderController = null;
@@ -65,7 +66,7 @@ public class MainPage extends javax.swing.JFrame {
         initComponents();
         try {
             this.fileSelectionController = new FileSelectionControllerImplement();
-            this.mainPageController = new MainPageControllerImplements();
+            this.pageController = new PageControllerImplements();
             this.frameActionsController = new FrameActionsControllerImplements();
             this.automaticProcessorController = new AutomaticProcessorControllerImplements();
             this.fileReaderController = new FileReaderControllerImplements();
@@ -188,7 +189,7 @@ public class MainPage extends javax.swing.JFrame {
         MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
         if (MainResources.getInstance().getPalette() == null || MainResources.getInstance().getPalette().getPathName() == null) {
             MainResources.getInstance().setPalette(this.evaluationController.getPalettDirByReport(this.fileReaderController.readPaletteDirectoryFromReport(manualReport), this.fileReaderController.readPaletteDirectoryFromReport(autoReport)));
-            mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
+            pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
         }
         loadEvalContents(manualReport, autoReport);
         String evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
@@ -211,10 +212,10 @@ public class MainPage extends javax.swing.JFrame {
      * @throws DirectoryNotValidException
      */
     private void loadEvalContents(String manualReport, String autoReport) throws FileNotFoundException, CloneNotSupportedException, NumberFormatException, ImageNotValidException, DirectoryNotValidException {
-        this.mainPageController.onNextFrameInEvaluation(jLabel13, jLabel12,
+        this.pageController.onNextFrameInEvaluation(jLabel13, jLabel12,
                 MainResources.getInstance().getPalette().getDirectory(),
                 MainResources.getInstance().getReports());
-        this.mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12,
+        this.pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12,
                 (this.frameActionsController.paintFormats(
                         MainResources.getInstance().getCurrentFrame().clone(),
                         this.fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
@@ -1001,7 +1002,7 @@ public class MainPage extends javax.swing.JFrame {
             jLabel10.setIcon(null);
             jLabel9.setIcon(null);
             jLabel9.setText("");
-            mainPageController.showFramesOnSelectedTabScreen(
+            pageController.showFramesOnSelectedTabScreen(
                     jTabbedPane1,
                     jLabel1,
                     jLabel2,
@@ -1026,17 +1027,17 @@ public class MainPage extends javax.swing.JFrame {
                         jButton3.setEnabled(wasFileSelected);
                         jButton2.setEnabled(wasFileSelected);
                         MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
-                        mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
+                        pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
                     }
                     case 1 -> {
                         jButton1.setEnabled(wasFileSelected);
                         jTabbedPane2.setSelectedIndex(4);
                         MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
-                        mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
+                        pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
                     }
                     case 2 -> {
                         MainResources.getInstance().setReports(new String[2]);
-                        mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
+                        pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
                     }
                     default ->
                         throw new AssertionError("No tab with such index");
@@ -1072,10 +1073,10 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel10.setIcon(null);
                 jLabel9.setIcon(null);
                 jLabel9.setText("");
-                mainPageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
+                pageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
             } else {
                 LOG.info("You've reached the end of the Palette.");
-                mainPageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
+                pageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
                 jLabel10.setText("");
@@ -1106,8 +1107,8 @@ public class MainPage extends javax.swing.JFrame {
             subFrame = frameActionsController.captureSubframe(pointClick,
                     MainResources.getInstance().getCurrentFrame());
             if (frame != null) {
-                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
-                mainPageController.showSubFrameOnSelectedTabScreen(jLabel10, jLabel9, subFrame, pointClick);
+                pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
+                pageController.showSubFrameOnSelectedTabScreen(jLabel10, jLabel9, subFrame, pointClick);
                 LOG.log(Level.INFO, "Presenting frame on screen");
                 String eggs = this.jLabel1.getText();
                 if (eggs.contains(": ")) {
@@ -1129,7 +1130,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
-            mainPageController.onPreviousFrameInAutomatic(
+            pageController.onPreviousFrameInAutomatic(
                     jLabel4,
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
@@ -1149,7 +1150,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
-            mainPageController.onNextFrameInAutomatic(
+            pageController.onNextFrameInAutomatic(
                     jLabel4,
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
@@ -1184,7 +1185,7 @@ public class MainPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jPanel1, mensagem);
             MainResources.getInstance().setSavingFolder(new File(result[0]));
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            mainPageController.onNextFrameInAutomatic(
+            pageController.onNextFrameInAutomatic(
                     jLabel4,
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
@@ -1228,11 +1229,11 @@ public class MainPage extends javax.swing.JFrame {
         try {
             int numberOfEvaluationReports = countEvaluationReports();
             if (numberOfEvaluationReports == 2) {
-                this.mainPageController.onNextFrameInEvaluation(
+                this.pageController.onNextFrameInEvaluation(
                         jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12,
+                pageController.showFrameOnScreen(jLabel13, jLabel12,
                         this.frameActionsController.paintFormats(
                                 MainResources.getInstance().getCurrentFrame().clone(),
                                 fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
@@ -1258,10 +1259,10 @@ public class MainPage extends javax.swing.JFrame {
         try {
             int numberOfEvaluationReports = countEvaluationReports();
             if (numberOfEvaluationReports == 2) {
-                this.mainPageController.onPreviousFrameInEvaluation(jLabel13, jLabel12,
+                this.pageController.onPreviousFrameInEvaluation(jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12,
+                pageController.showFrameOnScreen(jLabel13, jLabel12,
                         this.frameActionsController.paintFormats(
                                 MainResources.getInstance().getCurrentFrame().clone(),
                                 fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),

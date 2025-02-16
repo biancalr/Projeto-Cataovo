@@ -4,13 +4,13 @@
  */
 package cataovo.automation.threads.dataSaving;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.enums.FileExtension;
-import cataovo.enums.ProcessingMode;
+import cataovo.utils.enums.FileExtension;
+import cataovo.utils.enums.ProcessingMode;
 import cataovo.exceptions.AutomationExecutionException;
-import cataovo.externals.fileHandlers.writers.Writer;
-import cataovo.externals.fileHandlers.writers.csv.csvWriter.CsvFileWriter;
+import cataovo.utils.fileUtils.writers.Writer;
+import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;

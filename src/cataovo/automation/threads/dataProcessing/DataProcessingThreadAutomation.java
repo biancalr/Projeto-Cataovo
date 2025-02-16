@@ -4,13 +4,13 @@
  */
 package cataovo.automation.threads.dataProcessing;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
-import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcess;
-import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
+import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtilsImplements;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
 
 /**
  *
@@ -34,7 +34,7 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     /**
      * Contains the methods to process a frame.
      */
-    protected final AutomaticImageProcess imageProcess;
+    protected final ProcessUtils imageProcess;
 
     /**
      * The thread responsable for the automatic processing.
@@ -45,7 +45,7 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     public DataProcessingThreadAutomation(Frame frame, String destination) {
         this.frame = frame;
         this.destination = destination;
-        this.imageProcess = new AutomaticImageProcessImplements();
+        this.imageProcess = new ProcessUtilsImplements();
     }
 
     /**

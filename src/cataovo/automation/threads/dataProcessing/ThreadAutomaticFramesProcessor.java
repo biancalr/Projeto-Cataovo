@@ -4,10 +4,10 @@
  */
 package cataovo.automation.threads.dataProcessing;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
-import cataovo.externals.libs.opencvlib.converters.Converter;
-import cataovo.externals.libs.opencvlib.wrappers.MatWrapper;
+import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import java.util.logging.Logger;
 
 /**
@@ -40,7 +40,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      * @return a text containing the quanity of eggs of Aedes found in the
      * frame, and a List of some of the points that make part of the eggs
      * contours.
-     * @see cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcess
+     * @see cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils
      */
     @Override
     public StringBuffer startSequence(final Frame frame) {

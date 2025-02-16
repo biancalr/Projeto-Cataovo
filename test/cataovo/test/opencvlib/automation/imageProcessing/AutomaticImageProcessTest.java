@@ -4,13 +4,12 @@
  */
 package cataovo.test.opencvlib.automation.imageProcessing;
 
-import cataovo.constants.Constants;
-import cataovo.enums.FileExtension;
-import cataovo.externals.fileHandlers.writers.csv.csvWriter.CsvFileWriter;
-import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcess;
-import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
-import cataovo.externals.libs.opencvlib.converters.Converter;
-import cataovo.externals.libs.opencvlib.wrappers.MatWrapper;
+import cataovo.utils.constants.Constants;
+import cataovo.utils.enums.FileExtension;
+import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
+import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtilsImplements;
+import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,6 +26,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
 
 /**
  *
@@ -49,7 +49,7 @@ public class AutomaticImageProcessTest {
             file.mkdir();
         }
         
-        AutomaticImageProcess imageProcess = new AutomaticImageProcessImplements();
+        ProcessUtils imageProcess = new ProcessUtilsImplements();
         
         Mat img = Imgcodecs.imread(orign);
         

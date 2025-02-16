@@ -4,11 +4,11 @@
  */
 package cataovo.automation.threads.dataSaving;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.enums.FileExtension;
-import cataovo.utils.evaluationUtils.EvaluationCalcType;
-import cataovo.utils.evaluationUtils.PercentageCalcUtils;
+import cataovo.utils.enums.FileExtension;
+import cataovo.utils.mathUtils.EvaluationCalcType;
+import cataovo.utils.mathUtils.PercentageCalcUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

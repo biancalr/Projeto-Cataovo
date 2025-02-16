@@ -7,7 +7,7 @@ package cataovo.controllers.implement;
 import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationManualProcess;
 import cataovo.controllers.ManualProcessorController;
-import cataovo.enums.FileExtension;
+import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainResources;
 import java.text.DateFormat;

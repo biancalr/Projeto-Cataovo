@@ -5,7 +5,7 @@
  */
 package cataovo.entities;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.exceptions.RegionNotValidException;
 import java.io.Serializable;
 import java.util.Objects;

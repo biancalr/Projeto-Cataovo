@@ -4,7 +4,7 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import java.util.List;

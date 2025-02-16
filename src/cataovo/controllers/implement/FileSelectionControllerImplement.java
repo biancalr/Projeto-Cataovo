@@ -5,17 +5,17 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.constants.Constants;
+import cataovo.utils.constants.Constants;
 import cataovo.controllers.FileSelectionController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.enums.FileExtension;
-import cataovo.enums.ProcessingMode;
+import cataovo.utils.enums.FileExtension;
+import cataovo.utils.enums.ProcessingMode;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
-import cataovo.externals.libs.swinglib.wrappers.FileChooserUI;
-import cataovo.externals.libs.swinglib.wrappers.TabbedPane;
+import cataovo.externals.UI.swing.wrappers.FileChooserUI;
+import cataovo.externals.UI.swing.wrappers.TabbedPane;
 import cataovo.resources.MainResources;
 import cataovo.resources.fileChooser.handler.FileFilterExtensions;
 import cataovo.resources.fileChooser.handler.FileListHandler;
