@@ -11,11 +11,11 @@ import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
-import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
 import cataovo.resources.MainContext;
-import cataovo.externals.libs.opencv.utils.frameUtils.FrameActionsUtils;
+import cataovo.utils.actionUtils.FrameActionsUtils;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -113,12 +113,12 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
         if (currentFrame.getRegionsContainingEggs().isEmpty()) {
-            return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
+            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids()).get());
         } else {
             MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
                     (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
-            return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
+            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids()).get());
         }
     }
 
