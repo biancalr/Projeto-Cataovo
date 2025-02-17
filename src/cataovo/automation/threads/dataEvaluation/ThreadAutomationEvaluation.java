@@ -7,6 +7,7 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.utils.constants.Constants;
+import cataovo.utils.conversionUtils.DataToFormatUtils;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -19,13 +20,23 @@ import java.util.logging.Logger;
 public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluation.class.getName());
+    
+    private final DataToFormatUtils dataUtils;
 
     public ThreadAutomationEvaluation(String fileContentManual, String fileContentAuto) {
         super(fileContentManual, fileContentAuto);
+        this.dataUtils = new DataToFormatUtils();
     }
 
+    /**
+     *
+     * @param regionsInFrame
+     * @param pointsInFrame
+     * @return
+     * @throws NumberFormatException
+     */
     @Override
-    protected float[] evaluateFrame(String regionsInFrame, String pointsInFrame) throws NumberFormatException {
+    protected float[] evaluateFrame(final String regionsInFrame, final String pointsInFrame) throws NumberFormatException {
         int tp = 0;
         int tn = 0;
         int fp = 0;
@@ -37,7 +48,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         int eggsCounter;
 
         //Separar a as regioes pela vírgula
-        List<Region> regions = split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
+        List<Region> regions = dataUtils.split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
         regionsCounter = regions.size();
         //Separa as áreas dos ovos pela cerquilha
         eggs = new CopyOnWriteArrayList<>(List.of(pointsInFrame.split(Constants.OBJECT_SEPARATOR)));
@@ -54,7 +65,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             for (int e = 1; e < eggs.size(); e++) {
                 String eggLine = eggs.get(e);
                 // Separar os pontos do ovo pela vírgula
-                points = split(Constants.CIRCLE_FORMAT, eggLine.split(Constants.SEPARATOR));
+                points = dataUtils.split(Constants.CIRCLE_FORMAT, eggLine.split(Constants.SEPARATOR));
                 Region rect;
                 int totalPontos = points.size();
                 LOG.log(Level.INFO, "Total of points {0}", points.size());
@@ -139,75 +150,6 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         metrics[2] = fp;
         metrics[3] = tn;
         return metrics;
-    }
-
-    private List split(int ofFormat, String[] data) throws NumberFormatException {
-        int jumpStep;
-        int atStartPoint;
-        switch (ofFormat) {
-            case Constants.RECT_FORMAT -> {
-                jumpStep = 4;
-                atStartPoint = 1;
-            }
-            case Constants.CIRCLE_FORMAT -> {
-                jumpStep = 2;
-                atStartPoint = 0;
-            }
-            default ->
-                throw new AssertionError();
-        }
-        return iterateOver(data, ofFormat, atStartPoint, jumpStep);
-
-    }
-
-    private List<?> iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
-        List formatList = new CopyOnWriteArrayList<>();
-        for (int i = atStartPoint; i < data.length; i += jumpStep) {
-            if (data[i] != null && !data[i].isBlank()) {
-                switch (ofFormat) {
-                    case Constants.RECT_FORMAT ->
-                        formatList.add(addRegion(data, i));
-                    case Constants.CIRCLE_FORMAT ->
-                        formatList.add(addPoint(data, i));
-                    default ->
-                        throw new AssertionError();
-                }
-
-            }
-        }
-        return formatList;
-    }
-
-    /**
-     * Converts a line of string data into {@link cataovo.entities.Point points}
-     *
-     * @param data
-     * @return the list of points
-     * @throws NumberFormatException
-     */
-    private Point addPoint(String[] data, int ofPosition) throws NumberFormatException {
-        return new Point(
-                Integer.parseInt(data[ofPosition].replace(".0", "").trim()),
-                Integer.parseInt(data[ofPosition + 1].replace(".0", "").trim()));
-
-    }
-
-    /**
-     * Converts a line of string data into
-     * {@link cataovo.entities.Region regions}
-     *
-     * @param data
-     * @return the list of regions
-     * @throws NumberFormatException
-     */
-    private Region addRegion(String[] data, int ofPosition) throws NumberFormatException {
-        return new Region(
-                //Acrescentando correção em caso de valores negativos
-                Integer.parseInt(data[ofPosition + 3]) > 0 ? Integer.parseInt(data[ofPosition + 3]) : Math.abs(Integer.parseInt(data[ofPosition + 3])),
-                Integer.parseInt(data[ofPosition + 2]) > 0 ? Integer.parseInt(data[ofPosition + 2]) : Math.abs(Integer.parseInt(data[ofPosition + 2])),
-                new Point(Integer.parseInt(data[ofPosition + 2]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition]),
-                        Integer.parseInt(data[ofPosition + 3]) > 0 ? (Integer.parseInt(data[ofPosition + 1]) - Integer.parseInt(data[ofPosition + 3])) : Integer.parseInt(data[ofPosition + 1])));
-
     }
 
 }
