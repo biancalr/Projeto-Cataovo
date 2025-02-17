@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.utils.frameUtils;
+package cataovo.utils.actionUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtils;
 import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtilsImplements;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
@@ -25,16 +25,16 @@ import javax.swing.ImageIcon;
  *
  * @author Bianca Leopoldo Ramos
  */
-public abstract class FrameUtils {
+public abstract class ActionUtils {
 
-    protected static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
+    protected static final Logger LOG = Logger.getLogger(ActionUtils.class.getName());
     protected PointWrapper pointWrapper;
     protected RectWrapper rectWrapper;
     protected MatWrapper matWrapper;
     protected Frame frame = null;
     protected ImageUtils imageUtils;
 
-    public FrameUtils(Frame frame) {
+    public ActionUtils(Frame frame) {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper(frame);
@@ -42,7 +42,7 @@ public abstract class FrameUtils {
         this.imageUtils = new ImageUtilsImplements();
     }
 
-    public FrameUtils() {
+    public ActionUtils() {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper();
@@ -60,92 +60,7 @@ public abstract class FrameUtils {
     public MatWrapper getMatWrapper() {
         return matWrapper;
     }
-
-    /**
-     * Draws a circle based on a point click.
-     *
-     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
-     * @return a image with a drawn point circle.
-     * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
-     */
-    protected abstract Icon drawCircle(PointWrapper pw);
-
-    /**
-     * Draws a rectangle based on two point clicks.
-     *
-     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
-     * @return a image with a drawn rectangle.
-     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
-     * org.opencv.core.Mat)
-     */
-    protected abstract Icon drawRectangle(RectWrapper rw);
-
-    /**
-     * Captures a subgrid based on a {@link cataovo.entities.Region Region}
-     * within two point clicks.
-     *
-     * @param beginGrid a point to start calculating the
-     * {@link org.opencv.core.Rect Rect}.
-     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
-     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
-     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
-     */
-    protected abstract Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid);
-
-    /**
-     * Updates a grid if there's already denmarked
-     * {@link cataovo.entities.Region Regions}
-     *
-     * @return the updated image with the proper number of grids.
-     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
-     * org.opencv.core.Mat)
-     */
-    protected abstract MatWrapper prepareGrids();
-
-    /**
-     * Create a dot.
-     *
-     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
-     * @return a image with a drawn point circle.
-     */
-    protected Icon dot(PointWrapper pw) {
-        return drawDot(pw);
-    }
-
-    /**
-     * Create a rectangle.
-     *
-     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
-     * @return a image with a drawn rectangle.
-     */
-    protected Icon rectangle(RectWrapper rw) {
-        return drawSquare(rw);
-    }
-
-    /**
-     * Captures a submat.
-     *
-     * @param beginGrid a point to start calculating the
-     * {@link org.opencv.core.Rect Rect}.
-     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
-     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
-     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
-     */
-    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
-        return captureSubmat(beginGrid, endGrid);
-    }
-
-    /**
-     * Updates a grid.
-     *
-     * @return the updated image with the proper number of grids.
-     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
-     * org.opencv.core.Mat)
-     */
-    protected MatWrapper updateGrids() {
-        return preprareRegions();
-    }
-
+    
     /**
      *
      * @param rects
@@ -173,15 +88,15 @@ public abstract class FrameUtils {
      * @return a image with a drawn point circle.
      * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
      */
-    private Icon drawDot(PointWrapper pw) {
+    protected Icon drawCircle(PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
-            this.matWrapper = preprareRegions();
+            this.matWrapper = updateGrids();
         } else {
-            matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
+            matWrapper = Conversion.getInstance().convertImageFrameToMat(frame);
         }
         matWrapper.setOpencvMat(imageUtils.circle(pw.getOpencvPoint(), matWrapper.getOpencvMat()).clone());
-        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
     /**
@@ -193,21 +108,21 @@ public abstract class FrameUtils {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    private Icon drawSquare(RectWrapper rw) {
+    protected Icon drawRectangle(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
-            this.matWrapper = preprareRegions();
+            this.matWrapper = updateGrids();
         }
         pointWrapper = new PointWrapper(
                 new Point(rw.getRegion().getInitialPoint().getX(),
                         rw.getRegion().getInitialPoint().getY()));
-        PointWrapper pw2 = new PointWrapper(new Point(
+        final var pw2 = new PointWrapper(new Point(
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
-        this.frame.getRegionsContainingEggs().add(captureSubmat(pointWrapper, pw2));
+        this.frame.getRegionsContainingEggs().add(captureGrid(pointWrapper, pw2));
         matWrapper.setOpencvMat(imageUtils.rectangle(
                 pointWrapper.getOpencvPoint(), pw2.getOpencvPoint(), matWrapper.getOpencvMat()));
-        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
     /**
@@ -219,7 +134,7 @@ public abstract class FrameUtils {
      * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
-    private Region captureSubmat(PointWrapper beginGrid, PointWrapper endGrid) {
+    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
         return new RectWrapper(imageUtils.captureGridMat(beginGrid.getOpencvPoint(), endGrid.getOpencvPoint())).getRegion();
     }
 
@@ -230,16 +145,16 @@ public abstract class FrameUtils {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    private MatWrapper preprareRegions() {
-        MatWrapper mw = new MatWrapper(this.frame);
+    protected MatWrapper updateGrids() {
+        final var mw = new MatWrapper(this.frame);
         this.frame.getRegionsContainingEggs().stream().forEach((r) -> {
-            PointWrapper pw1 = new PointWrapper(
+            final var pw1 = new PointWrapper(
                     new Point(r.getInitialPoint().getX(),
                             r.getInitialPoint().getY()));
-            PointWrapper pw2 = new PointWrapper(new Point(
+            final var pw2 = new PointWrapper(new Point(
                     Math.abs(r.getInitialPoint().getX() - r.getWidth()),
                     Math.abs(r.getInitialPoint().getY() - r.getHeight())));
-            MatWrapper wrapper = new MatWrapper();
+            final var wrapper = new MatWrapper();
             wrapper.setOpencvMat(mw.getOpencvMat());
             mw.setOpencvMat(imageUtils.rectangle(
                     pw1.getOpencvPoint(), pw2.getOpencvPoint(), wrapper.getOpencvMat()).clone());
@@ -255,13 +170,13 @@ public abstract class FrameUtils {
     private MatWrapper drawMultipleRects(Collection<RectWrapper> rects) {
         MatWrapper mw = new MatWrapper(this.frame);
         rects.stream().forEach((r) -> {
-            PointWrapper beginPoint = new PointWrapper(
+            final var beginPoint = new PointWrapper(
                     new Point(r.getRegion().getInitialPoint().getX(),
                             r.getRegion().getInitialPoint().getY()));
-            PointWrapper endPoint = new PointWrapper(new Point(
+            final var endPoint = new PointWrapper(new Point(
                     Math.abs(r.getRegion().getInitialPoint().getX() - r.getRegion().getWidth()),
                     Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
-            MatWrapper wrapper = new MatWrapper();
+            final var wrapper = new MatWrapper();
             wrapper.setOpencvMat(mw.getOpencvMat());
             mw.setOpencvMat(imageUtils.rectangle(
                     beginPoint.getOpencvPoint(),
@@ -277,7 +192,7 @@ public abstract class FrameUtils {
      * @return
      */
     private MatWrapper drawMultipleCircles(Collection<Collection<PointWrapper>> circles) {
-        MatWrapper mw = this.matWrapper;
+        final var mw = this.matWrapper;
         circles.stream().forEach((col) -> {col.stream().forEach((c) -> {
                 mw.setOpencvMat(imageUtils.circle(c.getOpencvPoint(), mw.getOpencvMat()).clone());
         });});

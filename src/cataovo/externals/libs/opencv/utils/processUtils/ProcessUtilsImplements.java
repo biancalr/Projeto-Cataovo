@@ -5,7 +5,7 @@
 package cataovo.externals.libs.opencv.utils.processUtils;
 
 import cataovo.utils.constants.Constants;
-import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import cataovo.utils.enums.FileExtension;
 import java.awt.Color;
@@ -148,7 +148,7 @@ public class ProcessUtilsImplements implements ProcessUtils {
      */
     private boolean saveImage(Mat dstn, String savingPath) {
         try {
-            BufferedImage image = Converter.getInstance().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
+            BufferedImage image = Conversion.getInstance().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
             ImageIO.write(image, FileExtension.PNG.toString().toLowerCase(), new File(savingPath));
             return true;
         } catch (IOException ex) {

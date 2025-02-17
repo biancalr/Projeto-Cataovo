@@ -4,9 +4,13 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
+import cataovo.entities.Point;
+import cataovo.entities.Region;
 import cataovo.utils.constants.Constants;
 import cataovo.exceptions.ReportNotValidException;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

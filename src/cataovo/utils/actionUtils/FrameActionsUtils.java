@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.utils.frameUtils;
+package cataovo.utils.actionUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FrameActionsUtils extends FrameUtils {
+public class FrameActionsUtils extends ActionUtils {
 
     public FrameActionsUtils(Frame frame) {
         super(frame);
@@ -43,7 +43,7 @@ public class FrameActionsUtils extends FrameUtils {
      */
     @Override
     public Icon drawCircle(PointWrapper pw) {
-        return super.dot(pw);
+        return super.drawCircle(pw);
     }
 
     /**
@@ -54,17 +54,7 @@ public class FrameActionsUtils extends FrameUtils {
      */
     @Override
     public Icon drawRectangle(RectWrapper rw) {
-        return super.rectangle(rw);
-    }
-
-    /**
-     * Updates drawn rectangles based on add/remove
-     * {@link cataovo.entities.Region}s.
-     *
-     * @return an image with the quantity of grids updated.
-     */
-    public MatWrapper updateGridsOnFrame() {
-        return super.updateGrids();
+        return super.drawRectangle(rw);
     }
 
     /**
@@ -77,18 +67,19 @@ public class FrameActionsUtils extends FrameUtils {
      * @return a subGrid captured on a image {@link org.opencv.core.Mat}
      */
     @Override
-    protected Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid) {
+    public Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
         return super.captureGrid(beginGrid, endGrid);
     }
-
+    
     /**
-     * Updates a grid if there's already denmarked
-     * {@link cataovo.entities.Region}s
+     * Updates the current frame.
      *
      * @return the updated image with the proper number of grids.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
     @Override
-    protected MatWrapper prepareGrids() {
+    public MatWrapper updateGrids() {
         return super.updateGrids();
     }
 
@@ -102,8 +93,8 @@ public class FrameActionsUtils extends FrameUtils {
      */
     public Icon captureSubframe(Point initialPoint, Point pointClick) {
         rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
-        matWrapper = new MatWrapper(imageUtils.captureSubmat(rectWrapper.getOpencvRect(), Converter.getInstance().convertImageFrameToMat(frame).getOpencvMat()), null);
-        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+        matWrapper = new MatWrapper(imageUtils.captureSubmat(rectWrapper.getOpencvRect(), Conversion.getInstance().convertImageFrameToMat(frame).getOpencvMat()), null);
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
     /**
@@ -116,7 +107,7 @@ public class FrameActionsUtils extends FrameUtils {
         matWrapper = new MatWrapper(frame);
         matWrapper.setOpencvMat(super.drawMultipleRectangles(rects).getOpencvMat());
         matWrapper.setOpencvMat(super.drawMultiplePoints(circles).getOpencvMat());
-        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
 }

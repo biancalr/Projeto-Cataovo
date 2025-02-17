@@ -36,12 +36,13 @@ public class ImageUtilsImplements implements ImageUtils {
     public Mat circle(Point point, Mat imagePointed) {
         //draw the circle
         LOG.log(Level.INFO, "Draw the circle...");
-        Imgproc.circle(imagePointed,
+        final var img = imagePointed.clone();
+                Imgproc.circle(img,
                 point,
                 3,
                 new Scalar(0, 0, 255),
                 Core.FILLED);
-        return imagePointed;
+        return img;
     }
 
     /**
@@ -57,11 +58,12 @@ public class ImageUtilsImplements implements ImageUtils {
     @Override
     public Mat rectangle(Point beginPoint, Point endPoint, Mat imageGrid) {
         LOG.log(Level.INFO, "Draw the rectangle...");
-        Imgproc.rectangle(imageGrid,
+        final var img = imageGrid.clone();
+        Imgproc.rectangle(img,
                 beginPoint,
                 endPoint,
                 new Scalar(0, 255, 0),Core.BORDER_REFLECT);
-        return imageGrid;
+        return img;
     }
 
     /**
@@ -76,7 +78,7 @@ public class ImageUtilsImplements implements ImageUtils {
     @Override
     public Rect captureGridMat(Point beginGrid, Point endGrid) {
         LOG.log(Level.INFO, "Capture the Region...");
-        Rect grid = new Rect();
+        final Rect grid = new Rect();
         grid.x = (int) beginGrid.x;
         grid.y = (int) beginGrid.y;
         grid.width = (int) (beginGrid.x - endGrid.x);
@@ -107,12 +109,12 @@ public class ImageUtilsImplements implements ImageUtils {
     @Override
     public Mat captureSubmat(Rect region, Mat frame) {
         LOG.log(Level.INFO, "Capturing submat");
-        region.x = region.width > 0 ? (region.x - region.width) : region.x;
-        region.y = region.height > 0 ? (region.y - region.height) : region.y;
-        region.width = region.width > 0 ? region.width : Math.abs(region.width);
-        region.height = region.height > 0 ? region.height : Math.abs(region.height);
-        Mat submat = frame.submat(region);
-        return submat;
+        Rect rect = new Rect();
+        rect.x = region.width > 0 ? (region.x - region.width) : region.x;
+        rect.y = region.height > 0 ? (region.y - region.height) : region.y;
+        rect.width = region.width > 0 ? region.width : Math.abs(region.width);
+        rect.height = region.height > 0 ? region.height : Math.abs(region.height);
+        return frame.submat(rect);
     }
 
 }

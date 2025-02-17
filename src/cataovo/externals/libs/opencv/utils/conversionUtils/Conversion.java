@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.converters;
+package cataovo.externals.libs.opencv.utils.conversionUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
@@ -31,28 +31,28 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class Converter {
+public final class Conversion {
 
     /**
      * Logging
      */
-    private static final Logger LOG = Logger.getLogger(Converter.class.getName());
+    private static final Logger LOG = Logger.getLogger(Conversion.class.getName());
     /**
      * Instance
      */
-    private static volatile Converter CONVERTER;
+    private static volatile Conversion CONVERTER;
 
     /**
      *
      * @return rules the operations of converting types
      */
-    public static Converter getInstance() {
-        Converter FORMAT_CONVERTER = Converter.CONVERTER;
+    public static Conversion getInstance() {
+        Conversion FORMAT_CONVERTER = Conversion.CONVERTER;
         if (FORMAT_CONVERTER == null) {
-            synchronized (Converter.class) {
-                FORMAT_CONVERTER = Converter.CONVERTER;
+            synchronized (Conversion.class) {
+                FORMAT_CONVERTER = Conversion.CONVERTER;
                 if (FORMAT_CONVERTER == null) {
-                    Converter.CONVERTER = FORMAT_CONVERTER = new Converter();
+                    Conversion.CONVERTER = FORMAT_CONVERTER = new Conversion();
                 }
             }
         }

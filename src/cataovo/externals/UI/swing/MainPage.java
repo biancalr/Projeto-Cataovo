@@ -39,7 +39,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
 import org.opencv.core.Core;
 
 /**
