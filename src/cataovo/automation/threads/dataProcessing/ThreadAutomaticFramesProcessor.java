@@ -6,7 +6,7 @@ package cataovo.automation.threads.dataProcessing;
 
 import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
-import cataovo.externals.libs.opencv.converters.Converter;
+import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import java.util.logging.Logger;
 
@@ -53,7 +53,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
 
         // binary
         current.setOpencvMat(imageProcess.applyBinaryOnImage(dstny + Constants.BINARY_PNG,
-                Converter.getInstance().convertMatToPng(current).get()));
+                Conversion.getInstance().convertMatToPng(current).get()));
 
         // morphology 
         current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
