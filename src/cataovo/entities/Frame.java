@@ -5,7 +5,7 @@
  */
 package cataovo.entities;
 
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.utils.enums.FileExtension;
 import java.io.File;

@@ -4,12 +4,11 @@
  */
 package cataovo.test.opencvlib.automation.imageProcessing;
 
-import cataovo.utils.constants.Constants;
+import cataovo.externals.libs.opencv.Conversion;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
-import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtilsImplements;
-import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.wrappers.MatWrapper;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,11 +21,7 @@ import javax.imageio.ImageIO;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
 
 /**
  *
@@ -49,52 +44,52 @@ public class AutomaticImageProcessTest {
             file.mkdir();
         }
         
-        ProcessUtils imageProcess = new ProcessUtilsImplements();
+//        ImageProcessUtils imageProcess = new ImageProcessUtilsImplements();
+//        
+//        Mat img = Imgcodecs.imread(orign);
+//        
+//        Core.copyMakeBorder(img, img, 4, 4, 4, 4, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
+//        
+//        Imgcodecs.imwrite(dstn + frameName + "_1_original.png", img);
+//        
+//        
+//        Mat finalImage = img.clone();
+//        
+//        /*
+//         *  Reduzir o brilho
+//        */
+//        img.convertTo(img, -1, 1, -15);
+//        Imgcodecs.imwrite(dstn + frameName + "_2_brightness.png", img);
+//        
+//        /*
+//         * Aplicar Abertura 
+//         */
+//        img = imageProcess.applyMorphOnImage(dstn + frameName + "_3_morph_init.png", 3, 3, 2, img);
+//        
+//        System.out.println("-------------------------------------" + img.type());
+//        
+//        img = imageProcess.applyBlurOnImage(dstn + frameName+ "_4_blur.png", img, 5, 5);
+//        
+//        System.out.println("-------------------------------------" + img.type());
+//        
+//        Mat im = getChannelImage(img, dstn + frameName + "_5_channel.png");
+////        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
+//        
+////        Mat im = getChannelImage(img, dstn + frameName + "_5_binary.png");
+//
+//        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(im, orign)).get());
+//        
+//        im = imageProcess.applyMorphOnImage(dstn + frameName + "_7_morph_1.png", 17, 40, 2, im);
+//        im = imageProcess.applyMorphOnImage(dstn + frameName+ "_8_morph_2.png", 40, 17, 2, im);
+////        img = imageProcess.applyMorphOnImage(dstn + "_morph_3.png", 17, 35, 2, img);
+////        img = imageProcess.applyMorphOnImage(dstn + "_morph_4.png", 40, 17, 2, img);
+//        
+//
+//        Core.copyMakeBorder(im, im, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
+//        
+//        finalImage = imageProcess.drawContoursOnImage(dstn + frameName + "_9_contours.png", finalImage, im, 800, 5500);
         
-        Mat img = Imgcodecs.imread(orign);
-        
-        Core.copyMakeBorder(img, img, 4, 4, 4, 4, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
-        
-        Imgcodecs.imwrite(dstn + frameName + "_1_original.png", img);
-        
-        
-        Mat finalImage = img.clone();
-        
-        /*
-         *  Reduzir o brilho
-        */
-        img.convertTo(img, -1, 1, -15);
-        Imgcodecs.imwrite(dstn + frameName + "_2_brightness.png", img);
-        
-        /*
-         * Aplicar Abertura 
-         */
-        img = imageProcess.applyMorphOnImage(dstn + frameName + "_3_morph_init.png", 3, 3, 2, img);
-        
-        System.out.println("-------------------------------------" + img.type());
-        
-        img = imageProcess.applyBlurOnImage(dstn + frameName+ "_4_blur.png", img, 5, 5);
-        
-        System.out.println("-------------------------------------" + img.type());
-        
-        Mat im = getChannelImage(img, dstn + frameName + "_5_channel.png");
-//        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
-        
-//        Mat im = getChannelImage(img, dstn + frameName + "_5_binary.png");
-
-        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(im, orign)).get());
-        
-        im = imageProcess.applyMorphOnImage(dstn + frameName + "_7_morph_1.png", 17, 40, 2, im);
-        im = imageProcess.applyMorphOnImage(dstn + frameName+ "_8_morph_2.png", 40, 17, 2, im);
-//        img = imageProcess.applyMorphOnImage(dstn + "_morph_3.png", 17, 35, 2, img);
-//        img = imageProcess.applyMorphOnImage(dstn + "_morph_4.png", 40, 17, 2, img);
-        
-
-        Core.copyMakeBorder(im, im, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
-        
-        finalImage = imageProcess.drawContoursOnImage(dstn + frameName + "_9_contours.png", finalImage, im, 800, 5500);
-        
-        System.out.println(finalImage);
+        System.out.println(frameName);
     }
 
     private static Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary) {

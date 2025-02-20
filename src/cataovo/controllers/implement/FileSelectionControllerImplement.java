@@ -5,7 +5,7 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.controllers.FileSelectionController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;

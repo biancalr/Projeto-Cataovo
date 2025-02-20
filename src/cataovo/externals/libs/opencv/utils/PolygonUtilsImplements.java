@@ -3,27 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.utils.imageUtils;
+package cataovo.externals.libs.opencv.utils;
 
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
-import cataovo.externals.libs.opencv.wrappers.PointWrapper;
-import cataovo.externals.libs.opencv.wrappers.RectWrapper;
-import cataovo.utils.imageUtils.ImageUtils;
+import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.PointWrapper;
+import cataovo.wrappers.RectWrapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import cataovo.utils.libraryUtils.PolygonUtils;
 
 /**
  * Implements resources from Opencv to transform an image.
  *
  * @author Bianca Leopoldo Ramos
  */
-public class ImageUtilsImplements implements ImageUtils {
+public class PolygonUtilsImplements implements PolygonUtils {
 
-    private static final Logger LOG = Logger.getLogger(ImageUtilsImplements.class.getName());
+    private static final Logger LOG = Logger.getLogger(PolygonUtilsImplements.class.getName());
 
     /**
      * Draw the dot clicked in the image.

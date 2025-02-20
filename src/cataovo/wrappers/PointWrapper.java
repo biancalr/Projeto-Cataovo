@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.wrappers;
+package cataovo.wrappers;
 
 import org.opencv.core.Point;
 

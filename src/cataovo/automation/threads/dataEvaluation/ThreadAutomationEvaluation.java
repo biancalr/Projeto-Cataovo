@@ -7,10 +7,10 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import cataovo.resources.MainContext;
-import cataovo.utils.constants.Constants;
-import cataovo.utils.conversionUtils.DataToFormatUtils;
+import cataovo.utils.Constants;
+import cataovo.utils.fileUtils.readers.SplitData;
+import cataovo.wrappers.MatWrapper;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -24,11 +24,11 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluation.class.getName());
 
-    private final DataToFormatUtils dataUtils;
+    private final SplitData dataUtils;
 
     public ThreadAutomationEvaluation(String fileContentManual, String fileContentAuto) {
         super(fileContentManual, fileContentAuto);
-        this.dataUtils = new DataToFormatUtils();
+        this.dataUtils = new SplitData();
     }
 
     /**

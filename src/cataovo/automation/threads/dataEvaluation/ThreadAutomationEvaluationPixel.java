@@ -7,13 +7,13 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
-import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtilsImplements;
-import cataovo.externals.libs.opencv.wrappers.MatOfPointWrapper;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.externals.libs.opencv.utils.ImageProcessUtilsImplements;
 import cataovo.resources.MainContext;
-import cataovo.utils.constants.Constants;
-import cataovo.utils.conversionUtils.DataToFormatUtils;
+import cataovo.utils.Constants;
+import cataovo.utils.fileUtils.readers.SplitData;
+import cataovo.utils.libraryUtils.ImageProcessUtils;
+import cataovo.wrappers.MatOfPointWrapper;
+import cataovo.wrappers.MatWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,13 +28,13 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluationPixel.class.getName());
 
-    private final DataToFormatUtils dataUtils;
-    private final ProcessUtils processUtils;
+    private final SplitData dataUtils;
+    private final ImageProcessUtils processUtils;
 
     public ThreadAutomationEvaluationPixel(String fileContentManual, String fileContentAuto) {
         super(fileContentManual, fileContentAuto);
-        this.dataUtils = new DataToFormatUtils();
-        this.processUtils = new ProcessUtilsImplements();
+        this.dataUtils = new SplitData();
+        this.processUtils = new ImageProcessUtilsImplements();
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                     }
 
                     totalEggsInPixels = 0;
-                    totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem).getMatOfPoint())).reduce(totalEggsInPixels, Integer::sum);
+                    totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
                     totalOfPixels -= totalEggsInPixels;
                     tp = totalEggsInPixels;
                     LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{totalFoundEggs, eggsString.get(0)});
@@ -190,7 +190,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
             // remover todos os pontos pertencentes a ovos encontrados encontrados corretamente
             if (!remanescent.isEmpty()) {
                 totalEggsInPixels = 0;
-                totalEggsInPixels = remanescent.stream().map(e -> (int) processUtils.getArea(new MatOfPointWrapper(e).getMatOfPoint())).reduce(totalEggsInPixels, Integer::sum);
+                totalEggsInPixels = remanescent.stream().map(e -> (int) processUtils.getArea(new MatOfPointWrapper(e))).reduce(totalEggsInPixels, Integer::sum);
                 totalOfPixels -= totalEggsInPixels;
                 fp = totalEggsInPixels;
             }

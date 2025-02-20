@@ -2,18 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.externals.libs.opencv.utils.processUtils;
+package cataovo.externals.libs.opencv.utils;
 
-import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
-import cataovo.utils.constants.Constants;
+import cataovo.externals.libs.opencv.Conversion;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
+import cataovo.utils.libraryUtils.ImageProcessUtils;
+import cataovo.wrappers.MatOfPointWrapper;
+import cataovo.wrappers.MatWrapper;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -31,12 +34,12 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class ProcessUtilsImplements implements ProcessUtils {
+public class ImageProcessUtilsImplements implements ImageProcessUtils {
 
     /**
-     * Logging for ProcessUtilsImplements.
+     * Logging for ImageProcessUtilsImplements.
      */
-    private static final Logger LOG = Logger.getLogger(ProcessUtilsImplements.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImageProcessUtilsImplements.class.getName());
     /**
      * Represents white the color.
      */
@@ -45,43 +48,38 @@ public class ProcessUtilsImplements implements ProcessUtils {
      * Represents the black color.
      */
     private final double[] BLACK;
-    /**
-     * Quantity of eggs in a frame.
-     */
-    private int quantityOfEggs = 0;
-    /**
-     * Objects found in each image. Potencial eggs, a single egg or collection
-     * of two or mor eggs.
-     */
-    private List<MatOfPoint> eggsContours = new ArrayList<>();
 
-    public ProcessUtilsImplements() {
+    public ImageProcessUtilsImplements() {
         this.BLACK = new double[]{0};
         this.WHITE = new double[]{255};
     }
 
     @Override
-    public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height) {
-        saveImage(imageMatToBlur, savingPath.replace(Constants.BLUR_PNG, Constants.ORIGINAL_PNG));
+    public MatWrapper applyBlurOnImage(String savingPath, MatWrapper imageMatToBlur, int ksize_width, int ksize_height) {
+        Mat toBlur = imageMatToBlur.getOpencvMat().clone();
+        saveImage(toBlur, savingPath.replace(Constants.BLUR_PNG, Constants.ORIGINAL_PNG));
         LOG.log(Level.INFO, "Applying blur...");
-        Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8UC1);
-        Imgproc.cvtColor(imageMatToBlur.clone(), dstn, Imgproc.COLOR_BGR2GRAY);
+        Mat dstn = Mat.zeros(toBlur.size(), CvType.CV_8UC1);
+        Imgproc.cvtColor(toBlur, dstn, Imgproc.COLOR_BGR2GRAY);
         Imgproc.blur(dstn, dstn, new Size(ksize_width, ksize_height));
         if (saveImage(dstn, savingPath)) {
-            return dstn;
+            final MatWrapper temp = imageMatToBlur;
+            temp.setOpencvMat(dstn);
+            return temp;
         }
         return null;
     }
 
     @Override
-    public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary) {
+    public MatWrapper applyBinaryOnImage(String savingPath, MatWrapper imgToBinary) {
+        final var buffImgToBinary = Conversion.getInstance().convertMatToPng(imgToBinary).get();
         LOG.log(Level.INFO, "Applying binary...");
         Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC1);
         for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
             for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
                 Color colores = new Color(buffImgToBinary.getRGB(i, j));
                 double pixelColor = colores.getRed();
-                if (pixelColor > 75){
+                if (pixelColor > 75) {
                     dstn.put(j, i, WHITE);
                 } else {
                     dstn.put(j, i, BLACK);
@@ -89,33 +87,38 @@ public class ProcessUtilsImplements implements ProcessUtils {
             }
         }
         if (saveImage(dstn, savingPath)) {
-            return dstn;
+            final MatWrapper temp = imgToBinary;
+            temp.setOpencvMat(dstn);
+            return temp;
         }
         return null;
     }
 
     @Override
-    public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph) {
+    public MatWrapper applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, MatWrapper imageToMorph) {
         LOG.log(Level.INFO, "Applying morphology...");
-        Mat dstn = Mat.zeros(imageToMorph.size(), imageToMorph.type());
-        Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(structuringElementWidth, structuringElementHeight));
-        Imgproc.morphologyEx(imageToMorph.clone(), dstn, morphologicalOperation, structuringElement);
+        final Mat result = imageToMorph.getOpencvMat();
+        final Mat dstn = Mat.zeros(result.size(), result.type());
+        final Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(structuringElementWidth, structuringElementHeight));
+        Imgproc.morphologyEx(result.clone(), dstn, morphologicalOperation, structuringElement);
         if (saveImage(dstn, savingPath)) {
-            return dstn;
+            MatWrapper temp = imageToMorph;
+            temp.setOpencvMat(dstn);
+            return temp;
         }
         return null;
     }
 
     @Override
-    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea) {
+    public Map<Integer, List<List<cataovo.entities.Point>>> drawContoursOnImage(String savingPath, MatWrapper imageToDraw, MatWrapper imgToFindContours, int minSizeArea, int maxSizeArea) {
         LOG.log(Level.INFO, "drawing objects...");
         int numOfContours = 0;
-        Mat result = imageToDraw.clone();
-        final List<MatOfPoint> contours = findContours(imgToFindContours.clone());
+        Mat result = imageToDraw.getOpencvMat();
+        final List<MatOfPoint> contours = findContours(imgToFindContours.getOpencvMat().clone());
         final List<MatOfPoint> foundContours = new ArrayList<>();
 
         for (int i = 0; i < contours.size(); i++) {
-            double contourArea = getArea(contours.get(i));
+            double contourArea = getArea(new MatOfPointWrapper(Conversion.getInstance().convertMatOfPointToList(contours.get(i))));
 
             if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
                 numOfContours++;
@@ -129,21 +132,20 @@ public class ProcessUtilsImplements implements ProcessUtils {
         }
         LOG.log(Level.INFO, "Quantity of contours: {0}", numOfContours);
 
-        this.quantityOfEggs = numOfContours;
-        this.eggsContours = foundContours;
+        final var list = foundContours.stream().map(c -> Conversion.getInstance().convertMatOfPointToList(c)).toList();
 
         if (saveImage(result, savingPath)) {
-            return result;
+            return Map.of(numOfContours, list);
         }
         return null;
     }
 
     @Override
-    public double getArea(MatOfPoint currentContour) {
-        if (currentContour.empty()) {
+    public double getArea(MatOfPointWrapper currentContour) {
+        if (currentContour.getMatOfPoint().empty()) {
             return 0;
         }
-        return Imgproc.contourArea(currentContour);
+        return Imgproc.contourArea(currentContour.getMatOfPoint());
     }
 
     /**
@@ -178,48 +180,6 @@ public class ProcessUtilsImplements implements ProcessUtils {
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(src, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
         return contours;
-    }
-
-    /**
-     * <p>
-     * Generates the content of the automatic counting.</p>
-     *
-     * @return A text containg the total of the eggs and a list of a certain
-     * quantity of coodinates that forms each object.
-     */
-    @Override
-    public StringBuffer generateAutoReport() {
-        StringBuffer builder = new StringBuffer(Integer.toString(this.quantityOfEggs));
-        List<Point> auxlist;
-        List<Point> mainPoints = new ArrayList<>();
-        for (var i = 0; i < this.eggsContours.size(); i++) {
-            MatOfPoint get = this.eggsContours.get(i);
-
-            auxlist = get.toList();
-            for (int j = 0; j < auxlist.size(); j++) {
-
-                // Saves a point each given steps
-                if ((j % Constants.STEPS_TO_POINT_SAVING) == 0) {
-                    mainPoints.add(auxlist.get(j));
-                }
-            }
-           
-           for (var j = 0; j < mainPoints.size(); j++) {
-               if (j!=0) {
-                   builder.append(Constants.SEPARATOR);
-               } else {
-                   builder.append(Constants.OBJECT_SEPARATOR);
-               }
-               builder.append(mainPoints.get(j).x);
-               builder.append(",");
-               builder.append(mainPoints.get(j).y);
-           }
-            
-           mainPoints = new ArrayList<>();
-            
-        }
-
-        return builder;
     }
 
 }

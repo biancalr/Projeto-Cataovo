@@ -2,21 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.utils.conversionUtils;
+package cataovo.utils.fileUtils.readers;
 
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
-public class DataToFormatUtils {
+public class SplitData {
     
-    public DataToFormatUtils(){
+    public SplitData(){
         
     }
     

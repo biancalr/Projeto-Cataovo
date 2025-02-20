@@ -5,8 +5,8 @@
 package cataovo.controllers;
 
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.libs.opencv.wrappers.PointWrapper;
-import cataovo.externals.libs.opencv.wrappers.RectWrapper;
+import cataovo.wrappers.PointWrapper;
+import cataovo.wrappers.RectWrapper;
 import java.io.FileNotFoundException;
 import java.util.List;
 

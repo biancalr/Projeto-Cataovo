@@ -8,13 +8,12 @@ package cataovo.externals.UI.swing.utils;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
-import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtilsImplements;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
-import cataovo.externals.libs.opencv.wrappers.PointWrapper;
-import cataovo.externals.libs.opencv.wrappers.RectWrapper;
-import cataovo.utils.frameActionUtils.FrameActionUtils;
-import cataovo.utils.imageUtils.ImageUtils;
+import cataovo.externals.libs.opencv.Conversion;
+import cataovo.externals.libs.opencv.utils.PolygonUtilsImplements;
+import cataovo.utils.frameUtils.FrameUtils;
+import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.PointWrapper;
+import cataovo.wrappers.RectWrapper;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,14 +23,10 @@ import javax.swing.ImageIcon;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FrameActionsUtils extends FrameActionUtils {
+public class FrameActionsUtils extends FrameUtils {
 
     public FrameActionsUtils(Frame frame) {
-        super(frame, new ImageUtilsImplements());
-    }
-
-    public FrameActionsUtils() {
-        super(new ImageUtilsImplements());
+        super(frame, new PolygonUtilsImplements());
     }
 
     public Frame getFrame() {
@@ -76,8 +71,7 @@ public class FrameActionsUtils extends FrameActionUtils {
      * Updates the current frame.
      *
      * @return the updated image with the proper number of grids.
-     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
-     * org.opencv.core.Mat)
+     * @see FrameUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point, org.opencv.core.Mat)
      */
     @Override
     public MatWrapper updateGrids() {
@@ -93,8 +87,8 @@ public class FrameActionsUtils extends FrameActionUtils {
      * @return a Image within these clicks.
      */
     public Icon captureSubframe(Point initialPoint, Point pointClick) {
-        rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
-        matWrapper = imageUtils.captureSubmat(rectWrapper, Conversion.getInstance().convertImageFrameToMat(frame));
+        final RectWrapper rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
+        final MatWrapper matWrapper = imageUtils.captureSubmat(rectWrapper, Conversion.getInstance().convertImageFrameToMat(frame));
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
@@ -104,8 +98,8 @@ public class FrameActionsUtils extends FrameActionUtils {
      * @param circles
      * @return 
      */
-    public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<Collection<PointWrapper>> circles) {
-        matWrapper = new MatWrapper(frame);
+    public Icon drawFormats(Collection<RectWrapper> rects, Collection<Collection<PointWrapper>> circles) {
+        MatWrapper matWrapper = new MatWrapper(frame);
         matWrapper.setOpencvMat(super.multipleRects(rects).getOpencvMat());
         matWrapper.setOpencvMat(super.multipleCircles(circles).getOpencvMat());
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
