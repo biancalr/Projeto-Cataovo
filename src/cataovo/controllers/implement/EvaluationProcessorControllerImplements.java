@@ -15,7 +15,7 @@ import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainContext;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.mathUtils.EvaluationCalcType;
 import cataovo.utils.mathUtils.PercentageCalcUtils;

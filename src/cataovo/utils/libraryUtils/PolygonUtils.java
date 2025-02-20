@@ -3,21 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.utils.imageUtils;
+package cataovo.utils.libraryUtils;
 
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
-import cataovo.externals.libs.opencv.wrappers.PointWrapper;
-import cataovo.externals.libs.opencv.wrappers.RectWrapper;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
+import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.PointWrapper;
+import cataovo.wrappers.RectWrapper;
 
 /**
  * Use resources from Opencv to transform an image.
  *
  * @author Bianca Leopoldo Ramos.
  */
-public interface ImageUtils {
+public interface PolygonUtils {
 
     /**
      * Draw the dot clicked in the image.
@@ -49,7 +46,7 @@ public interface ImageUtils {
      *
      * @param beginGrid the point to begin
      * @param endGrid the point to end
-     * @return the area {@link Rect} of the Grid
+     * @return the area {@link org.opencv.core.Rect} of the Grid
      */
     public RectWrapper captureGridMat(final PointWrapper beginGrid, final PointWrapper endGrid);
 

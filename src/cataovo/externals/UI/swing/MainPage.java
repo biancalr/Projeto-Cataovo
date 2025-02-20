@@ -27,7 +27,7 @@ import cataovo.exceptions.TabNotValidToEvaluationException;
 import cataovo.externals.UI.swing.controllers.PageController;
 import cataovo.externals.UI.swing.controllers.implement.PageControllerImplements;
 import cataovo.resources.MainContext;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import java.awt.Dimension;
 import java.awt.HeadlessException;

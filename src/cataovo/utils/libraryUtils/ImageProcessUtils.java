@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package cataovo.externals.libs.opencv.utils.processUtils;
+package cataovo.utils.libraryUtils;
 
-import java.awt.image.BufferedImage;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.imgproc.Imgproc;
+import cataovo.entities.Point;
+import cataovo.wrappers.MatOfPointWrapper;
+import cataovo.wrappers.MatWrapper;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Stablish the steps to detect Aedes eggs in a image.
  *
  * @author Bianca Leopoldo Ramos.
  */
-public interface ProcessUtils {
+public interface ImageProcessUtils {
 
     /**
      * Apply Blur On a Image
@@ -27,16 +28,16 @@ public interface ProcessUtils {
      * @see org.opencv.imgproc.Imgproc#blur(org.opencv.core.Mat,
      * org.opencv.core.Mat, org.opencv.core.Size)
      */
-    public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height);
+    public MatWrapper applyBlurOnImage(String savingPath, MatWrapper imageMatToBlur, int ksize_width, int ksize_height);
 
     /**
      * Apply Binary On a Image
      *
      * @param savingPath the folder to save the image
-     * @param buffImgToBinary the image to apply binarization
+     * @param imgToBinary the image to apply binarization
      * @return the image binarried
      */
-    public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary);
+    public MatWrapper applyBinaryOnImage(String savingPath, MatWrapper imgToBinary);
 
     /**
      * Apply Morphology On a Image
@@ -54,7 +55,7 @@ public interface ProcessUtils {
      * @see org.opencv.imgproc.Imgproc#morphologyEx(org.opencv.core.Mat,
      * org.opencv.core.Mat, int, org.opencv.core.Mat)
      */
-    public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph);
+    public MatWrapper applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, MatWrapper imageToMorph);
 
     /**
      * Draw Contours On a Image.
@@ -68,21 +69,13 @@ public interface ProcessUtils {
      * @see Imgproc#findContours(org.opencv.core.Mat, java.util.List, org.opencv.core.Mat, int, int) 
      * @see Imgproc#drawContours(org.opencv.core.Mat, java.util.List, int, org.opencv.core.Scalar) 
      */
-    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea);
+    public Map<Integer,List<List<Point>>> drawContoursOnImage(String savingPath, MatWrapper imageToDraw, MatWrapper imgToFindContours, int minSizeArea, int maxSizeArea);
     
     /**
      * Calculates the area.
      * @param contour
      * @return 
      */
-    public double getArea(MatOfPoint contour);
-
-    /**
-     * Creates the content of the relatory for a frame.
-     *
-     * @return A text containg the total of the eggs and a list of a certain
-     * quantity of coodinates that forms each object.
-     */
-    public StringBuffer generateAutoReport();
+    public double getArea(MatOfPointWrapper contour);
 
 }

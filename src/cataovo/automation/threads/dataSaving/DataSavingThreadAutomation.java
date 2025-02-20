@@ -4,11 +4,11 @@
  */
 package cataovo.automation.threads.dataSaving;
 
-import cataovo.utils.constants.Constants;
 import cataovo.entities.Palette;
+import cataovo.exceptions.AutomationExecutionException;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.enums.ProcessingMode;
-import cataovo.exceptions.AutomationExecutionException;
 import cataovo.utils.fileUtils.writers.Writer;
 import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
 import java.util.concurrent.Callable;

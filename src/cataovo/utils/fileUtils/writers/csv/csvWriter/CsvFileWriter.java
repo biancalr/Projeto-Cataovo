@@ -4,9 +4,9 @@
  */
 package cataovo.utils.fileUtils.writers.csv.csvWriter;
 
-import cataovo.utils.constants.Constants;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
+import cataovo.utils.Constants;
 import cataovo.utils.fileUtils.writers.Writer;
 import java.io.BufferedReader;
 import java.io.File;

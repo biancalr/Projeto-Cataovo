@@ -4,7 +4,7 @@
  */
 package cataovo.utils.fileUtils.readers.csv.csvReader;
 
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.utils.fileUtils.readers.Reader;
 import java.io.BufferedReader;
 import java.io.FileInputStream;

@@ -4,7 +4,7 @@
  */
 package cataovo.utils.mathUtils;
 
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 

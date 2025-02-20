@@ -6,11 +6,11 @@ package cataovo.automation.threads.dataSaving;
 
 import cataovo.automation.threads.dataProcessing.DataProcessingThreadAutomation;
 import cataovo.automation.threads.dataProcessing.ThreadAutomaticFramesProcessor;
-import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.AutomationExecutionException;
+import cataovo.utils.Constants;
+import cataovo.utils.enums.FileExtension;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;

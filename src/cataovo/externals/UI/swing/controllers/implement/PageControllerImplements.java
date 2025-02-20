@@ -6,7 +6,7 @@
  */
 package cataovo.externals.UI.swing.controllers.implement;
 
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;

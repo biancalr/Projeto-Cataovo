@@ -5,15 +5,18 @@
 package cataovo.automation.threads.dataProcessing;
 
 import cataovo.entities.Frame;
-import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
-import cataovo.externals.libs.opencv.wrappers.MatWrapper;
-import cataovo.utils.constants.Constants;
+import cataovo.entities.Point;
+import cataovo.utils.Constants;
+import cataovo.wrappers.MatWrapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
  * This thread is responsible for batch processing a
- * {@link cataovo.entities.Frame Frame}. This processment is responsible for find each
- * egg present in the frame.
+ * {@link cataovo.entities.Frame Frame}. This processment is responsible for
+ * find each egg present in the frame.
  *
  * @author Bianca Leopoldo Ramos.
  */
@@ -23,7 +26,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      * Logging for ThreadAutomaticFramesProcessor.
      */
     private static final Logger LOG = Logger.getLogger(ThreadAutomaticFramesProcessor.class.getName());
-   
+
     public ThreadAutomaticFramesProcessor(final Frame frame, final String destination) {
         super(frame, destination);
     }
@@ -40,7 +43,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      * @return a text containing the quanity of eggs of Aedes found in the
      * frame, and a List of some of the points that make part of the eggs
      * contours.
-     * @see cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils
+     * @see cataovo.utils.libraryUtils.ImageProcessUtils
      */
     @Override
     public StringBuffer startSequence(final Frame frame) {
@@ -48,29 +51,65 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
         MatWrapper current = new MatWrapper(frame);
         String dstny = destination + "/" + frame.getName();
         // blur
-        current.setOpencvMat(imageProcess.applyBlurOnImage(dstny + Constants.BLUR_PNG,
-                current.getOpencvMat(), 5, 5));
+        current = imageProcess.applyBlurOnImage(dstny + Constants.BLUR_PNG,
+                current, 5, 5);
 
         // binary
-        current.setOpencvMat(imageProcess.applyBinaryOnImage(dstny + Constants.BINARY_PNG,
-                Conversion.getInstance().convertMatToPng(current).get()));
+        current = imageProcess.applyBinaryOnImage(dstny + Constants.BINARY_PNG,
+                current);
 
         // morphology 
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                17, 35, 2, current.getOpencvMat()));
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                35, 17, 2, current.getOpencvMat()));
-//        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-//                17, 35, 2, current.getOpencvMat()));
-//        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-//                30, 17, 2, current.getOpencvMat()));
+        current = imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+                17, 35, 2, current);
+        current = imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+                35, 17, 2, current);
 
         // contours
-        current.setOpencvMat(imageProcess.drawContoursOnImage(dstny + Constants.CONTOURS_PNG,
-                new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 800, 5000));
+        final var result = imageProcess.drawContoursOnImage(dstny + Constants.CONTOURS_PNG,
+                new MatWrapper(frame), current, 800, 5000);
 
-        LOG.info("Finising the processment of the frame");
-        return imageProcess.generateAutoReport();
+        LOG.info("Finising the processing");
+        return generateAutoReport(result);
+    }
+
+    private StringBuffer generateAutoReport(final Map<Integer, List<List<Point>>> result) {
+        final StringBuffer builder = new StringBuffer();
+
+        for (Map.Entry<Integer, List<List<Point>>> entry : result.entrySet()) {
+            var key = entry.getKey();
+            var val = entry.getValue();
+
+            builder.append(Integer.toString(key));
+
+            List<Point> auxlist;
+            List<Point> mainPoints = new ArrayList<>();
+            for (var i = 0; i < val.size(); i++) {
+
+                auxlist = val.get(i);
+                for (int j = 0; j < auxlist.size(); j++) {
+
+                    // Saves a point each given steps
+                    if ((j % Constants.STEPS_TO_POINT_SAVING) == 0) {
+                        mainPoints.add(auxlist.get(j));
+                    }
+                }
+
+                for (var j = 0; j < mainPoints.size(); j++) {
+                    if (j != 0) {
+                        builder.append(Constants.SEPARATOR);
+                    } else {
+                        builder.append(Constants.OBJECT_SEPARATOR);
+                    }
+                    builder.append(mainPoints.get(j).getX());
+                    builder.append(",");
+                    builder.append(mainPoints.get(j).getY());
+                }
+
+                mainPoints = new ArrayList<>();
+
+            }
+        }
+        return builder;
     }
 
 }

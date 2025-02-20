@@ -6,7 +6,7 @@ package cataovo.controllers.implement;
 
 import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationAutomaticProcess;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;

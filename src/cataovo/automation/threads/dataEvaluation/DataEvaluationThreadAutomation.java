@@ -6,7 +6,7 @@ package cataovo.automation.threads.dataEvaluation;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ReportNotValidException;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;

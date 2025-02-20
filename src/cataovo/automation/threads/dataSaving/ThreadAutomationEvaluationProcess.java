@@ -5,7 +5,7 @@
 package cataovo.automation.threads.dataSaving;
 
 import cataovo.entities.Palette;
-import cataovo.utils.constants.Constants;
+import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.mathUtils.EvaluationCalcType;
 import cataovo.utils.mathUtils.PercentageCalcUtils;
