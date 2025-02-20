@@ -11,7 +11,7 @@ import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.externals.UI.swing.wrappers.TabbedPane;
+import cataovo.wrappers.UI.TabbedPane;
 import cataovo.resources.MainContext;
 import java.awt.Color;
 import java.awt.Component;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.wrappers;
+package cataovo.wrappers.lib;
 
 import cataovo.entities.Point;
 import java.util.List;

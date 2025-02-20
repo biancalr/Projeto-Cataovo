@@ -5,8 +5,8 @@
 package cataovo.utils.libraryUtils;
 
 import cataovo.entities.Point;
-import cataovo.wrappers.MatOfPointWrapper;
-import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.lib.MatOfPointWrapper;
+import cataovo.wrappers.lib.MatWrapper;
 import java.util.List;
 import java.util.Map;
 

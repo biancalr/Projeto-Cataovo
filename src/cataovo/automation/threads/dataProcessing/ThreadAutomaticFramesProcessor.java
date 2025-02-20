@@ -7,7 +7,7 @@ package cataovo.automation.threads.dataProcessing;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.utils.Constants;
-import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.lib.MatWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
