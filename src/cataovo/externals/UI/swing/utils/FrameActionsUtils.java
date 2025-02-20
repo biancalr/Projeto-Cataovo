@@ -25,32 +25,30 @@ import javax.swing.ImageIcon;
  */
 public class FrameActionsUtils extends FrameUtils {
 
-    public FrameActionsUtils(Frame frame) {
-        super(frame, new PolygonUtilsImplements());
-    }
-
-    public Frame getFrame() {
-        return frame;
+    public FrameActionsUtils() {
+        super(new PolygonUtilsImplements());
     }
 
     /**
      * Draws a circle based on a point click.
      *
+     * @param frame
      * @param pw the Opencv {@link org.opencv.core.Point} Wrapper
      * @return a image with a drawn point circle.
      */
-    public Icon drawCircle(PointWrapper pw) {
-        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.circle(pw)).get());
+    public Icon drawCircle(final Frame frame, final PointWrapper pw) {
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.circle(frame, pw)).get());
     }
 
     /**
      * Draws a rectangle based on two point clicks.
      *
+     * @param frame
      * @param rw the Opencv {@link org.opencv.core.Rect} Wrapper
      * @return a image with a drawn rectangle.
      */
-    public Icon drawRectangle(RectWrapper rw) {
-        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.rectangle(rw)).get());
+    public Icon drawRectangle(final Frame frame, RectWrapper rw) {
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.rectangle(frame, rw)).get());
     }
 
     /**
@@ -74,19 +72,20 @@ public class FrameActionsUtils extends FrameUtils {
      * @see FrameUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point, org.opencv.core.Mat)
      */
     @Override
-    public MatWrapper updateGrids() {
-        return super.updateGrids();
+    public MatWrapper updateGrids(final Frame frame) {
+        return super.updateGrids(frame);
     }
 
     /**
      * Captures a subgrid based on a {@link cataovo.entities.Region} between two
      * point clicks.
      *
+     * @param frame
      * @param initialPoint a point to start calculating the grid.
      * @param pointClick a point to delimitate the grid
      * @return a Image within these clicks.
      */
-    public Icon captureSubframe(Point initialPoint, Point pointClick) {
+    public Icon captureSubframe(final Frame frame, Point initialPoint, Point pointClick) {
         final RectWrapper rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
         final MatWrapper matWrapper = imageUtils.captureSubmat(rectWrapper, Conversion.getInstance().convertImageFrameToMat(frame));
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
@@ -94,14 +93,15 @@ public class FrameActionsUtils extends FrameUtils {
 
     /**
      * 
+     * @param frame
      * @param rects
      * @param circles
      * @return 
      */
-    public Icon drawFormats(Collection<RectWrapper> rects, Collection<Collection<PointWrapper>> circles) {
+    public Icon drawFormats(final Frame frame, final Collection<RectWrapper> rects, final Collection<Collection<PointWrapper>> circles) {
         MatWrapper matWrapper = new MatWrapper(frame);
-        matWrapper.setOpencvMat(super.multipleRects(rects).getOpencvMat());
-        matWrapper.setOpencvMat(super.multipleCircles(circles).getOpencvMat());
+        matWrapper = super.multipleRects(matWrapper, rects);
+        matWrapper = super.multipleCircles(matWrapper, circles);
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 

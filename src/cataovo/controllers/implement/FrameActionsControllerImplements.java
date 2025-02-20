@@ -77,7 +77,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     private Icon paintDotOnFrame(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        return new FrameActionsUtils(currentFrame).drawCircle(new PointWrapper(point));
+        return new FrameActionsUtils().drawCircle(currentFrame, new PointWrapper(point));
     }
 
     /**
@@ -89,9 +89,9 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     private Icon paintGridOnFrame(Region region, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        final FrameActionsUtils frameUtils = new FrameActionsUtils(currentFrame.clone());
-        final Icon icon = frameUtils.drawRectangle(new RectWrapper(region));
-        MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
+        final FrameActionsUtils frameUtils = new FrameActionsUtils();
+        final Icon icon = frameUtils.drawRectangle(currentFrame.clone(), new RectWrapper(region));
+        MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(currentFrame.getRegionsContainingEggs());
         return icon;
     }
 
@@ -105,14 +105,14 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     @Override
     public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
-        final FrameActionsUtils frameUtils = new FrameActionsUtils(currentFrame);
+        final FrameActionsUtils frameUtils = new FrameActionsUtils();
         if (currentFrame.getRegionsContainingEggs().isEmpty()) {
-            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids()).get());
+            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids(currentFrame)).get());
         } else {
             MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
                     (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
-            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids()).get());
+            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids(currentFrame)).get());
         }
     }
 
@@ -129,7 +129,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException {
         Icon subframeImage = null;
         if (clickCount == 0 && initialPoint != null) {
-            subframeImage = new FrameActionsUtils(currentFrame).captureSubframe(this.initialPoint, pointClick);
+            subframeImage = new FrameActionsUtils().captureSubframe(currentFrame, this.initialPoint, pointClick);
         }
         return subframeImage;
     }
@@ -143,7 +143,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      */
     @Override
     public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection points) {  
-        return new FrameActionsUtils(currentFrame).drawFormats(regions, points);
+        return new FrameActionsUtils().drawFormats(currentFrame, regions, points);
     }
 
 }
