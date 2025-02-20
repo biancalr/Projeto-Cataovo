@@ -5,9 +5,9 @@
  */
 package cataovo.externals.libs.opencv.utils;
 
-import cataovo.wrappers.MatWrapper;
-import cataovo.wrappers.PointWrapper;
-import cataovo.wrappers.RectWrapper;
+import cataovo.wrappers.lib.MatWrapper;
+import cataovo.wrappers.lib.PointWrapper;
+import cataovo.wrappers.lib.RectWrapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencv.core.Core;

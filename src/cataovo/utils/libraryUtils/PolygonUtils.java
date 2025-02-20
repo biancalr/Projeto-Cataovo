@@ -5,9 +5,9 @@
  */
 package cataovo.utils.libraryUtils;
 
-import cataovo.wrappers.MatWrapper;
-import cataovo.wrappers.PointWrapper;
-import cataovo.wrappers.RectWrapper;
+import cataovo.wrappers.lib.MatWrapper;
+import cataovo.wrappers.lib.PointWrapper;
+import cataovo.wrappers.lib.RectWrapper;
 
 /**
  * Use resources from Opencv to transform an image.

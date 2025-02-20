@@ -10,7 +10,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
 import cataovo.utils.fileUtils.readers.SplitData;
-import cataovo.wrappers.MatWrapper;
+import cataovo.wrappers.lib.MatWrapper;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
