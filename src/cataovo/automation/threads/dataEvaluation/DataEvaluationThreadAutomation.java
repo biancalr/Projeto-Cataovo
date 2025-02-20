@@ -4,13 +4,10 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
-import cataovo.entities.Point;
-import cataovo.entities.Region;
-import cataovo.utils.constants.Constants;
+import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ReportNotValidException;
-import java.util.List;
+import cataovo.utils.constants.Constants;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +36,7 @@ public abstract class DataEvaluationThreadAutomation implements Callable<String>
     }
 
     @Override
-    public String call() throws NumberFormatException, ReportNotValidException {
+    public String call() throws ReportNotValidException, DirectoryNotValidException {
         return evaluationAnalysis();
     }
 
@@ -48,14 +45,15 @@ public abstract class DataEvaluationThreadAutomation implements Callable<String>
      * @param regionsInFrame
      * @param pointsInFrame
      * @return
+     * @throws cataovo.exceptions.DirectoryNotValidException
      */
-    protected abstract float[] evaluateFrame(String regionsInFrame, String pointsInFrame) throws NumberFormatException;
+    protected abstract float[] evaluateFrame(String regionsInFrame, String pointsInFrame) throws DirectoryNotValidException;
 
     /**
      *
      * @return
      */
-    private synchronized String evaluationAnalysis() throws NumberFormatException, ReportNotValidException {
+    private synchronized String evaluationAnalysis() throws NumberFormatException, ReportNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "Starting Evaluation...");
 
         //split both strings

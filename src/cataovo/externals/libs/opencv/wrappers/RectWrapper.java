@@ -13,26 +13,31 @@ import org.opencv.core.Rect;
  * Wrapps a {@link org.opencv.core.Rect Rect}
  * @author Bianca Leopoldo Ramos
  */
-public class RectWrapper {
+public final class RectWrapper {
     
-    private Rect rect;
+    private final Rect rect;
+    private double area;
 
     public RectWrapper() {
+        this.rect = new Rect();
+        this.area = 0;
     }
 
-    public RectWrapper(Rect rect) {
+    public RectWrapper(final Rect rect) {
         this.rect = rect;
+        this.area = rect.area();
     }
 
     /**
      * 
      * @param region 
      */
-    public RectWrapper(Region region) {
+    public RectWrapper(final Region region) {
         this.rect = new Rect(region.getInitialPoint().getX(), 
                              region.getInitialPoint().getY(),
                              region.getWidth(), 
                              region.getHeight());
+        this.area = this.rect.area();
     }
 
     /**
@@ -52,6 +57,7 @@ public class RectWrapper {
         this.rect.y = region.getInitialPoint().getY();
         this.rect.height = region.getHeight();
         this.rect.width = region.getWidth();
+        this.area = this.rect.area();
     }
     
     /**
@@ -66,5 +72,9 @@ public class RectWrapper {
 
     public Rect getOpencvRect() {
         return rect;
+    }
+
+    public double getArea() {
+        return area;
     }
 }

@@ -15,7 +15,7 @@ import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
 import cataovo.resources.MainContext;
-import cataovo.utils.actionUtils.FrameActionsUtils;
+import cataovo.externals.UI.swing.utils.FrameActionsUtils;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
