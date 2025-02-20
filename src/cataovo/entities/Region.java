@@ -113,6 +113,10 @@ public final class Region implements Cloneable, Serializable {
     public Point getInitialPoint() {
         return initialPoint;
     }
+    
+    public int getArea() {
+        return this.width * this.getHeight();
+    }
 
     /**
      *
@@ -124,7 +128,7 @@ public final class Region implements Cloneable, Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(",").append(initialPoint.toString())
                 .append(",")
                 .append(width)

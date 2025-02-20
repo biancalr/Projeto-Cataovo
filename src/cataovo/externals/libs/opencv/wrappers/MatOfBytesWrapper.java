@@ -13,7 +13,7 @@ import org.opencv.core.MatOfByte;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class MatOfBytesWrapper extends MatOfByte {
+public final class MatOfBytesWrapper extends MatOfByte {
 
     // 8UC(x)
     private static final int DEPTH = CvType.CV_8U;

@@ -5,13 +5,13 @@
  */
 package cataovo.resources.fileChooser.handler;
 
-import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.utils.enums.FileExtension;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,14 +32,14 @@ public final class FileListHandler<T> {
      * @return
      * @throws ImageNotValidException
      */
-    public Collection<T> normalizeFilesOnAList(File[] file, FileExtension fileExtension) throws ImageNotValidException {
+    public Collection<T> normalizeFiles(File[] file, FileExtension fileExtension) throws ImageNotValidException {
         Collection<T> fileList = new LinkedList<>();
         for (File file1 : file) {
             if (file1.exists() && file1.isFile() && getFileExtension(file1).equalsIgnoreCase(fileExtension.getExtension())) {
                 fileList.add((T) file1);
                 LOG.log(Level.INFO, "Adding following file: {0}", file1.getName());
             } else if (file1.isDirectory()) {
-                normalizeFilesOnAList(file1.listFiles(), fileExtension);
+                normalizeFiles(file1.listFiles(), fileExtension);
             }
         }
         return fileList;

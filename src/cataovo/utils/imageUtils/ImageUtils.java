@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv.utils.imageUtils;
+package cataovo.utils.imageUtils;
 
+import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.externals.libs.opencv.wrappers.PointWrapper;
+import cataovo.externals.libs.opencv.wrappers.RectWrapper;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -25,7 +28,7 @@ public interface ImageUtils {
      * @see org.opencv.imgproc.Imgproc#circle(org.opencv.core.Mat,
      * org.opencv.core.Point, int, org.opencv.core.Scalar)
      */
-    public Mat circle(Point point, Mat imagePointed);
+    public MatWrapper circle(final PointWrapper point, final MatWrapper imagePointed);
 
     /**
      * Draw a grid made by two dots in the image
@@ -37,7 +40,7 @@ public interface ImageUtils {
      * @see org.opencv.imgproc.Imgproc#rectangle(org.opencv.core.Mat,
      * org.opencv.core.Rect, org.opencv.core.Scalar)
      */
-    public Mat rectangle(Point beginPoint, Point endPoint, Mat imageGrid);
+    public MatWrapper rectangle(final PointWrapper beginPoint, final PointWrapper endPoint, final MatWrapper imageGrid);
 
     /**
      * Capture the Rect of the grid for identification. Allows to capture the
@@ -48,7 +51,7 @@ public interface ImageUtils {
      * @param endGrid the point to end
      * @return the area {@link Rect} of the Grid
      */
-    public Rect captureGridMat(Point beginGrid, Point endGrid);
+    public RectWrapper captureGridMat(final PointWrapper beginGrid, final PointWrapper endGrid);
 
     /**
      * Captures the submat of an denmarked egg. It must have to obbey the
@@ -69,5 +72,5 @@ public interface ImageUtils {
      * @return the capture submat based on the region coordinates.
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
-    public Mat captureSubmat(Rect region, Mat frame);
+    public MatWrapper captureSubmat(final RectWrapper region, final MatWrapper frame);
 }

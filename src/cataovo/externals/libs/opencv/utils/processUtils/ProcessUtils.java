@@ -6,6 +6,7 @@ package cataovo.externals.libs.opencv.utils.processUtils;
 
 import java.awt.image.BufferedImage;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -68,6 +69,13 @@ public interface ProcessUtils {
      * @see Imgproc#drawContours(org.opencv.core.Mat, java.util.List, int, org.opencv.core.Scalar) 
      */
     public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea);
+    
+    /**
+     * Calculates the area.
+     * @param contour
+     * @return 
+     */
+    public double getArea(MatOfPoint contour);
 
     /**
      * Creates the content of the relatory for a frame.

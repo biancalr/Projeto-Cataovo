@@ -4,9 +4,9 @@
  */
 package cataovo.externals.libs.opencv.utils.processUtils;
 
-import cataovo.utils.constants.Constants;
 import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.utils.constants.Constants;
 import cataovo.utils.enums.FileExtension;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -111,11 +111,11 @@ public class ProcessUtilsImplements implements ProcessUtils {
         LOG.log(Level.INFO, "drawing objects...");
         int numOfContours = 0;
         Mat result = imageToDraw.clone();
-        List<MatOfPoint> contours = findContours(imgToFindContours.clone());
-        List<MatOfPoint> foundContours = new ArrayList<>();
+        final List<MatOfPoint> contours = findContours(imgToFindContours.clone());
+        final List<MatOfPoint> foundContours = new ArrayList<>();
 
         for (int i = 0; i < contours.size(); i++) {
-            double contourArea = Imgproc.contourArea(contours.get(i));
+            double contourArea = getArea(contours.get(i));
 
             if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
                 numOfContours++;
@@ -136,6 +136,14 @@ public class ProcessUtilsImplements implements ProcessUtils {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public double getArea(MatOfPoint currentContour) {
+        if (currentContour.empty()) {
+            return 0;
+        }
+        return Imgproc.contourArea(currentContour);
     }
 
     /**

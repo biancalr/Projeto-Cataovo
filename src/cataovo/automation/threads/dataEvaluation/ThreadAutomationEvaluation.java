@@ -6,6 +6,9 @@ package cataovo.automation.threads.dataEvaluation;
 
 import cataovo.entities.Point;
 import cataovo.entities.Region;
+import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.resources.MainContext;
 import cataovo.utils.constants.Constants;
 import cataovo.utils.conversionUtils.DataToFormatUtils;
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.logging.Logger;
 public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluation.class.getName());
-    
+
     private final DataToFormatUtils dataUtils;
 
     public ThreadAutomationEvaluation(String fileContentManual, String fileContentAuto) {
@@ -36,19 +39,20 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
      * @throws NumberFormatException
      */
     @Override
-    protected float[] evaluateFrame(final String regionsInFrame, final String pointsInFrame) throws NumberFormatException {
+    protected float[] evaluateFrame(final String regionsInFrame, final String pointsInFrame) throws DirectoryNotValidException {
         int tp = 0;
         int tn = 0;
         int fp = 0;
         int fn = 0;
         float[] metrics = new float[4];
         List<String> eggs;
-        
+        MatWrapper currentFrame;
+
         int regionsCounter;
         int eggsCounter;
 
         //Separar a as regioes pela vírgula
-        List<Region> regions = dataUtils.split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
+        final List<Region> regions = dataUtils.split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
         regionsCounter = regions.size();
         //Separa as áreas dos ovos pela cerquilha
         eggs = new CopyOnWriteArrayList<>(List.of(pointsInFrame.split(Constants.OBJECT_SEPARATOR)));
@@ -58,6 +62,9 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
         // Caso não haja ovos detectados pelo automático, a linha não será splitada
         if (eggs.size() >= 1) {
+
+            currentFrame = new MatWrapper(MainContext.getInstance().getCurrentFrame());
+            int Ymaximo = 0, Yminimo = currentFrame.getHEIGHT(), Xmaximo = 0, Xminimo = currentFrame.getWIDTH(), distanciaYMancha, distanciaXMancha;
 
             // Posição zero contém apenas nome e a quantidade de ovos
             // Começar a partir do 1 pois essa posição não contém coordenadas de pontos
@@ -72,7 +79,6 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                 // Comparação começa aqui
                 // Percorrendo as marcações
                 List<Point> pontosEncontrados = new CopyOnWriteArrayList<>();
-                int Ymaximo = 0, Yminimo = 480, Xmaximo = 0, Xminimo = 640, distanciaYMancha, distanciaXMancha;
                 for (int i = 0; i < regions.size(); i++) {
                     rect = regions.get(i);
                     //percorrendo os pontos
@@ -98,26 +104,27 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                             }
                         }
                     }
-                    if (!pontosEncontrados.isEmpty() && ( (float) pontosEncontrados.size() / (float) points.size() > 0.3F)) {
+                    // Força o acúmulo de uma quantidade significativa da área de um ovo dentro da marcação
+                    if (!pontosEncontrados.isEmpty() && ((float) pontosEncontrados.size() / (float) points.size() > 0.3F)) {
                         LOG.log(Level.INFO, "Total de pontos encontrados em {0}: {1}", new Object[]{eggs.get(0), pontosEncontrados.size()});
                         distanciaYMancha = Ymaximo - Yminimo;
                         distanciaXMancha = Xmaximo - Xminimo;
 
                         float resultadoX = Math.abs((float) distanciaXMancha / (float) rect.getWidth());
                         float resultadoY = Math.abs((float) distanciaYMancha / (float) rect.getHeight());
-                        
+
                         LOG.log(Level.INFO, "Largura X: {0}", distanciaXMancha);
                         LOG.log(Level.INFO, "Altura Y: {0}", distanciaYMancha);
                         LOG.log(Level.INFO, "Resultado distancia X: {0}", resultadoX);
                         LOG.log(Level.INFO, "Resultado distancia Y: {0}", resultadoY);
-                        
+
                         if ((resultadoX > 0.5 && resultadoX <= 1.0) || (resultadoY > 0.5 && resultadoY <= 1.0)) {
 
                             regionsCounter--;
                             for (var pontoEncontrado : pontosEncontrados) {
                                 points.remove(pontoEncontrado);
                             }
-                            if (((float)points.size() / (float)totalPontos) >= 0.3F) {
+                            if (((float) points.size() / (float) totalPontos) >= 0.3F) {
                                 i = i - 1;
                             } else {
                                 eggsCounter--;
@@ -136,7 +143,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             // Caso tenha sobrado ovos que não foram detectados ou foram detectados incorretamente
             // Reduzir 1 do pois a posição 1 não contém coordenadas de pontos
             fp = eggsCounter;
-            
+
             LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
             LOG.log(Level.INFO, "Ovos remanescentes {0}", eggs.size() - 1);
 

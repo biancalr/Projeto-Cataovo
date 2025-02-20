@@ -3,15 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.utils.actionUtils;
+package cataovo.externals.UI.swing.utils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
+import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtilsImplements;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
+import cataovo.utils.frameActionUtils.FrameActionUtils;
+import cataovo.utils.imageUtils.ImageUtils;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -21,14 +24,14 @@ import javax.swing.ImageIcon;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FrameActionsUtils extends ActionUtils {
+public class FrameActionsUtils extends FrameActionUtils {
 
     public FrameActionsUtils(Frame frame) {
-        super(frame);
+        super(frame, new ImageUtilsImplements());
     }
 
     public FrameActionsUtils() {
-        super();
+        super(new ImageUtilsImplements());
     }
 
     public Frame getFrame() {
@@ -41,9 +44,8 @@ public class FrameActionsUtils extends ActionUtils {
      * @param pw the Opencv {@link org.opencv.core.Point} Wrapper
      * @return a image with a drawn point circle.
      */
-    @Override
     public Icon drawCircle(PointWrapper pw) {
-        return super.drawCircle(pw);
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.circle(pw)).get());
     }
 
     /**
@@ -52,9 +54,8 @@ public class FrameActionsUtils extends ActionUtils {
      * @param rw the Opencv {@link org.opencv.core.Rect} Wrapper
      * @return a image with a drawn rectangle.
      */
-    @Override
     public Icon drawRectangle(RectWrapper rw) {
-        return super.drawRectangle(rw);
+        return new ImageIcon(Conversion.getInstance().convertMatToImg(super.rectangle(rw)).get());
     }
 
     /**
@@ -93,7 +94,7 @@ public class FrameActionsUtils extends ActionUtils {
      */
     public Icon captureSubframe(Point initialPoint, Point pointClick) {
         rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
-        matWrapper = new MatWrapper(imageUtils.captureSubmat(rectWrapper.getOpencvRect(), Conversion.getInstance().convertImageFrameToMat(frame).getOpencvMat()), null);
+        matWrapper = imageUtils.captureSubmat(rectWrapper, Conversion.getInstance().convertImageFrameToMat(frame));
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 
@@ -105,8 +106,8 @@ public class FrameActionsUtils extends ActionUtils {
      */
     public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<Collection<PointWrapper>> circles) {
         matWrapper = new MatWrapper(frame);
-        matWrapper.setOpencvMat(super.drawMultipleRectangles(rects).getOpencvMat());
-        matWrapper.setOpencvMat(super.drawMultiplePoints(circles).getOpencvMat());
+        matWrapper.setOpencvMat(super.multipleRects(rects).getOpencvMat());
+        matWrapper.setOpencvMat(super.multipleCircles(circles).getOpencvMat());
         return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
     }
 

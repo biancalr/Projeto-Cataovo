@@ -3,50 +3,47 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.utils.actionUtils;
+package cataovo.utils.frameActionUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
-import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtils;
-import cataovo.externals.libs.opencv.utils.imageUtils.ImageUtilsImplements;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
 import cataovo.externals.libs.opencv.wrappers.PointWrapper;
 import cataovo.externals.libs.opencv.wrappers.RectWrapper;
+import cataovo.utils.imageUtils.ImageUtils;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 /**
  * Define the actions to do in a {@link Frame}.
  *
  * @author Bianca Leopoldo Ramos
  */
-public abstract class ActionUtils {
+public abstract class FrameActionUtils {
 
-    protected static final Logger LOG = Logger.getLogger(ActionUtils.class.getName());
+    protected static final Logger LOG = Logger.getLogger(FrameActionUtils.class.getName());
     protected PointWrapper pointWrapper;
     protected RectWrapper rectWrapper;
     protected MatWrapper matWrapper;
     protected Frame frame = null;
     protected ImageUtils imageUtils;
 
-    public ActionUtils(Frame frame) {
+    public FrameActionUtils(Frame frame, ImageUtils imageUtils) {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper(frame);
         this.frame = frame;
-        this.imageUtils = new ImageUtilsImplements();
+        this.imageUtils = imageUtils;
     }
 
-    public ActionUtils() {
+    public FrameActionUtils(ImageUtils imageUtils) {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper();
-        this.imageUtils = new ImageUtilsImplements();
+        this.imageUtils = imageUtils;
     }
 
     public PointWrapper getPointWrapper() {
@@ -60,24 +57,6 @@ public abstract class ActionUtils {
     public MatWrapper getMatWrapper() {
         return matWrapper;
     }
-    
-    /**
-     *
-     * @param rects
-     * @return
-     */
-    protected MatWrapper drawMultipleRectangles(Collection<RectWrapper> rects) {
-        return drawMultipleRects(rects);
-    }
-
-    /**
-     *
-     * @param circles
-     * @return
-     */
-    protected MatWrapper drawMultiplePoints(Collection<Collection<PointWrapper>> circles) {
-        return drawMultipleCircles(circles);
-    }
 
     /**
      * Using the coordinates of a given {@link org.opencv.core.Point Point},
@@ -88,15 +67,15 @@ public abstract class ActionUtils {
      * @return a image with a drawn point circle.
      * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
      */
-    protected Icon drawCircle(PointWrapper pw) {
+    protected MatWrapper circle(PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
             this.matWrapper = updateGrids();
         } else {
             matWrapper = Conversion.getInstance().convertImageFrameToMat(frame);
         }
-        matWrapper.setOpencvMat(imageUtils.circle(pw.getOpencvPoint(), matWrapper.getOpencvMat()).clone());
-        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
+        matWrapper = imageUtils.circle(pw, matWrapper);
+        return matWrapper;
     }
 
     /**
@@ -108,7 +87,7 @@ public abstract class ActionUtils {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    protected Icon drawRectangle(RectWrapper rw) {
+    protected MatWrapper rectangle(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
             this.matWrapper = updateGrids();
@@ -120,9 +99,10 @@ public abstract class ActionUtils {
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
         this.frame.getRegionsContainingEggs().add(captureGrid(pointWrapper, pw2));
-        matWrapper.setOpencvMat(imageUtils.rectangle(
-                pointWrapper.getOpencvPoint(), pw2.getOpencvPoint(), matWrapper.getOpencvMat()));
-        return new ImageIcon(Conversion.getInstance().convertMatToImg(matWrapper).get());
+        matWrapper = imageUtils.rectangle(
+                pointWrapper, pw2, matWrapper);
+        return matWrapper;
+
     }
 
     /**
@@ -134,8 +114,8 @@ public abstract class ActionUtils {
      * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
-    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
-        return new RectWrapper(imageUtils.captureGridMat(beginGrid.getOpencvPoint(), endGrid.getOpencvPoint())).getRegion();
+    protected Region captureGrid(final PointWrapper beginGrid, final PointWrapper endGrid) {
+        return this.imageUtils.captureGridMat(beginGrid, endGrid).getRegion();
     }
 
     /**
@@ -146,8 +126,8 @@ public abstract class ActionUtils {
      * org.opencv.core.Mat)
      */
     protected MatWrapper updateGrids() {
-        final var mw = new MatWrapper(this.frame);
-        this.frame.getRegionsContainingEggs().stream().forEach((r) -> {
+        var mw = new MatWrapper(this.frame);
+        for (Region r : this.frame.getRegionsContainingEggs()) {
             final var pw1 = new PointWrapper(
                     new Point(r.getInitialPoint().getX(),
                             r.getInitialPoint().getY()));
@@ -156,9 +136,9 @@ public abstract class ActionUtils {
                     Math.abs(r.getInitialPoint().getY() - r.getHeight())));
             final var wrapper = new MatWrapper();
             wrapper.setOpencvMat(mw.getOpencvMat());
-            mw.setOpencvMat(imageUtils.rectangle(
-                    pw1.getOpencvPoint(), pw2.getOpencvPoint(), wrapper.getOpencvMat()).clone());
-        });
+            mw = imageUtils.rectangle(
+                    pw1, pw2, wrapper);
+        }
         return mw;
     }
 
@@ -167,9 +147,9 @@ public abstract class ActionUtils {
      * @param rects
      * @return
      */
-    private MatWrapper drawMultipleRects(Collection<RectWrapper> rects) {
+    protected MatWrapper multipleRects(Collection<RectWrapper> rects) {
         MatWrapper mw = new MatWrapper(this.frame);
-        rects.stream().forEach((r) -> {
+        for (RectWrapper r : rects) {
             final var beginPoint = new PointWrapper(
                     new Point(r.getRegion().getInitialPoint().getX(),
                             r.getRegion().getInitialPoint().getY()));
@@ -178,11 +158,12 @@ public abstract class ActionUtils {
                     Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
             final var wrapper = new MatWrapper();
             wrapper.setOpencvMat(mw.getOpencvMat());
-            mw.setOpencvMat(imageUtils.rectangle(
-                    beginPoint.getOpencvPoint(),
-                    endPoint.getOpencvPoint(),
-                    wrapper.getOpencvMat()).clone());
-        });
+            mw = imageUtils.rectangle(
+                    beginPoint,
+                    endPoint,
+                    wrapper);
+        }
+
         return mw;
     }
 
@@ -191,11 +172,13 @@ public abstract class ActionUtils {
      * @param circles
      * @return
      */
-    private MatWrapper drawMultipleCircles(Collection<Collection<PointWrapper>> circles) {
-        final var mw = this.matWrapper;
-        circles.stream().forEach((col) -> {col.stream().forEach((c) -> {
-                mw.setOpencvMat(imageUtils.circle(c.getOpencvPoint(), mw.getOpencvMat()).clone());
-        });});
+    protected MatWrapper multipleCircles(final Collection<Collection<PointWrapper>> circles) {
+        var mw = this.matWrapper;
+        for (var col : circles) {
+            for (var c : col) {
+                mw = imageUtils.circle(c, mw);
+            }
+        }
         return mw;
     }
 }

@@ -11,7 +11,7 @@ import org.opencv.core.Point;
  * Wrapps a {@link org.opencv.core.Point Point}
  * @author Bianca Leopoldo Ramos.
  */
-public class PointWrapper {
+public final class PointWrapper {
     
     private Point point;
 

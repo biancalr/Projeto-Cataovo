@@ -4,13 +4,13 @@
  */
 package cataovo.automation.threads.dataProcessing;
 
-import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
+import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
 import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtilsImplements;
+import cataovo.utils.constants.Constants;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import cataovo.externals.libs.opencv.utils.processUtils.ProcessUtils;
 
 /**
  *

@@ -4,10 +4,10 @@
  */
 package cataovo.automation.threads.dataProcessing;
 
-import cataovo.utils.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.externals.libs.opencv.utils.conversionUtils.Conversion;
 import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.utils.constants.Constants;
 import java.util.logging.Logger;
 
 /**

@@ -5,9 +5,9 @@
 package cataovo.controllers;
 
 import cataovo.entities.Palette;
-import cataovo.utils.enums.FileExtension;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.utils.enums.FileExtension;
 
 /**
  *

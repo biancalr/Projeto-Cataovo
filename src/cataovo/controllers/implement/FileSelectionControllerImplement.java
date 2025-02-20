@@ -268,7 +268,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
         Queue<Frame> frames = new LinkedList<>();
-        Collection<File> colection = new FileListHandler<File>().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Collection<File> colection = new FileListHandler<File>().normalizeFiles(listFiles, FileExtension.PNG);
         Frame frame;
         for (File file1 : colection) {
             frame = new Frame(file1.getPath());

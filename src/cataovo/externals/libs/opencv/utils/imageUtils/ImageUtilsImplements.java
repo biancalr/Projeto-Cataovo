@@ -5,14 +5,16 @@
  */
 package cataovo.externals.libs.opencv.utils.imageUtils;
 
+import cataovo.externals.libs.opencv.wrappers.MatWrapper;
+import cataovo.externals.libs.opencv.wrappers.PointWrapper;
+import cataovo.externals.libs.opencv.wrappers.RectWrapper;
+import cataovo.utils.imageUtils.ImageUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implements resources from Opencv to transform an image.
@@ -33,16 +35,18 @@ public class ImageUtilsImplements implements ImageUtils {
      * org.opencv.core.Point, int, org.opencv.core.Scalar)
      */
     @Override
-    public Mat circle(Point point, Mat imagePointed) {
+    public MatWrapper circle(final PointWrapper point, final MatWrapper imagePointed) {
         //draw the circle
         LOG.log(Level.INFO, "Draw the circle...");
-        final var img = imagePointed.clone();
+        MatWrapper tmp = imagePointed;
+        final var img = tmp.getOpencvMat().clone();
                 Imgproc.circle(img,
-                point,
+                point.getOpencvPoint(),
                 3,
                 new Scalar(0, 0, 255),
                 Core.FILLED);
-        return img;
+        tmp.setOpencvMat(img);
+        return tmp;
     }
 
     /**
@@ -56,14 +60,16 @@ public class ImageUtilsImplements implements ImageUtils {
      * org.opencv.core.Rect, org.opencv.core.Scalar)
      */
     @Override
-    public Mat rectangle(Point beginPoint, Point endPoint, Mat imageGrid) {
+    public MatWrapper rectangle(PointWrapper beginPoint, PointWrapper endPoint, MatWrapper imageGrid) {
         LOG.log(Level.INFO, "Draw the rectangle...");
-        final var img = imageGrid.clone();
+        MatWrapper tmp = imageGrid;
+        final var img = tmp.getOpencvMat().clone();
         Imgproc.rectangle(img,
-                beginPoint,
-                endPoint,
+                beginPoint.getOpencvPoint(),
+                endPoint.getOpencvPoint(),
                 new Scalar(0, 255, 0),Core.BORDER_REFLECT);
-        return img;
+        tmp.setOpencvMat(img);
+        return tmp;
     }
 
     /**
@@ -76,14 +82,14 @@ public class ImageUtilsImplements implements ImageUtils {
      * @return the area {@link Rect} of the Grid
      */
     @Override
-    public Rect captureGridMat(Point beginGrid, Point endGrid) {
+    public RectWrapper captureGridMat(PointWrapper beginGrid, PointWrapper endGrid) {
         LOG.log(Level.INFO, "Capture the Region...");
         final Rect grid = new Rect();
-        grid.x = (int) beginGrid.x;
-        grid.y = (int) beginGrid.y;
-        grid.width = (int) (beginGrid.x - endGrid.x);
-        grid.height = (int) (beginGrid.y - endGrid.y);
-        return grid;
+        grid.x = (int) beginGrid.getOpencvPoint().x;
+        grid.y = (int) beginGrid.getOpencvPoint().y;
+        grid.width = (int) (beginGrid.getOpencvPoint().x - endGrid.getOpencvPoint().x);
+        grid.height = (int) (beginGrid.getOpencvPoint().y - endGrid.getOpencvPoint().y);
+        return new RectWrapper(grid);
 
     }
 
@@ -107,14 +113,16 @@ public class ImageUtilsImplements implements ImageUtils {
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
     @Override
-    public Mat captureSubmat(Rect region, Mat frame) {
+    public MatWrapper captureSubmat(RectWrapper region, MatWrapper frame) {
         LOG.log(Level.INFO, "Capturing submat");
-        Rect rect = new Rect();
-        rect.x = region.width > 0 ? (region.x - region.width) : region.x;
-        rect.y = region.height > 0 ? (region.y - region.height) : region.y;
-        rect.width = region.width > 0 ? region.width : Math.abs(region.width);
-        rect.height = region.height > 0 ? region.height : Math.abs(region.height);
-        return frame.submat(rect);
+        MatWrapper tmp = frame;
+        final Rect rect = new Rect();
+        rect.x = region.getOpencvRect().width > 0 ? (region.getOpencvRect().x - region.getOpencvRect().width) : region.getOpencvRect().x;
+        rect.y = region.getOpencvRect().height > 0 ? (region.getOpencvRect().y - region.getOpencvRect().height) : region.getOpencvRect().y;
+        rect.width = region.getOpencvRect().width > 0 ? region.getOpencvRect().width : Math.abs(region.getOpencvRect().width);
+        rect.height = region.getOpencvRect().height > 0 ? region.getOpencvRect().height : Math.abs(region.getOpencvRect().height);
+        tmp.setOpencvMat(tmp.getOpencvMat().submat(rect));
+        return tmp;
     }
 
 }
