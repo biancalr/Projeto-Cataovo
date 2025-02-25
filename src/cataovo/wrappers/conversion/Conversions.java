@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.libs.opencv;
+package cataovo.wrappers.conversion;
 
-import cataovo.entities.Frame;
-import cataovo.entities.Point;
 import cataovo.utils.enums.FileExtension;
 import cataovo.wrappers.lib.MatOfBytesWrapper;
 import cataovo.wrappers.lib.MatWrapper;
@@ -15,14 +13,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
@@ -31,71 +25,19 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class Conversion {
+public final class Conversions {
 
     /**
      * Logging
      */
-    private static final Logger LOG = Logger.getLogger(Conversion.class.getName());
-    /**
-     * Instance
-     */
-    private static volatile Conversion CONVERTER;
+    private static final Logger LOG = Logger.getLogger(Conversions.class.getName());
 
-    /**
-     *
-     * @return rules the operations of converting types
-     */
-    public static Conversion getInstance() {
-        Conversion FORMAT_CONVERTER = Conversion.CONVERTER;
-        if (FORMAT_CONVERTER == null) {
-            synchronized (Conversion.class) {
-                FORMAT_CONVERTER = Conversion.CONVERTER;
-                if (FORMAT_CONVERTER == null) {
-                    Conversion.CONVERTER = FORMAT_CONVERTER = new Conversion();
-                }
-            }
-        }
-        return FORMAT_CONVERTER;
+    public Conversions() {
     }
 
     /**
-     * Converts a {@link org.opencv.core.MatOfPoint MatOfPoint} to a list of
-     * {@link cataovo.entities.Point Point}
-     *
-     * @param matOfPoint
-     * @return a list of {@link cataovo.entities.Point Point}
-     */
-    public List<Point> convertMatOfPointToList(MatOfPoint matOfPoint) {
-        List<Point> points = new ArrayList<>();
-        for (org.opencv.core.Point point : matOfPoint.toList()) {
-            points.add(new Point((int) point.x, (int) point.y));
-        }
-        return points;
-    }
-
-    /**
-     * Converts an image Frame to a
-     * {@link cataovo.wrappers.lib.MatWrapper Mat} in order to make
-     * operations with a {@link org.opencv.core.Mat Opencv.Mat}.
-     *
-     * @param current the Frame to make the conversion.
-     * @return a {@link cataovo.wrappers.lib.MatWrapper MatWrapper} that
-     * encapsulates a {@link org.opencv.core.Mat Mat}
-     * @see org.opencv.imgcodecs.Imgcodecs#imread(java.lang.String)
-     */
-    public MatWrapper convertImageFrameToMat(Frame current) {
-        Mat m = new Mat();
-        Optional<Mat> optional = Optional.ofNullable(Imgcodecs.imread(current.getPaletteFrame().getPath()));
-        optional.ifPresent((t) -> t.copyTo(m));
-        MatWrapper wrapper = new MatWrapper(m.clone(), current.getPaletteFrame().getAbsolutePath());
-        return wrapper;
-
-    }
-
-    /**
-     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to
-     * a JPG file.
+     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to a JPG
+     * file.
      *
      * @param current the current frame as
      * {@link cataovo.wrappers.lib.MatWrapper MatWrapper}
@@ -108,8 +50,8 @@ public final class Conversion {
     }
 
     /**
-     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to
-     * a PNG file.
+     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to a PNG
+     * file.
      *
      * @param current the current frame as
      * {@link cataovo.wrappers.lib.MatWrapper MatWrapper}
@@ -131,9 +73,9 @@ public final class Conversion {
      */
     private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension) {
         LOG.log(Level.INFO, "Converting a MAT to: {0}", extension.name());
-        MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
+        final MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
         boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getOpencvMat(), ofBytesWrapper);
-        BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
+        final BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
         return output;
 
     }
@@ -158,10 +100,9 @@ public final class Conversion {
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, "Error while converting a MAT to: " + extension.toString(), ex);
             }
-            return output;
-        } else {
-            return null;
+
         }
+        return output;
 
     }
 

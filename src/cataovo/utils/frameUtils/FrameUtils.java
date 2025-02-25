@@ -7,7 +7,6 @@ package cataovo.utils.frameUtils;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.externals.libs.opencv.Conversion;
 import cataovo.utils.libraryUtils.PolygonUtils;
 import cataovo.wrappers.lib.MatWrapper;
 import cataovo.wrappers.lib.PointWrapper;
@@ -21,14 +20,14 @@ import java.util.logging.Logger;
  * @author Bianca Leopoldo Ramos
  */
 public class FrameUtils {
-    
+
     protected static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
     protected PolygonUtils imageUtils;
 
     public FrameUtils(PolygonUtils imageUtils) {
         this.imageUtils = imageUtils;
     }
-    
+
     /**
      * Using the coordinates of a given {@link org.opencv.core.Point Point},
      * creates a dot to denmark the first click to start a region that locates
@@ -43,14 +42,14 @@ public class FrameUtils {
         LOG.log(Level.INFO, "Starting..");
         MatWrapper matWrapper;
         if (!frame.getRegionsContainingEggs().isEmpty()) {
-            matWrapper = updateGrids(frame);
+            matWrapper = update(frame);
         } else {
-            matWrapper = Conversion.getInstance().convertImageFrameToMat(frame);
+            matWrapper = new MatWrapper(frame);
         }
         matWrapper = imageUtils.circle(pw, matWrapper);
         return matWrapper;
     }
-    
+
     /**
      * Using the first point plus width and height based on a second point,
      * creates a rectangle to denmark the region that locates an object Egg.
@@ -65,7 +64,7 @@ public class FrameUtils {
         LOG.log(Level.INFO, "Starting..");
         MatWrapper matWrapper = new MatWrapper(frame);
         if (!frame.getRegionsContainingEggs().isEmpty()) {
-            matWrapper = updateGrids(frame);
+            matWrapper = update(frame);
         }
         final var pointWrapper = new PointWrapper(
                 new Point(rw.getRegion().getInitialPoint().getX(),
@@ -73,26 +72,31 @@ public class FrameUtils {
         final var pw2 = new PointWrapper(new Point(
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
-        frame.getRegionsContainingEggs().add(captureGrid(pointWrapper, pw2));
+        frame.getRegionsContainingEggs().add(grid(pointWrapper, pw2));
         matWrapper = imageUtils.rectangle(
                 pointWrapper, pw2, matWrapper);
         return matWrapper;
 
     }
-    
+
     /**
-     * Captures a submat.
+     * Capture the Rect of the grid for identification. Allows to capture the
+     * rect so it can be possible to indentify which grid has a certain egg
+     * inside.
      *
-     * @param beginGrid a point to start calculating the
-     * {@link org.opencv.core.Rect Rect}.
-     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
-     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
-     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
+     * @param beginGrid the point to begin
+     * @param endGrid the point to end
+     * @return the area {@link Region} of the Grid
      */
-    protected Region captureGrid(final PointWrapper beginGrid, final PointWrapper endGrid) {
-        return this.imageUtils.captureGridMat(beginGrid, endGrid).getRegion();
+    protected Region grid(final PointWrapper beginGrid, final PointWrapper endGrid) {
+        LOG.log(Level.INFO, "Capture the Region...");
+        final Region grid = new Region();
+        grid.setInitialPoint(beginGrid.getPoint());
+        grid.setWidth((int) (beginGrid.getPoint().getX() - endGrid.getPoint().getX()));
+        grid.setHeight((int) (beginGrid.getPoint().getY() - endGrid.getPoint().getY()));
+        return grid;
     }
-    
+
     /**
      * Draws dinamically each grid of the regions in the frame
      *
@@ -101,7 +105,7 @@ public class FrameUtils {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    protected MatWrapper updateGrids(final Frame frame) {
+    protected MatWrapper update(final Frame frame) {
         var mw = new MatWrapper(frame);
         for (var r : frame.getRegionsContainingEggs()) {
             final var pw1 = new PointWrapper(
@@ -110,14 +114,12 @@ public class FrameUtils {
             final var pw2 = new PointWrapper(new Point(
                     Math.abs(r.getInitialPoint().getX() - r.getWidth()),
                     Math.abs(r.getInitialPoint().getY() - r.getHeight())));
-            final var wrapper = new MatWrapper();
-            wrapper.setOpencvMat(mw.getOpencvMat());
             mw = imageUtils.rectangle(
-                    pw1, pw2, wrapper);
+                    pw1, pw2, mw);
         }
         return mw;
     }
-    
+
     /**
      *
      * @param matWrapper
@@ -133,17 +135,15 @@ public class FrameUtils {
             final var endPoint = new PointWrapper(new Point(
                     Math.abs(r.getRegion().getInitialPoint().getX() - r.getRegion().getWidth()),
                     Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
-            final var wrapper = new MatWrapper();
-            wrapper.setOpencvMat(mw.getOpencvMat());
             mw = imageUtils.rectangle(
                     beginPoint,
                     endPoint,
-                    wrapper);
+                    mw);
         }
 
         return mw;
     }
-    
+
     /**
      *
      * @param matWrapper
@@ -159,5 +159,5 @@ public class FrameUtils {
         }
         return mw;
     }
-    
+
 }

@@ -4,12 +4,12 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.utils.Constants;
 import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.utils.enums.ProcessingMode;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.utils.Constants;
+import cataovo.utils.enums.ProcessingMode;
 import cataovo.utils.fileUtils.readers.Reader;
 import cataovo.utils.fileUtils.readers.csv.csvReader.CsvFileReader;
 import cataovo.wrappers.lib.PointWrapper;

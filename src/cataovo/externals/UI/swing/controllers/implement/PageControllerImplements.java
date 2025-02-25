@@ -6,13 +6,13 @@
  */
 package cataovo.externals.UI.swing.controllers.implement;
 
-import cataovo.utils.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.wrappers.UI.TabbedPane;
+import cataovo.externals.UI.swing.controllers.PageController;
 import cataovo.resources.MainContext;
+import cataovo.utils.Constants;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
@@ -22,7 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import cataovo.externals.UI.swing.controllers.PageController;
+import javax.swing.JTabbedPane;
 
 /**
  * Controls how the Frames are seen and iterated.
@@ -134,7 +134,7 @@ public class PageControllerImplements implements PageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void onNextFrameInAutomatic(JLabel parentName, Component jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!paletteSavingFolder.getAbsolutePath().contains(paletteName)
                 || !paletteSavingFolder.getAbsolutePath().contains("auto")) {
@@ -162,7 +162,7 @@ public class PageControllerImplements implements PageController {
     }
 
     @Override
-    public void onPreviousFrameInAutomatic(JLabel parentName, Component jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!savingFolder.getAbsolutePath().contains(paletteDirectoryName)
                 || !savingFolder.getAbsolutePath().contains("auto")) {
@@ -198,12 +198,11 @@ public class PageControllerImplements implements PageController {
      * @return
      * @throws ImageNotValidException
      */
-    private Frame putFileOnFrame(Component tabbedPane, File currentFrameDirectory, JLabel parentName) throws ImageNotValidException {
-        TabbedPane pane = new TabbedPane(tabbedPane);
+    private Frame putFileOnFrame(JTabbedPane tabbedPane, File currentFrameDirectory, JLabel parentName) throws ImageNotValidException {
         // Recuperar as imagens resultantes e inserí-las nas abas correspondentes
         Frame current = new Frame();
-        for (int i = 0; i < pane.getTabbedPane().getComponents().length; i++) {
-            Component component = pane.getTabbedPane().getComponents()[i];
+        for (int i = 0; i < tabbedPane.getComponents().length; i++) {
+            Component component = tabbedPane.getComponents()[i];
             Frame frame = new Frame(currentFrameDirectory.listFiles()[i].getAbsolutePath());
             if (frame.getName().equalsIgnoreCase(Constants.FRAME_ORIGINAL_NAME_TAG)) {
                 current = frame;
@@ -315,10 +314,9 @@ public class PageControllerImplements implements PageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException, UnsupportedOperationException, AssertionError {
-        TabbedPane pane = new TabbedPane(tabComponent);
+    public void showFramesOnSelectedTabScreen(JTabbedPane tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException, UnsupportedOperationException, AssertionError {
         this.frameCounter = -1;
-        switch (pane.getTabbedPane().getSelectedIndex()) {
+        switch (tabComponent.getSelectedIndex()) {
             case 0 -> {
                 parentLabel.setText(null);
                 parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));

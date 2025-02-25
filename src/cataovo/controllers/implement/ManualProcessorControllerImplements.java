@@ -31,7 +31,7 @@ public class ManualProcessorControllerImplements implements ManualProcessorContr
     private static final Logger LOG = Logger.getLogger(ManualProcessorControllerImplements.class.getName());
 
     @Override
-    public String onNewManualProcessPalette(final String parent) {
+    public String onNewManualProcessPalette(final String parent, final String savingDarectory) {
         LOG.log(Level.INFO, "Final file save: start");
         String manualRelatoryDestination;
         try {
@@ -41,7 +41,7 @@ public class ManualProcessorControllerImplements implements ManualProcessorContr
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             newCreateRelatories = new ThreadAutomationManualProcess(
                     MainContext.getInstance().getPaletteToSave(),
-                    MainContext.getInstance().getSavingFolder().getPath(),
+                    savingDarectory,
                     FileExtension.CSV,
                     parent, 
                     dateTime);

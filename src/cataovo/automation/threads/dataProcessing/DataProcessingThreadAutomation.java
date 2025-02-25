@@ -5,7 +5,7 @@
 package cataovo.automation.threads.dataProcessing;
 
 import cataovo.entities.Frame;
-import cataovo.externals.libs.opencv.utils.ImageProcessUtilsImplements;
+import cataovo.externals.libs.opencv.utils.ImageProcessImplements;
 import cataovo.utils.Constants;
 import cataovo.utils.libraryUtils.ImageProcessUtils;
 import java.util.concurrent.Callable;
@@ -45,7 +45,7 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     public DataProcessingThreadAutomation(Frame frame, String destination) {
         this.frame = frame;
         this.destination = destination;
-        this.imageProcess = new ImageProcessUtilsImplements();
+        this.imageProcess = new ImageProcessImplements();
     }
 
     /**

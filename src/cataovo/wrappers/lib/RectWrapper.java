@@ -77,4 +77,13 @@ public final class RectWrapper {
     public double getArea() {
         return area;
     }
+    
+    public Rect getRect() {
+        final Rect region = new Rect();
+        region.x = this.rect.width > 0 ? (this.rect.x - this.rect.width) : this.rect.x;
+        region.y = this.rect.height > 0 ? (this.rect.y - this.rect.height) : this.rect.y;
+        region.width = this.rect.width > 0 ? this.rect.width : Math.abs(this.rect.width);
+        region.height = this.rect.height > 0 ? this.rect.height : Math.abs(this.rect.height);
+        return region;
+    }
 }

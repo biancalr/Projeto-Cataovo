@@ -6,9 +6,8 @@
 package cataovo.wrappers.UI;
 
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.utils.enums.FileExtension;
 import cataovo.resources.fileChooser.FileFilterExtensions;
-import cataovo.resources.MainContext;
+import cataovo.utils.enums.FileExtension;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -60,7 +59,7 @@ public class FileChooserUI extends JFileChooser{
             default -> {
             }
         }
-        LOG.log(Level.INFO, "Selected File: " + f == null ? f.getAbsolutePath() : "empty");
+        LOG.log(Level.INFO, "Selected File: {0}", f == null ? "empty" : f.getPath());
         return f;
     }  
     
@@ -82,13 +81,8 @@ public class FileChooserUI extends JFileChooser{
             case JFileChooser.APPROVE_OPTION -> {
                 f = super.getSelectedFile();
             }
-            case JFileChooser.CANCEL_OPTION -> {
+            case JFileChooser.CANCEL_OPTION, JFileChooser.ERROR_OPTION -> {
                 f = null;
-                MainContext.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            }
-            case JFileChooser.ERROR_OPTION -> {
-                MainContext.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                throw new HeadlessException("Exception ocurred while openning the dialog box.");
             }
             default -> {
             }

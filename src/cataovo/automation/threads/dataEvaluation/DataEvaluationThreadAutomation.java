@@ -72,12 +72,12 @@ public abstract class DataEvaluationThreadAutomation implements Callable<String>
 
         for (int i = 0; i < regionsOnFrame.length; i++) {
             float[] frameResult = evaluateFrame(regionsOnFrame[i], eggsOnFrame[i]);
-            LOG.log(Level.INFO, "Resultado individual: TP({0}), FN({1}), FP({2}), TN({4})", new Object[]{frameResult[0], frameResult[1], frameResult[2], frameResult[3]});
+            LOG.log(Level.INFO, "Resultado individual: TP({0}), FN({1}), FP({2}), TN({3})", new Object[]{frameResult[0], frameResult[1], frameResult[2], frameResult[3]});
             evaluationResult[0] += frameResult[0];
             evaluationResult[1] += frameResult[1];
             evaluationResult[2] += frameResult[2];
             evaluationResult[3] += frameResult[3];
-            LOG.log(Level.INFO, "Resultado somado: TP({0}), FN({1}), FP({2}), TN({4})", new Object[]{evaluationResult[0], evaluationResult[1], evaluationResult[2], evaluationResult[3]});
+            LOG.log(Level.INFO, "Resultado somado: TP({0}), FN({1}), FP({2}), TN({3})", new Object[]{evaluationResult[0], evaluationResult[1], evaluationResult[2], evaluationResult[3]});
         }
 
         for (int i = 0; i < evaluationResult.length; i++) {

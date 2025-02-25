@@ -40,17 +40,6 @@ public interface PolygonUtils {
     public MatWrapper rectangle(final PointWrapper beginPoint, final PointWrapper endPoint, final MatWrapper imageGrid);
 
     /**
-     * Capture the Rect of the grid for identification. Allows to capture the
-     * rect so it can be possible to indentify which grid has a certain egg
-     * inside.
-     *
-     * @param beginGrid the point to begin
-     * @param endGrid the point to end
-     * @return the area {@link org.opencv.core.Rect} of the Grid
-     */
-    public RectWrapper captureGridMat(final PointWrapper beginGrid, final PointWrapper endGrid);
-
-    /**
      * Captures the submat of an denmarked egg. It must have to obbey the
      * expression:
      * <p>
@@ -69,5 +58,5 @@ public interface PolygonUtils {
      * @return the capture submat based on the region coordinates.
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
-    public MatWrapper captureSubmat(final RectWrapper region, final MatWrapper frame);
+    public MatWrapper submat(final RectWrapper region, final MatWrapper frame);
 }

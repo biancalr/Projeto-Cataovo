@@ -5,25 +5,24 @@
  */
 package cataovo.externals.libs.opencv.utils;
 
+import cataovo.utils.libraryUtils.PolygonUtils;
 import cataovo.wrappers.lib.MatWrapper;
 import cataovo.wrappers.lib.PointWrapper;
 import cataovo.wrappers.lib.RectWrapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencv.core.Core;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import cataovo.utils.libraryUtils.PolygonUtils;
 
 /**
  * Implements resources from Opencv to transform an image.
  *
  * @author Bianca Leopoldo Ramos
  */
-public class PolygonUtilsImplements implements PolygonUtils {
+public class PolygonImplements implements PolygonUtils {
 
-    private static final Logger LOG = Logger.getLogger(PolygonUtilsImplements.class.getName());
+    private static final Logger LOG = Logger.getLogger(PolygonImplements.class.getName());
 
     /**
      * Draw the dot clicked in the image.
@@ -73,27 +72,6 @@ public class PolygonUtilsImplements implements PolygonUtils {
     }
 
     /**
-     * Capture the Rect of the grid for identification. Allows to capture the
-     * rect so it can be possible to indentify which grid has a certain egg
-     * inside.
-     *
-     * @param beginGrid the point to begin
-     * @param endGrid the point to end
-     * @return the area {@link Rect} of the Grid
-     */
-    @Override
-    public RectWrapper captureGridMat(PointWrapper beginGrid, PointWrapper endGrid) {
-        LOG.log(Level.INFO, "Capture the Region...");
-        final Rect grid = new Rect();
-        grid.x = (int) beginGrid.getOpencvPoint().x;
-        grid.y = (int) beginGrid.getOpencvPoint().y;
-        grid.width = (int) (beginGrid.getOpencvPoint().x - endGrid.getOpencvPoint().x);
-        grid.height = (int) (beginGrid.getOpencvPoint().y - endGrid.getOpencvPoint().y);
-        return new RectWrapper(grid);
-
-    }
-
-    /**
      * Captures the submat of an denmarked egg. It must have to obbey the
      * expression:
      * <p>
@@ -107,21 +85,16 @@ public class PolygonUtilsImplements implements PolygonUtils {
      * signal (+ or -) what defines right or left, to up or to down, this method
      * must adapt the values to react without the signal.
      *
-     * @param region the area {@link Rect} of the Grid
+     * @param region the area {@link RectWrapper} of the Grid
      * @param frame the image to capture submat
      * @return the capture submat based on the region coordinates.
      * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
     @Override
-    public MatWrapper captureSubmat(RectWrapper region, MatWrapper frame) {
+    public MatWrapper submat(RectWrapper region, MatWrapper frame) {
         LOG.log(Level.INFO, "Capturing submat");
         MatWrapper tmp = frame;
-        final Rect rect = new Rect();
-        rect.x = region.getOpencvRect().width > 0 ? (region.getOpencvRect().x - region.getOpencvRect().width) : region.getOpencvRect().x;
-        rect.y = region.getOpencvRect().height > 0 ? (region.getOpencvRect().y - region.getOpencvRect().height) : region.getOpencvRect().y;
-        rect.width = region.getOpencvRect().width > 0 ? region.getOpencvRect().width : Math.abs(region.getOpencvRect().width);
-        rect.height = region.getOpencvRect().height > 0 ? region.getOpencvRect().height : Math.abs(region.getOpencvRect().height);
-        tmp.setOpencvMat(tmp.getOpencvMat().submat(rect));
+        tmp.setOpencvMat(tmp.getOpencvMat().submat(region.getRect()));
         return tmp;
     }
 

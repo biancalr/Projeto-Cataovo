@@ -57,7 +57,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
             Future<String> task;
             ExecutorService executorService;
             String[] infos = new String[2];
-            MainContext.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+            MainContext.getInstance().getPanelTabHelper().setCurrentTabProcessing(true);
             
             for (Palette palette : splitted) {
                 executorService = Executors.newSingleThreadExecutor();

@@ -12,13 +12,11 @@ import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
 import cataovo.externals.UI.swing.utils.FrameActionsUtils;
-import cataovo.externals.libs.opencv.Conversion;
 import cataovo.resources.MainContext;
 import cataovo.wrappers.lib.PointWrapper;
 import cataovo.wrappers.lib.RectWrapper;
 import java.util.Collection;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 /**
  * Implements the frame actions controller.
@@ -36,9 +34,11 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      */
     private Point initialPoint = null;
     
+    private final FrameActionsUtils frameUtils;
+    
     public FrameActionsControllerImplements() {
         clickCount = 0;
-        
+        frameUtils = new FrameActionsUtils();
     }
 
     /**
@@ -77,7 +77,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     private Icon paintDotOnFrame(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        return new FrameActionsUtils().drawCircle(currentFrame, new PointWrapper(point));
+        return this.frameUtils.drawCircle(currentFrame, new PointWrapper(point));
     }
 
     /**
@@ -89,8 +89,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     private Icon paintGridOnFrame(Region region, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        final FrameActionsUtils frameUtils = new FrameActionsUtils();
-        final Icon icon = frameUtils.drawRectangle(currentFrame.clone(), new RectWrapper(region));
+        final Icon icon = this.frameUtils.drawRectangle(currentFrame.clone(), new RectWrapper(region));
         MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(currentFrame.getRegionsContainingEggs());
         return icon;
     }
@@ -105,14 +104,13 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     @Override
     public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
-        final FrameActionsUtils frameUtils = new FrameActionsUtils();
         if (currentFrame.getRegionsContainingEggs().isEmpty()) {
-            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids(currentFrame)).get());
+            return this.frameUtils.updateGrids(currentFrame);
         } else {
             MainContext.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
                     (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
-            return new ImageIcon(Conversion.getInstance().convertMatToImg(frameUtils.updateGrids(currentFrame)).get());
+            return this.frameUtils.updateGrids(currentFrame);
         }
     }
 
@@ -129,7 +127,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException {
         Icon subframeImage = null;
         if (clickCount == 0 && initialPoint != null) {
-            subframeImage = new FrameActionsUtils().captureSubframe(currentFrame, this.initialPoint, pointClick);
+            subframeImage = this.frameUtils.getSubframe(currentFrame, this.initialPoint, pointClick);
         }
         return subframeImage;
     }
@@ -137,13 +135,13 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     /**
      * 
      * @param currentFrame
-     * @param regions
-     * @param points
+     * @param rects
+     * @param circles
      * @return 
      */
     @Override
-    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection points) {  
-        return new FrameActionsUtils().drawFormats(currentFrame, regions, points);
+    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> rects, Collection circles) {  
+        return this.frameUtils.drawPolygons(currentFrame, rects, circles);
     }
 
 }

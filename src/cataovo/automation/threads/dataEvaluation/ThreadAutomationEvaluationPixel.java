@@ -7,7 +7,7 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.libs.opencv.utils.ImageProcessUtilsImplements;
+import cataovo.externals.libs.opencv.utils.ImageProcessImplements;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
 import cataovo.utils.fileUtils.readers.SplitData;
@@ -34,7 +34,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
     public ThreadAutomationEvaluationPixel(String fileContentManual, String fileContentAuto) {
         super(fileContentManual, fileContentAuto);
         this.dataUtils = new SplitData();
-        this.processUtils = new ImageProcessUtilsImplements();
+        this.processUtils = new ImageProcessImplements();
     }
 
     @Override

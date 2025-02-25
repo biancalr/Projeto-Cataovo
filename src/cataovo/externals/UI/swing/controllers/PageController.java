@@ -9,10 +9,10 @@ import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import java.awt.Component;
 import java.io.File;
 import javax.swing.Icon;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 
 /**
  * Controls how the frames are demonstrated on screen and how to move from one
@@ -42,7 +42,7 @@ public interface PageController {
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void onNextFrameInAutomatic(JLabel parentName, Component jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
+    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
 
     /**
      *
@@ -75,7 +75,7 @@ public interface PageController {
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
-    public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException;
+    public void showFramesOnSelectedTabScreen(JTabbedPane tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException;
 
     /**
      *
@@ -108,7 +108,7 @@ public interface PageController {
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void onPreviousFrameInAutomatic(JLabel parentName, Component jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
+    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
 
     /**
      *

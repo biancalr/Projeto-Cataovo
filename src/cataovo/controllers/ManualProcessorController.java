@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f04c1b5032a5f92bbbef2530f496e5f6d4c842a6e6aef7931e50082e6975bb9f
-size 541
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package cataovo.controllers;
+
+/**
+ *
+ * @author Bianca Leopoldo Ramos
+ */
+public interface ManualProcessorController {
+    
+    /**
+     * Triggers the manual processment.
+     * 
+     * @param processingTabName
+     * @param savingDirectory
+     * @return 
+     */
+    public String onNewManualProcessPalette(final String processingTabName, final String savingDirectory);
+    
+}

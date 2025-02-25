@@ -85,10 +85,9 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                     for (Point point : points) {
                         // se a região contém o ponto
                         if (rect.contains(point)) {
-                            LOG.log(Level.INFO, "The point {0} was found in a region", point);
+//                            LOG.log(Level.INFO, "The point {0} was found in a region", point);
                             // acrescenta na quantidade de partes encontradas
 //                            percentual++;
-                            LOG.log(Level.INFO, "Points found in {0}: {1}", new Object[]{rect, point});
                             pontosEncontrados.add(point);
                             if (point.getX() > Xmaximo) {
                                 Xmaximo = point.getX();
@@ -131,6 +130,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                             }
                             tp++;
                             LOG.log(Level.INFO, "A região de {0} contém um ovo", rect);
+                            LOG.log(Level.INFO, "Points found in {0}: {1}", new Object[]{rect, pontosEncontrados.toString()});
                         }
                         pontosEncontrados = new CopyOnWriteArrayList<>();
                     }

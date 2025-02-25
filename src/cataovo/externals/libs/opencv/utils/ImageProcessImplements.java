@@ -4,10 +4,10 @@
  */
 package cataovo.externals.libs.opencv.utils;
 
-import cataovo.externals.libs.opencv.Conversion;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.libraryUtils.ImageProcessUtils;
+import cataovo.wrappers.conversion.Conversions;
 import cataovo.wrappers.lib.MatOfPointWrapper;
 import cataovo.wrappers.lib.MatWrapper;
 import java.awt.Color;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -34,12 +35,12 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class ImageProcessUtilsImplements implements ImageProcessUtils {
+public class ImageProcessImplements implements ImageProcessUtils {
 
     /**
-     * Logging for ImageProcessUtilsImplements.
+     * Logging for ImageProcessImplements.
      */
-    private static final Logger LOG = Logger.getLogger(ImageProcessUtilsImplements.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImageProcessImplements.class.getName());
     /**
      * Represents white the color.
      */
@@ -49,7 +50,7 @@ public class ImageProcessUtilsImplements implements ImageProcessUtils {
      */
     private final double[] BLACK;
 
-    public ImageProcessUtilsImplements() {
+    public ImageProcessImplements() {
         this.BLACK = new double[]{0};
         this.WHITE = new double[]{255};
     }
@@ -72,7 +73,7 @@ public class ImageProcessUtilsImplements implements ImageProcessUtils {
 
     @Override
     public MatWrapper applyBinaryOnImage(String savingPath, MatWrapper imgToBinary) {
-        final var buffImgToBinary = Conversion.getInstance().convertMatToPng(imgToBinary).get();
+        final var buffImgToBinary = new Conversions().convertMatToPng(imgToBinary).get();
         LOG.log(Level.INFO, "Applying binary...");
         Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC1);
         for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
@@ -118,7 +119,7 @@ public class ImageProcessUtilsImplements implements ImageProcessUtils {
         final List<MatOfPoint> foundContours = new ArrayList<>();
 
         for (int i = 0; i < contours.size(); i++) {
-            double contourArea = getArea(new MatOfPointWrapper(Conversion.getInstance().convertMatOfPointToList(contours.get(i))));
+            double contourArea = getArea(new MatOfPointWrapper(contours.get(i).toList().stream().map(ImageProcessImplements::toPoint).collect(Collectors.toList())));
 
             if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
                 numOfContours++;
@@ -132,12 +133,16 @@ public class ImageProcessUtilsImplements implements ImageProcessUtils {
         }
         LOG.log(Level.INFO, "Quantity of contours: {0}", numOfContours);
 
-        final var list = foundContours.stream().map(c -> Conversion.getInstance().convertMatOfPointToList(c)).toList();
+        final var list = foundContours.stream().map(c -> c.toList().stream().map(ImageProcessImplements::toPoint).collect(Collectors.toList())).toList();
 
         if (saveImage(result, savingPath)) {
             return Map.of(numOfContours, list);
         }
         return null;
+    }
+
+    public static cataovo.entities.Point toPoint(Point point) {
+        return new cataovo.entities.Point((int) point.x, (int) point.y);
     }
 
     @Override
@@ -158,7 +163,7 @@ public class ImageProcessUtilsImplements implements ImageProcessUtils {
      */
     private boolean saveImage(Mat dstn, String savingPath) {
         try {
-            BufferedImage image = Conversion.getInstance().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
+            BufferedImage image = new Conversions().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
             ImageIO.write(image, FileExtension.PNG.toString().toLowerCase(), new File(savingPath));
             return true;
         } catch (IOException ex) {

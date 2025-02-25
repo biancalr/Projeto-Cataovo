@@ -4,10 +4,10 @@
  */
 package cataovo.test.opencvlib.automation.imageProcessing;
 
-import cataovo.externals.libs.opencv.Conversion;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
+import cataovo.wrappers.conversion.Conversions;
 import cataovo.wrappers.lib.MatWrapper;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -73,11 +73,11 @@ public class AutomaticImageProcessTest {
 //        System.out.println("-------------------------------------" + img.type());
 //        
 //        Mat im = getChannelImage(img, dstn + frameName + "_5_channel.png");
-////        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
+////        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversions.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
 //        
 ////        Mat im = getChannelImage(img, dstn + frameName + "_5_binary.png");
 //
-//        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversion.getInstance().convertMatToPng(new MatWrapper(im, orign)).get());
+//        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversions.getInstance().convertMatToPng(new MatWrapper(im, orign)).get());
 //        
 //        im = imageProcess.applyMorphOnImage(dstn + frameName + "_7_morph_1.png", 17, 40, 2, im);
 //        im = imageProcess.applyMorphOnImage(dstn + frameName+ "_8_morph_2.png", 40, 17, 2, im);
@@ -127,7 +127,7 @@ public class AutomaticImageProcessTest {
      * @return a single channel result image
      */
     private static Mat getChannelImage(Mat src, String location) {
-        BufferedImage image = Conversion.getInstance().convertMatToPng(new MatWrapper(src, location)).get();
+        BufferedImage image = new Conversions().convertMatToPng(new MatWrapper(src, location)).get();
         double[] WHITE = new double[] {255};
         double[] BLACK = new double[] {0};
         double limite = 44;
@@ -158,7 +158,7 @@ public class AutomaticImageProcessTest {
     
     private static boolean saveImage(Mat dstn, String savingPath) {
         try {
-            BufferedImage image = Conversion.getInstance().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
+            BufferedImage image = new Conversions().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
             ImageIO.write(image, FileExtension.PNG.toString().toLowerCase(), new File(savingPath));
             return true;
         } catch (IOException ex) {
