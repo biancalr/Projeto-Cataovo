@@ -84,10 +84,10 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
             List<List<Point>> remanescent = new CopyOnWriteArrayList<>();
 
             // Posição zero contém apenas nome e a quantidade de ovos
-            // Começar a partir do 1 pois essa posição não contém coordenadas de pontos
+            // Começar a partir do 1 pois essa posição não contêm coordenadas de pontos
             for (int e = 1; e < eggsString.size(); e++) {
                 eggLine = eggsString.get(e);
-                // Separar os pontos do ovo pela vírgula
+                // Separar as coordenadas de um ovo pela vírgula
                 egg = dataUtils.split(Constants.CIRCLE_FORMAT, eggLine.split(Constants.SEPARATOR));
                 foundEggs.add(new CopyOnWriteArrayList<>(egg));
                 totalPointsOfSingleEgg = egg.size();
@@ -152,30 +152,37 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                     }
 
                 }
+            }
 
-                // Calcular a área da de cada um dos ovos
-                // deixar apenas os pontos contidos nas marcações manuais
-                if (totalFoundEggs > 0) {
+            // Calcular a área da de cada um dos ovos
+            // deixar apenas os pontos contidos nas marcações manuais
+            if (!foundEggs.isEmpty() && !pontosEncontradosAux.isEmpty()) {
 
-                    for (var i = 0; i < foundEggs.size(); i++) {
-                        foundEgg = foundEggs.get(i);
+                for (var i = 0; i < foundEggs.size(); i++) {
+                    foundEgg = foundEggs.get(i);
 
-                        for (var j = 0; j < foundEgg.size(); j++) {
-                            final var rem = foundEgg.get(j);
-                            if (!pontosEncontradosAux.contains(rem)) {
-                                foundEgg.remove(rem);
-                                removed.add(rem);
-                            }
+                    for (var j = 0; j < foundEgg.size(); j++) {
+                        final var rem = foundEgg.get(j);
+                        if (!pontosEncontradosAux.contains(rem)) {
+                            foundEgg.remove(rem);
+                            removed.add(rem);
                         }
-                        remanescent.add(removed);
                     }
-
-                    totalEggsInPixels = 0;
-                    totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
-                    totalOfPixels -= totalEggsInPixels;
-                    tp = totalEggsInPixels;
-                    LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{totalFoundEggs, eggsString.get(0)});
+                    remanescent.add(removed);
                 }
+
+                totalEggsInPixels = 0;
+                totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
+                totalOfPixels -= totalEggsInPixels;
+                tp += totalEggsInPixels;
+                LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{totalFoundEggs, eggsString.get(0)});
+            
+            } else if (!foundEggs.isEmpty() && pontosEncontradosAux.isEmpty()) {
+                totalEggsInPixels = 0;
+                totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
+                totalOfPixels -= totalEggsInPixels;
+                fp += totalEggsInPixels;
+                LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{0, eggsString.get(0)});
             }
             // Caso tenha sobrado regiões que não foram detectados ovos ou foram detectadas incorretamente
             // transformar para pixel
@@ -183,7 +190,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 totalRegionsInPixels = 0;
                 totalRegionsInPixels = regionsAux.stream().map(Region::getArea).reduce(totalRegionsInPixels, Integer::sum);
                 totalOfPixels -= totalRegionsInPixels;
-                fn = totalRegionsInPixels;
+                fn += totalRegionsInPixels;
             }
 
             // Caso tenha sobrado ovos que não foram detectados ou foram detectados incorretamente
@@ -192,7 +199,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 totalEggsInPixels = 0;
                 totalEggsInPixels = remanescent.stream().map(e -> (int) processUtils.getArea(new MatOfPointWrapper(e))).reduce(totalEggsInPixels, Integer::sum);
                 totalOfPixels -= totalEggsInPixels;
-                fp = totalEggsInPixels;
+                fp += totalEggsInPixels;
             }
 
             LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
@@ -205,12 +212,12 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 totalRegionsInPixels = 0;
                 totalRegionsInPixels = regions.stream().map(Region::getArea).reduce(totalRegionsInPixels, Integer::sum);
                 totalOfPixels -= totalRegionsInPixels;
-                fn = totalRegionsInPixels;
+                fn += totalRegionsInPixels;
             }
         }
 
         //  subtrair os valores do total de pixels do frame
-        tn = totalOfPixels;
+        tn += totalOfPixels;
 
         metrics[0] = tp;
         metrics[1] = fn;
