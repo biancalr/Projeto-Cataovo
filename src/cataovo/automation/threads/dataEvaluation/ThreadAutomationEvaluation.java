@@ -46,10 +46,10 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         int fn = 0;
         float[] metrics = new float[4];
         List<String> eggs;
-        MatWrapper currentFrame;
 
         int regionsCounter;
         int eggsCounter;
+        final MatWrapper currentFrame = new MatWrapper(MainContext.getInstance().getCurrentFrame());
 
         //Separar a as regioes pela vírgula
         final List<Region> regions = dataUtils.split(Constants.RECT_FORMAT, regionsInFrame.split(Constants.SEPARATOR));
@@ -62,9 +62,6 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
         // Caso não haja ovos detectados pelo automático, a linha não será splitada
         if (eggs.size() >= 1) {
-
-            currentFrame = new MatWrapper(MainContext.getInstance().getCurrentFrame());
-            int Ymaximo = 0, Yminimo = currentFrame.getHEIGHT(), Xmaximo = 0, Xminimo = currentFrame.getWIDTH(), distanciaYMancha, distanciaXMancha;
 
             // Posição zero contém apenas nome e a quantidade de ovos
             // Começar a partir do 1 pois essa posição não contém coordenadas de pontos
@@ -79,6 +76,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                 // Comparação começa aqui
                 // Percorrendo as marcações
                 List<Point> pontosEncontrados = new CopyOnWriteArrayList<>();
+                int Ymaximo = 0, Yminimo = currentFrame.getHEIGHT(), Xmaximo = 0, Xminimo = currentFrame.getWIDTH(), distanciaYMancha, distanciaXMancha;
                 for (int i = 0; i < regions.size(); i++) {
                     rect = regions.get(i);
                     //percorrendo os pontos

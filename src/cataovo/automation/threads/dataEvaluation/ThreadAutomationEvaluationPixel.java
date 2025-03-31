@@ -68,7 +68,6 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
             int totalPointsOfSingleEgg;
             int totalEggsInPixels;
             int totalFoundEggs = 0;
-            int Ymaximo = 0, Yminimo = currentFrame.getHEIGHT(), Xmaximo = 0, Xminimo = currentFrame.getWIDTH(), distanciaYMancha, distanciaXMancha;
             String eggLine;
 
             List<Point> egg;
@@ -92,6 +91,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 foundEggs.add(new CopyOnWriteArrayList<>(egg));
                 totalPointsOfSingleEgg = egg.size();
                 LOG.log(Level.INFO, "Total of points {0}", egg.size());
+                int Ymaximo = 0, Yminimo = currentFrame.getHEIGHT(), Xmaximo = 0, Xminimo = currentFrame.getWIDTH(), distanciaYMancha, distanciaXMancha;
                 for (int i = 0; i < regions.size(); i++) {
                     rect = regions.get(i);
                     //percorrendo os pontos
@@ -175,7 +175,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
                 totalOfPixels -= totalEggsInPixels;
                 tp += totalEggsInPixels;
-                LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{totalFoundEggs, eggsString.get(0)});
+                LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{foundEggs.size(), eggsString.get(0)});
             
             } else if (!foundEggs.isEmpty() && pontosEncontradosAux.isEmpty()) {
                 totalEggsInPixels = 0;
@@ -202,7 +202,7 @@ public class ThreadAutomationEvaluationPixel extends DataEvaluationThreadAutomat
                 fp += totalEggsInPixels;
             }
 
-            LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
+            LOG.log(Level.INFO, "Regiões remanescentes {0}", regionsAux.size());
             LOG.log(Level.INFO, "Ovos remanescentes {0}", eggsString.size() - 1);
 
         } else {
