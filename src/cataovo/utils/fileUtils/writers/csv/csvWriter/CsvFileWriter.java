@@ -7,7 +7,6 @@ package cataovo.utils.fileUtils.writers.csv.csvWriter;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
 import cataovo.utils.Constants;
-import cataovo.utils.fileUtils.writers.Writer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,12 +16,13 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import cataovo.utils.fileUtils.writers.WriteFile;
 
 /**
  *
  * @author Bianca Leopoldo Ramos
  */
-public class CsvFileWriter implements Writer{
+public class CsvFileWriter implements WriteFile{
 
     /**
      * Logging for CsvFileWriter

@@ -35,11 +35,11 @@ public final class Region implements Cloneable, Serializable {
      * Create a region using a initial {@link cataovo.entities.Point point}, a
      * width and a height as a data.
      *
-     * @param height
-     * @param width
      * @param initialPoint
+     * @param width
+     * @param height
      */
-    public Region(int height, int width, Point initialPoint) {
+    public Region(final Point initialPoint, final int width, final int height) {
         this.height = height;
         this.width = width;
         this.initialPoint = initialPoint;
@@ -54,7 +54,7 @@ public final class Region implements Cloneable, Serializable {
      * @throws cataovo.exceptions.RegionNotValidException if the distance of any
      * axis is less then 40px
      */
-    public Region(Point initialPoint, Point finalPoint) throws RegionNotValidException {
+    public Region(final Point initialPoint, final Point finalPoint) throws RegionNotValidException {
         this.initialPoint = initialPoint;
         if (isValidDistanceOfTwoPoints(initialPoint, finalPoint)) {
             this.width = initialPoint.getX() - finalPoint.getX();

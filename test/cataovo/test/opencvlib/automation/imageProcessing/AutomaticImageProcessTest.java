@@ -8,7 +8,7 @@ import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.fileUtils.writers.csv.csvWriter.CsvFileWriter;
 import cataovo.wrappers.conversion.Conversions;
-import cataovo.wrappers.lib.MatWrapper;
+import cataovo.wrappers.opencv.MatWrapper;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;

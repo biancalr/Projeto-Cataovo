@@ -33,26 +33,12 @@ public class MainContext {
     private Palette palette;
     private Palette paletteToSave;
     private Frame currentFrame;
-    private static volatile MainContext MAIN_PAGE_RESOURCES;
     private final PanelTabHelper panelTabHelper;
     // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
     private String[] reports;
 
     public MainContext() throws DirectoryNotValidException {
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
-    }
-
-    public static MainContext getInstance() throws DirectoryNotValidException {
-        MainContext PAGE_RESOURCES = MainContext.MAIN_PAGE_RESOURCES;
-        if (PAGE_RESOURCES == null) {
-            synchronized (MainContext.class) {
-                PAGE_RESOURCES = MainContext.MAIN_PAGE_RESOURCES;
-                if (PAGE_RESOURCES == null) {
-                    MainContext.MAIN_PAGE_RESOURCES = PAGE_RESOURCES = new MainContext();
-                }
-            }
-        }
-        return PAGE_RESOURCES;
     }
 
     public Palette getPalette() {
@@ -179,12 +165,12 @@ public class MainContext {
             }
             LOG.info(this.palette.toString());
             LOG.log(Level.INFO, "A new Palette was created with the amount of frames: {0}", this.palette.getFrames().size());
-            
+
         } else {
             LOG.log(Level.WARNING, "The selected file doesn't exist. Please, select an existing file.");
             throw new FileNotFoundException("The selected file doesn't exist. Please, select an existing file.");
         }
-        
+
     }
 
     /**
@@ -232,4 +218,28 @@ public class MainContext {
 
     }
 
+    /**
+     * Buscar paleta baseado nos caminhos dos arquivos nos relatórios.
+     *
+     * @param paletteDirectoryOnManual
+     * @param paletteDirectoryOnAuto
+     * @return
+     * @throws DirectoryNotValidException
+     * @throws cataovo.exceptions.ImageNotValidException
+     */
+    public Palette getPalettDirByReport(String paletteDirectoryOnManual, String paletteDirectoryOnAuto) throws DirectoryNotValidException, ImageNotValidException {
+        if (new File(paletteDirectoryOnManual).exists() && new File(paletteDirectoryOnAuto).exists()) {
+            final String reportName = paletteDirectoryOnManual.substring(paletteDirectoryOnManual.lastIndexOf("\\"), paletteDirectoryOnManual.length());
+            if (paletteDirectoryOnAuto.contains(reportName)) {
+                Palette currentPalette = new Palette(paletteDirectoryOnAuto);
+                File frame = currentPalette.getDirectory().listFiles()[0];
+                this.setCurrentFrame(new Frame(frame.getAbsolutePath()));
+                return currentPalette;
+            } else {
+                throw new DirectoryNotValidException("The reports are not from the same Palette");
+            }
+        } else {
+            throw new DirectoryNotValidException("One or more reports do not exist");
+        }
+    }
 }

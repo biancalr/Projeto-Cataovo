@@ -166,12 +166,12 @@ public class Constants {
     /**
      * Rect format = 1
      */
-    public static final int RECT_FORMAT = 1;
+    public static final int RECT = 1;
 
     /**
      * Circle format = 2
      */
-    public static final int CIRCLE_FORMAT = 2;
+    public static final int CIRCLE = 2;
 
     /**
      * PERCENTAGE OF TRUE POSITIVE

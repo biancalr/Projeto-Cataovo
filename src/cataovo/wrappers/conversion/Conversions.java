@@ -6,8 +6,8 @@
 package cataovo.wrappers.conversion;
 
 import cataovo.utils.enums.FileExtension;
-import cataovo.wrappers.lib.MatOfBytesWrapper;
-import cataovo.wrappers.lib.MatWrapper;
+import cataovo.wrappers.opencv.MatOfBytesWrapper;
+import cataovo.wrappers.opencv.MatWrapper;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -36,30 +36,30 @@ public final class Conversions {
     }
 
     /**
-     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to a JPG
+     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a JPG
      * file.
      *
      * @param current the current frame as
-     * {@link cataovo.wrappers.lib.MatWrapper MatWrapper}
+     * {@link cataovo.wrappers.opencv.MatWrapper MatWrapper}
      * @return an Optional of the BufferedImage ".jpg"
      * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
      * cataovo.resources.fileChooser.handler.FileExtension)
      */
-    public Optional<Image> convertMatToImg(MatWrapper current) {
+    public Optional<Image> convertMatToImg(final MatWrapper current) {
         return Optional.ofNullable(matToBuffedImageConvert(current, FileExtension.JPG));
     }
 
     /**
-     * Converts the current {@link cataovo.wrappers.lib.MatWrapper Mat} to a PNG
+     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a PNG
      * file.
      *
      * @param current the current frame as
-     * {@link cataovo.wrappers.lib.MatWrapper MatWrapper}
+     * {@link cataovo.wrappers.opencv.MatWrapper MatWrapper}
      * @return an Optional of the BufferedImage ".png"
      * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
      * cataovo.resources.fileChooser.handler.FileExtension)
      */
-    public Optional<BufferedImage> convertMatToPng(MatWrapper current) {
+    public Optional<BufferedImage> convertMatToPng(final MatWrapper current) {
         return Optional.ofNullable(matToBuffedImageConvert(current, FileExtension.PNG));
     }
 
@@ -67,14 +67,16 @@ public final class Conversions {
      * Encodes an image into a memory buffer.
      *
      * @param current the current frame as
-     * {@link cataovo.wrappers.lib.MatWrapper MatWrapper}
+     * {@link cataovo.wrappers.opencv.MatWrapper MatWrapper}
      * @param extension the type of desired extension for the frame.
      * @return the image as given extension.
      */
-    private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension) {
+    private BufferedImage matToBuffedImageConvert(final MatWrapper current, 
+            final FileExtension extension) {
         LOG.log(Level.INFO, "Converting a MAT to: {0}", extension.name());
         final MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
-        boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getOpencvMat(), ofBytesWrapper);
+        boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), 
+                        current.getOpencvMat(), ofBytesWrapper);
         final BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
         return output;
 
@@ -90,7 +92,9 @@ public final class Conversions {
      * @param extension extension of the image
      * @return the image converted
      */
-    private BufferedImage makeConversion(boolean codeOk, MatOfBytesWrapper ofBytesWrapper, FileExtension extension) {
+    private BufferedImage makeConversion(final boolean codeOk, 
+            final MatOfBytesWrapper ofBytesWrapper, 
+            final FileExtension extension) {
         BufferedImage output = null;
         if (codeOk) {
             byte[] byteArray = ofBytesWrapper.toArray();
@@ -98,7 +102,8 @@ public final class Conversions {
             try {
                 output = ImageIO.read(in);
             } catch (IOException ex) {
-                LOG.log(Level.SEVERE, "Error while converting a MAT to: " + extension.toString(), ex);
+                LOG.log(Level.SEVERE, "Error while converting a MAT to: " 
+                        + extension.toString(), ex);
             }
 
         }
