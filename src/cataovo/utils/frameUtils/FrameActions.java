@@ -37,7 +37,7 @@ class FrameActions {
      * @return a image with a drawn point circle.
      * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
      */
-    protected MatWrapper circle(final Frame frame, final PointWrapper pw) {
+    final MatWrapper circle(final Frame frame, final PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
         MatWrapper matWrapper;
         if (!frame.getRegionsContainingEggs().isEmpty()) {
@@ -58,7 +58,7 @@ class FrameActions {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    protected MatWrapper rectangle(final Frame frame, final RectWrapper rw) {
+    final MatWrapper rectangle(final Frame frame, final RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
         MatWrapper matWrapper;
         final PointWrapper pointWrapper;
@@ -87,7 +87,7 @@ class FrameActions {
      * @param endGrid the point to end
      * @return the area {@link Region} of the Grid
      */
-    protected Region grid(final PointWrapper beginGrid, final PointWrapper endGrid) {
+    final Region grid(final PointWrapper beginGrid, final PointWrapper endGrid) {
         LOG.log(Level.INFO, "Capture the Region...");
         return new Region(beginGrid.getPoint(),
                 (int) (beginGrid.getPoint().getX() - endGrid.getPoint().getX()),
@@ -102,7 +102,7 @@ class FrameActions {
      * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
      * org.opencv.core.Mat)
      */
-    protected MatWrapper update(final Frame frame) {
+    final MatWrapper update(final Frame frame) {
         PointWrapper pw1, pw2;
         MatWrapper mw = new MatWrapper(frame);
         for (Region r : frame.getRegionsContainingEggs()) {
@@ -123,7 +123,7 @@ class FrameActions {
      * @param rects
      * @return
      */
-    protected final MatWrapper multipleRects(final MatWrapper matWrapper, Collection<RectWrapper> rects) {
+    final MatWrapper multipleRects(final MatWrapper matWrapper, Collection<RectWrapper> rects) {
         PointWrapper beginPoint, endPoint;
         MatWrapper mw = matWrapper;
         for (RectWrapper r : rects) {
@@ -144,7 +144,7 @@ class FrameActions {
      * @param circles
      * @return
      */
-    protected MatWrapper multipleCircles(final MatWrapper matWrapper, final List<List<PointWrapper>> circles) {
+    final MatWrapper multipleCircles(final MatWrapper matWrapper, final List<List<PointWrapper>> circles) {
         var mw = matWrapper;
         for (List<PointWrapper> col : circles) {
             for (PointWrapper c : col) {
