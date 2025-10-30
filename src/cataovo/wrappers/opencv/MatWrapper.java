@@ -198,12 +198,12 @@ public final class MatWrapper {
     }
 
     /**
-     * 
+     *
      * @param savingPath
      * @param ksize_width
      * @param ksize_height
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public MatWrapper applyBlur(final String savingPath, final int ksize_width, final int ksize_height) throws IOException {
         Mat toBlur = this.mat.clone();
@@ -218,10 +218,10 @@ public final class MatWrapper {
     }
 
     /**
-     * 
+     *
      * @param savingPath
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public MatWrapper applyBinary(final String savingPath) throws IOException {
         final var buffImgToBinary = convertToPng();
@@ -244,13 +244,13 @@ public final class MatWrapper {
     }
 
     /**
-     * 
+     *
      * @param savingPath
      * @param structuringElementWidth
      * @param structuringElementHeight
      * @param morphologicalOperation
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public MatWrapper applyMorph(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation) throws IOException {
         final Mat result = this.mat.clone();
@@ -264,13 +264,13 @@ public final class MatWrapper {
     }
 
     /**
-     * 
+     *
      * @param savingPath
      * @param imageToDraw
      * @param minSizeArea
      * @param maxSizeArea
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public Map<Integer, List<List<cataovo.entities.Point>>> drawContours(String savingPath, MatWrapper imageToDraw, int minSizeArea, int maxSizeArea) throws IOException {
         int numOfContours = 0;
@@ -296,13 +296,13 @@ public final class MatWrapper {
 
         final var list = foundContours.stream().map(c -> c.toList().stream().map(p -> {
             PointWrapper pointWrapper = new PointWrapper(p);
-                return pointWrapper.getPoint();
+            return pointWrapper.getPoint();
         }).collect(Collectors.toList())).toList();
-        
+
         saveImage(result, savingPath);
         return Map.of(numOfContours, list);
     }
-    
+
     /**
      * Look for object detecting each boundary from the image
      *
@@ -316,11 +316,11 @@ public final class MatWrapper {
         Imgproc.findContours(src, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
         return contours;
     }
-    
+
     /**
      * Get Countour Area
-     * 
-     * @return 
+     *
+     * @return
      */
     public double getOpencvArea() {
         if (this.mat.empty()) {

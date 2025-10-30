@@ -15,10 +15,11 @@ import cataovo.exceptions.DirectoryNotValidException;
  * @author Bianca Leopoldo Ramos
  */
 public interface AutomaticEvent {
-       
+
     /**
-     * Starts the automatic processing of the {@link cataovo.entities.Palette} as a {@link java.util.concurrent.Callable}.
-     * 
+     * Starts the automatic processing of the {@link cataovo.entities.Palette}
+     * as a {@link java.util.concurrent.Callable}.
+     *
      * @param currentPalette
      * @param savingFolderPath
      * @param tabName
@@ -27,5 +28,5 @@ public interface AutomaticEvent {
      * @throws cataovo.exceptions.AutomationExecutionException
      */
     public Event execute(Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException;
-    
+
 }

@@ -12,7 +12,7 @@ import cataovo.utils.enums.FileExtension;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class SaveManualMode extends BasicSave{
+public final class SaveManualMode extends BasicSave {
 
     /**
      * <p>
@@ -20,12 +20,13 @@ public final class SaveManualMode extends BasicSave{
      *
      * @param palette the palette to be processed
      * @param savingDirectory the directory where the results will be saved.
-     * @param fileExtension referes to the relatory's file extension where the text
-     * data will be saved.
+     * @param fileExtension referes to the relatory's file extension where the
+     * text data will be saved.
      * @param tabName relates the tabName to the type of processing of a
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
-     * @param dateTime the date and time when the process begun to name the relatory
+     * @param dateTime the date and time when the process begun to name the
+     * relatory
      */
     public SaveManualMode(final Palette palette, final String savingDirectory, final FileExtension fileExtension, final String tabName, final String dateTime) {
         super(palette, savingDirectory, fileExtension, tabName, dateTime);

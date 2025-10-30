@@ -5,6 +5,7 @@
  */
 package cataovo.events.implement;
 
+import cataovo.events.FileEvent;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
@@ -17,8 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTabbedPane;
-import cataovo.events.FileEvent;
 
 /**
  * Controls the interactions with the files from outside the Application.

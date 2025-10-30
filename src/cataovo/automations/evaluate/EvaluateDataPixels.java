@@ -174,7 +174,7 @@ public class EvaluateDataPixels extends BasicEvaluate {
                 totalOfPixels -= totalEggsInPixels;
                 tp += totalEggsInPixels;
                 LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{foundEggs.size(), eggsString.get(0)});
-            
+
             } else if (!foundEggs.isEmpty() && pontosEncontradosAux.isEmpty() && regioesEncontradas.isEmpty()) {
                 totalEggsInPixels = 0;
                 totalEggsInPixels = foundEggs.stream().map(rem -> (int) new MatOfPointWrapper(rem).getArea()).reduce(totalEggsInPixels, Integer::sum);

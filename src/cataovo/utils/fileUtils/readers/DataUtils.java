@@ -15,11 +15,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Bianca Leopoldo Ramos
  */
 public class DataUtils {
-    
-    public DataUtils(){
-        
+
+    public DataUtils() {
+
     }
-    
+
     public final List split(int ofFormat, String[] data) throws NumberFormatException {
         int jumpStep;
         int atStartPoint;
@@ -82,10 +82,10 @@ public class DataUtils {
     private Region addRegion(String[] data, int ofPosition) throws NumberFormatException {
         return new Region(
                 //Acrescentando correção em caso de valores negativos
-                                new Point(Integer.parseInt(data[ofPosition + 2]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition]),
+                new Point(Integer.parseInt(data[ofPosition + 2]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition]),
                         Integer.parseInt(data[ofPosition + 3]) > 0 ? (Integer.parseInt(data[ofPosition + 1]) - Integer.parseInt(data[ofPosition + 3])) : Integer.parseInt(data[ofPosition + 1])), Integer.parseInt(data[ofPosition + 2]) > 0 ? Integer.parseInt(data[ofPosition + 2]) : Math.abs(Integer.parseInt(data[ofPosition + 2])), //Acrescentando correção em caso de valores negativos
                 Integer.parseInt(data[ofPosition + 3]) > 0 ? Integer.parseInt(data[ofPosition + 3]) : Math.abs(Integer.parseInt(data[ofPosition + 3])));
 
     }
-    
+
 }

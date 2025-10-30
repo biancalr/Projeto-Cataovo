@@ -24,7 +24,7 @@ public class FrameUtils {
     private static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
 
     public FrameUtils() {
-        
+
     }
 
     /**

@@ -69,7 +69,7 @@ public abstract class BasicProcess implements Callable<String> {
     protected Frame getFrame() {
         return frame;
     }
-    
+
     protected String getDestination() {
         return destination;
     }

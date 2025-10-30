@@ -5,6 +5,7 @@
  */
 package cataovo.controllers.implement;
 
+import cataovo.controllers.FrameController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
@@ -12,14 +13,12 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.frameUtils.FrameUtils;
-import cataovo.utils.frameUtils.FrameUtils;
 import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import cataovo.controllers.FrameController;
 
 /**
  * Implements the frame actions controller.

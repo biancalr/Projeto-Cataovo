@@ -15,9 +15,9 @@ import org.opencv.imgproc.Imgproc;
  * @author Bianca Leopoldo Ramos
  */
 public final class MatOfPointWrapper {
-    
+
     private final MatOfPoint matOfPoint;
-    
+
     public MatOfPointWrapper(final List<Point> listOfPoints) {
         this.matOfPoint = new MatOfPoint(toOpencvMatOfPoint(listOfPoints));
     }
@@ -33,11 +33,11 @@ public final class MatOfPointWrapper {
     public MatOfPoint getMatOfPoint() {
         return matOfPoint;
     }
-    
+
     /**
      * Get Countour Area
-     * 
-     * @return 
+     *
+     * @return
      */
     public double getArea() {
         if (this.matOfPoint.empty()) {
@@ -45,5 +45,5 @@ public final class MatOfPointWrapper {
         }
         return Imgproc.contourArea(matOfPoint);
     }
-    
+
 }

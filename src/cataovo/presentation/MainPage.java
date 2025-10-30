@@ -5,17 +5,19 @@
  */
 package cataovo.presentation;
 
+import cataovo.controllers.FrameController;
 import cataovo.controllers.PageController;
-import cataovo.events.implement.FileEventImpl;
-import cataovo.controllers.implement.PageControllerImpl;
 import cataovo.controllers.implement.FrameControllerImpl;
+import cataovo.controllers.implement.PageControllerImpl;
 import cataovo.domain.Event;
 import cataovo.entities.Point;
 import cataovo.events.AutomaticEvent;
 import cataovo.events.EvaluationEvent;
+import cataovo.events.FileEvent;
 import cataovo.events.ManualEvent;
 import cataovo.events.implement.AutomaticEventImpl;
 import cataovo.events.implement.EvaluationEventImpl;
+import cataovo.events.implement.FileEventImpl;
 import cataovo.events.implement.ManualEventImpl;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
@@ -40,8 +42,6 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 import org.opencv.core.Core;
-import cataovo.events.FileEvent;
-import cataovo.controllers.FrameController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -56,18 +56,17 @@ public class MainPage extends javax.swing.JFrame {
     private final String DIR_HOME = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
 
     private File savingFolder = null;
-    
+
     private FileUtils fileUtils = null;
     private MainContext mainContext = null;
 
     private PageController pageController = null;
     private FrameController frameController = null;
-    
+
     private FileEvent fileEvent = null;
     private AutomaticEvent autoEvent = null;
     private EvaluationEvent evalEvent = null;
     private ManualEvent manualEvent = null;
-    
 
     /**
      * Creates new form MainPage
@@ -84,7 +83,7 @@ public class MainPage extends javax.swing.JFrame {
 
             LOG.log(Level.INFO, "Selecting home directory {}", DIR_HOME);
             this.savingFolder = mainContext.getFileFolder(new File(DIR_HOME));
-            
+
             this.pageController = new PageControllerImpl(mainContext);
             this.frameController = new FrameControllerImpl(mainContext);
 

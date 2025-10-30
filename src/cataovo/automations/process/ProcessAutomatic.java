@@ -55,22 +55,22 @@ public class ProcessAutomatic extends BasicProcess {
             // blur
             LOG.log(Level.INFO, "Applying blur...");
             current = current.applyBlur(dstny + Constants.BLUR_PNG, 5, 5);
-            
+
             // binary
             LOG.log(Level.INFO, "Applying binary...");
             current = current.applyBinary(dstny + Constants.BINARY_PNG);
-            
+
             // morphology
             LOG.log(Level.INFO, "Applying morphology...");
             current = current.applyMorph(dstny + Constants.MORPH_PNG,
                     17, 35, 2);
             current = current.applyMorph(dstny + Constants.MORPH_PNG,
                     35, 17, 2);
-            
+
             // contours
             final Map<Integer, List<List<Point>>> result = current.drawContours(dstny + Constants.CONTOURS_PNG,
                     new MatWrapper(getFrame()), 800, 5000);
-            
+
             LOG.info("Finising the processing");
             return report(result);
         } catch (IOException ex) {

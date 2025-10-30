@@ -53,12 +53,12 @@ public abstract class BasicSave implements Callable<String> {
     protected final String dateTime;
 
     /**
-     * 
+     *
      * @param palette
      * @param savingDirectory
      * @param fileExtension
      * @param parentTabName
-     * @param dateTime 
+     * @param dateTime
      */
     public BasicSave(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, String dateTime) {
         this.palette = palette;
@@ -68,12 +68,12 @@ public abstract class BasicSave implements Callable<String> {
         this.dateTime = dateTime;
         this.csvFileWriter = new CsvFileWriter();
     }
-    
+
     @Override
     public String call() throws Exception {
-        return createFile(); 
+        return createFile();
     }
-    
+
     /**
      * Responsable for creating the contents of each report needed to save the
      * resulted products
@@ -86,7 +86,7 @@ public abstract class BasicSave implements Callable<String> {
      * cataovo.automation.threads.dataSaving.NewThreadAutomationManualProcess
      */
     protected abstract String execute() throws AutomationExecutionException;
-    
+
     /**
      * Creates the relatory wich saves the data of each type of processment.
      *
@@ -94,30 +94,32 @@ public abstract class BasicSave implements Callable<String> {
      * @see #execute()
      */
     private synchronized String createFile() throws Exception {
-        
+
         StringBuffer sb = new StringBuffer();
         final String processingMode = (parentTabName == null ? Constants.TAB_NAME_MANUAL_PT_BR == null : parentTabName.equals(Constants.TAB_NAME_MANUAL_PT_BR)) ? ProcessingMode.MANUAL.getProcessingMode() : (parentTabName == null ? Constants.TAB_NAME_AUTOMATIC_PT_BR == null : parentTabName.equals(Constants.TAB_NAME_AUTOMATIC_PT_BR)) ? ProcessingMode.AUTOMATIC.getProcessingMode() : ProcessingMode.EVALUATION.getProcessingMode();
         final String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + dateTime;
         final String fileDirecto = savingDirectory + Constants.APPLICATION_FOLDER + dstn;
         final String createdFile = savingDirectory + Constants.APPLICATION_FOLDER + dstn + "/" + Constants.REPORT_FILE_NAME + "." + fileExtension.getExtension();
-       
+
         sb.append(addModeSpecificities(processingMode, createdFile));
-        
+
         sb.append(execute());
-        
+
         LOG.log(Level.INFO, "the report will be created under the name: {0}", createdFile);
         return this.csvFileWriter.createFile(sb, createdFile, fileDirecto);
-        
+
     }
 
     private StringBuffer addModeSpecificities(final String processingMode, final String createdFile) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         switch (processingMode) {
-            case Constants.PROCESSING_MODE_NAME_AUTO ->  {
+            case Constants.PROCESSING_MODE_NAME_AUTO -> {
                 sb.append(csvFileWriter.verifyAndAppendFileAreadyExistent(createdFile, palette.getPathName()));
                 break;
             }
-            default ->  { break; }
+            default -> {
+                break;
+            }
         }
         return sb;
     }

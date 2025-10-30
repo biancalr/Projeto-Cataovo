@@ -11,10 +11,11 @@ import org.opencv.core.Rect;
 
 /**
  * Wrapps a {@link org.opencv.core.Rect Rect}
+ *
  * @author Bianca Leopoldo Ramos
  */
 public final class RectWrapper {
-    
+
     private final Rect rect;
     private double area;
 
@@ -29,28 +30,28 @@ public final class RectWrapper {
     }
 
     /**
-     * 
-     * @param region 
+     *
+     * @param region
      */
     public RectWrapper(final Region region) {
-        this.rect = new Rect(region.getInitialPoint().getX(), 
-                             region.getInitialPoint().getY(),
-                             region.getWidth(), 
-                             region.getHeight());
+        this.rect = new Rect(region.getInitialPoint().getX(),
+                region.getInitialPoint().getY(),
+                region.getWidth(),
+                region.getHeight());
         this.area = this.rect.area();
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Region getRegion() {
         return new Region(new Point(rect.x, rect.y), rect.width, rect.height);
     }
 
     /**
-     * 
-     * @param region 
+     *
+     * @param region
      */
     public void setRect(Region region) {
         this.rect.x = region.getInitialPoint().getX();
@@ -59,15 +60,15 @@ public final class RectWrapper {
         this.rect.width = region.getWidth();
         this.area = this.rect.area();
     }
-    
+
     /**
-     * 
+     *
      * @param p
-     * @return 
+     * @return
      */
-    public boolean contains(PointWrapper p){
-       return rect.x <= p.getPoint().getX() && p.getPoint().getX() < rect.x + rect.width 
-               && rect.y <= p.getPoint().getY() && p.getPoint().getY() < rect.y + rect.height;
+    public boolean contains(PointWrapper p) {
+        return rect.x <= p.getPoint().getX() && p.getPoint().getX() < rect.x + rect.width
+                && rect.y <= p.getPoint().getY() && p.getPoint().getY() < rect.y + rect.height;
     }
 
     public Rect getOpencvRect() {
@@ -77,7 +78,7 @@ public final class RectWrapper {
     public double getArea() {
         return area;
     }
-    
+
     public Rect getRect() {
         final Rect region = new Rect();
         region.x = this.rect.width > 0 ? (this.rect.x - this.rect.width) : this.rect.x;

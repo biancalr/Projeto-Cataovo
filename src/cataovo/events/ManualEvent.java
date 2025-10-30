@@ -11,14 +11,14 @@ import cataovo.domain.Event;
  * @author Bianca Leopoldo Ramos
  */
 public interface ManualEvent {
-    
+
     /**
      * Triggers the manual processment.
-     * 
+     *
      * @param processingTabName
      * @param savingDirectory
-     * @return 
+     * @return
      */
     public Event execute(final String processingTabName, final String savingDirectory);
-    
+
 }

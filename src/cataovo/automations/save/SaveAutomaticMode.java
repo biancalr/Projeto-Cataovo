@@ -161,10 +161,10 @@ public final class SaveAutomaticMode extends BasicSave {
     }
 
     /**
-     * 
+     *
      * @param range
      * @param length
-     * @return 
+     * @return
      */
     private int calculatRange(int begin, int range, int length) {
         return (begin + range) <= length ? (begin + range) : length;

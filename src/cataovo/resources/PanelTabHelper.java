@@ -6,11 +6,11 @@ package cataovo.resources;
 
 /**
  * Responsable to support the tab changing.
- * 
+ *
  * @author Bianca Leopoldo Ramos
  */
 public class PanelTabHelper {
-    
+
     private boolean currentTabProcessing;
     private int tabIndex;
     private String tabName;
@@ -48,6 +48,4 @@ public class PanelTabHelper {
         this.tabName = tabName;
     }
 
-    
-    
 }

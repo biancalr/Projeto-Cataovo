@@ -30,7 +30,7 @@ public interface PageController {
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void onNextFrameInManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError ;
+    public void onNextFrameInManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError;
 
     /**
      * Set to the next frame
@@ -53,7 +53,7 @@ public interface PageController {
      * @throws DirectoryNotValidException
      * @throws ImageNotValidException
      */
-    public void onNextFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException ;
+    public void onNextFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException;
 
     /**
      * When a Frame was finished its analysis, go to next Frame on Queue.
@@ -82,7 +82,7 @@ public interface PageController {
      * @param parentNameLabel
      * @param parentLabel
      * @param frame
-     * @return 
+     * @return
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
@@ -108,7 +108,7 @@ public interface PageController {
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
+    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
 
     /**
      *
@@ -121,6 +121,6 @@ public interface PageController {
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public int onPreviousFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException ;
+    public int onPreviousFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException;
 
 }

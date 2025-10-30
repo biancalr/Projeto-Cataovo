@@ -30,14 +30,14 @@ public final class Conversions {
      * Logging
      */
     private static final Logger LOG = Logger.getLogger(Conversions.class.getName());
-    
+
     public Conversions() {
-        
+
     }
 
     /**
-     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a JPG
-     * file.
+     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a
+     * JPG file.
      *
      * @param current the current frame as
      * {@link cataovo.wrappers.opencv.MatWrapper MatWrapper}
@@ -50,8 +50,8 @@ public final class Conversions {
     }
 
     /**
-     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a PNG
-     * file.
+     * Converts the current {@link cataovo.wrappers.opencv.MatWrapper Mat} to a
+     * PNG file.
      *
      * @param current the current frame as
      * {@link cataovo.wrappers.opencv.MatWrapper MatWrapper}
@@ -71,7 +71,7 @@ public final class Conversions {
      * @param extension the type of desired extension for the frame.
      * @return the image as given extension.
      */
-    private BufferedImage matToBuffedImageConvert(final MatWrapper current, 
+    private BufferedImage matToBuffedImageConvert(final MatWrapper current,
             final FileExtension extension) {
         LOG.log(Level.INFO, "Converting a MAT to: {0}", extension.name());
         final MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
@@ -91,8 +91,8 @@ public final class Conversions {
      * @param extension extension of the image
      * @return the image converted
      */
-    private BufferedImage makeConversion(final boolean codeOk, 
-            final MatOfBytesWrapper ofBytesWrapper, 
+    private BufferedImage makeConversion(final boolean codeOk,
+            final MatOfBytesWrapper ofBytesWrapper,
             final FileExtension extension) {
         BufferedImage output = null;
         if (codeOk) {
@@ -101,7 +101,7 @@ public final class Conversions {
             try {
                 output = ImageIO.read(in);
             } catch (IOException ex) {
-                LOG.log(Level.SEVERE, "Error while converting a MAT to: " 
+                LOG.log(Level.SEVERE, "Error while converting a MAT to: "
                         + extension.toString(), ex);
             }
         }

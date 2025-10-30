@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class Point implements Cloneable, Serializable{
+public final class Point implements Cloneable, Serializable {
 
     /**
      * The X axis of the initial {@code Point}

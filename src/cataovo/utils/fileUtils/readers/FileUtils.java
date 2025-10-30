@@ -51,7 +51,7 @@ public class FileUtils {
                         if (string != null) {
                             RectWrapper current = new RectWrapper(
                                     new Region(
-                                                                                        new Point(
+                                            new Point(
                                                     Integer.parseInt(data[i]),
                                                     Integer.parseInt(data[i + 1])), Integer.parseInt(data[i + 2]), Integer.parseInt(data[i + 3])));
                             regions.add(current);

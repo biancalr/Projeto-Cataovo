@@ -11,7 +11,7 @@ import cataovo.utils.Constants;
  * @author bianc
  */
 public class PercentUtils {
-    
+
     public String getPercentageOf(final int method, final String strValue1, final String strValue2) {
         // TVP = VP / (FN+VP)
         // TFP = FP / (VN+FP)
@@ -42,7 +42,7 @@ public class PercentUtils {
             }
         }
     }
-    
+
     public String getPercentageOf(final int method, final String strValue1, final String strValue2, final String strValue3, final String strValue4) {
         float value1 = Integer.parseInt(strValue1);
         float value2 = Integer.parseInt(strValue2);

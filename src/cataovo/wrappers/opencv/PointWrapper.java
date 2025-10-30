@@ -9,26 +9,27 @@ import org.opencv.core.Point;
 
 /**
  * Wrapps a {@link org.opencv.core.Point Point}
+ *
  * @author Bianca Leopoldo Ramos.
  */
 public final class PointWrapper {
-    
+
     private Point point;
 
     public PointWrapper() {
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @param p cataovo.entities.Point
      */
     public PointWrapper(Point p) {
         point = p;
     }
-    
+
     /**
-     * 
+     *
      * @param p cataovo.entities.Point
      */
     public PointWrapper(cataovo.entities.Point p) {
@@ -36,32 +37,32 @@ public final class PointWrapper {
     }
 
     /**
-     * 
+     *
      * @return a cataovo.entities.Point
      */
     public cataovo.entities.Point getPoint() {
-        return new cataovo.entities.Point((int)point.x, (int)point.y);
+        return new cataovo.entities.Point((int) point.x, (int) point.y);
     }
 
     /**
-     * 
+     *
      * @param point a cataovo.entities.Point to set
      */
     public void setPoint(cataovo.entities.Point point) {
         this.point.x = point.getX();
         this.point.y = point.getY();
     }
-    
+
     /**
-     * 
+     *
      * @param p a cataovo.entities.Point to set
-     * @return 
+     * @return
      */
-    public double dot(cataovo.entities.Point p){
+    public double dot(cataovo.entities.Point p) {
         return point.dot(new Point(p.getX(), p.getY()));
     }
-    
-    public Point getOpencvPoint(){
+
+    public Point getOpencvPoint() {
         return point;
     }
 }

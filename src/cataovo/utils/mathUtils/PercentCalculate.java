@@ -13,12 +13,12 @@ import java.text.DecimalFormat;
  * @author Bianca Leopoldo Ramos
  */
 class PercentCalculate {
-    
-    public String calculate(PercentMethods calcType, Float value1, Float value2, Float value3, Float value4){
+
+    public String calculate(PercentMethods calcType, Float value1, Float value2, Float value3, Float value4) {
         final DecimalFormat decimalFormat = new DecimalFormat(Constants.DECIMAL_FORMAT);
         decimalFormat.setRoundingMode(RoundingMode.DOWN);
-        
+
         return decimalFormat.format(calcType.calculate(value1, value2, value3, value4));
     }
-    
+
 }
