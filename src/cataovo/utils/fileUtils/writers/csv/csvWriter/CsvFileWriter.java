@@ -7,6 +7,7 @@ package cataovo.utils.fileUtils.writers.csv.csvWriter;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
 import cataovo.utils.Constants;
+import cataovo.utils.fileUtils.writers.WriteFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,8 +16,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import cataovo.utils.fileUtils.writers.WriteFile;
 
 /**
  *
@@ -90,8 +89,7 @@ public class CsvFileWriter implements WriteFile{
         try (InputStreamReader in = new InputStreamReader(new FileInputStream(createdFile)); BufferedReader csvReader = new BufferedReader(in);) {
             return readContent(csvReader, palettePathName);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage());
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            LOG.log(Level.SEVERE, e.getMessage(), e);
             throw new AutomationExecutionException("Error while reading an existing file.");
         }
     }

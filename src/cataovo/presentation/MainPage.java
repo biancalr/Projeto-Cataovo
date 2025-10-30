@@ -6,10 +6,9 @@
 package cataovo.presentation;
 
 import cataovo.controllers.PageController;
-import cataovo.controllers.PresentationController;
 import cataovo.events.implement.FileEventImpl;
 import cataovo.controllers.implement.PageControllerImpl;
-import cataovo.controllers.implement.PresentationControllerImpl;
+import cataovo.controllers.implement.FrameControllerImpl;
 import cataovo.domain.Event;
 import cataovo.entities.Point;
 import cataovo.events.AutomaticEvent;
@@ -42,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 import org.opencv.core.Core;
 import cataovo.events.FileEvent;
+import cataovo.controllers.FrameController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -61,9 +61,9 @@ public class MainPage extends javax.swing.JFrame {
     private MainContext mainContext = null;
 
     private PageController pageController = null;
-    private PresentationController presentationController = null;
+    private FrameController frameController = null;
+    
     private FileEvent fileEvent = null;
-
     private AutomaticEvent autoEvent = null;
     private EvaluationEvent evalEvent = null;
     private ManualEvent manualEvent = null;
@@ -86,7 +86,7 @@ public class MainPage extends javax.swing.JFrame {
             this.savingFolder = mainContext.getFileFolder(new File(DIR_HOME));
             
             this.pageController = new PageControllerImpl(mainContext);
-            this.presentationController = new PresentationControllerImpl(mainContext);
+            this.frameController = new FrameControllerImpl(mainContext);
 
             this.fileEvent = new FileEventImpl(DIR_HOME);
             this.autoEvent = new AutomaticEventImpl(mainContext);
@@ -243,7 +243,7 @@ public class MainPage extends javax.swing.JFrame {
                 mainContext.getPalette().getDirectory(),
                 mainContext.getReports());
         this.pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12,
-                (this.presentationController.paintFormats(mainContext.getCurrentFrame().clone(),
+                (this.frameController.paintFormats(mainContext.getCurrentFrame().clone(),
                         this.fileUtils.getRegionsInFrameFile(mainContext.getCurrentFrame().getName(),
                                 manualReport),
                         this.fileUtils.getPointsInFrameFile(mainContext.getCurrentFrame().getName(),
@@ -1039,7 +1039,7 @@ public class MainPage extends javax.swing.JFrame {
             pageController.showFramesOnSelectedTabScreen(jTabbedPane1,
                     jLabel1,
                     jLabel2,
-                    presentationController.removeLastRegion(mainContext.getCurrentFrame()
+                    frameController.removeLastRegion(mainContext.getCurrentFrame()
                     ));
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1147,8 +1147,8 @@ public class MainPage extends javax.swing.JFrame {
         Icon frame, subFrame;
         Point pointClick = new Point(evt.getX(), evt.getY());
         try {
-            frame = presentationController.paintFormats(pointClick, mainContext.getCurrentFrame());
-            subFrame = presentationController.captureSubframe(pointClick,
+            frame = frameController.paintFormats(pointClick, mainContext.getCurrentFrame());
+            subFrame = frameController.captureSubframe(pointClick,
                     mainContext.getCurrentFrame());
             if (frame != null) {
                 pageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
@@ -1274,7 +1274,7 @@ public class MainPage extends javax.swing.JFrame {
                         mainContext.getPalette().getDirectory(),
                         mainContext.getReports());
                 pageController.showFrameOnScreen(jLabel13, jLabel12,
-                        this.presentationController.paintFormats(mainContext.getCurrentFrame().clone(),
+                        this.frameController.paintFormats(mainContext.getCurrentFrame().clone(),
                                 fileUtils.getRegionsInFrameFile(mainContext.getCurrentFrame().getName(),
                                         mainContext.getReports()[0]),
                                 fileUtils.getPointsInFrameFile(mainContext.getCurrentFrame().getName(),
@@ -1302,7 +1302,7 @@ public class MainPage extends javax.swing.JFrame {
                         mainContext.getPalette().getDirectory(),
                         mainContext.getReports());
                 pageController.showFrameOnScreen(jLabel13, jLabel12,
-                        this.presentationController.paintFormats(mainContext.getCurrentFrame().clone(),
+                        this.frameController.paintFormats(mainContext.getCurrentFrame().clone(),
                                 fileUtils.getRegionsInFrameFile(mainContext.getCurrentFrame().getName(),
                                         mainContext.getReports()[0]),
                                 fileUtils.getPointsInFrameFile(mainContext.getCurrentFrame().getName(),

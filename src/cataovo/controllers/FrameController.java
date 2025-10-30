@@ -19,7 +19,7 @@ import javax.swing.Icon;
  *
  * @author Bianca Leopoldo Ramos.
  */
-public interface PresentationController {
+public interface FrameController {
 
     /**
      * Chooses the format to paint the {@link cataovo.entities.Frame Frame} whether is a dot or a rectangle

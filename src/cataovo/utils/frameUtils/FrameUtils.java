@@ -1,95 +1,156 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package cataovo.utils.frameUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
+import cataovo.entities.Region;
 import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Define the actions to do in a {@link cataovo.entities.Frame Frame}.
  *
  * @author Bianca Leopoldo Ramos
  */
 public class FrameUtils {
 
-    private final FrameActions frameActions;
-    
+    private static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
+
     public FrameUtils() {
-        this.frameActions = new FrameActions();
+        
     }
 
     /**
-     * Draws a circle based on a point click.
+     * Using the coordinates of a given {@link org.opencv.core.Point Point},
+     * creates a dot to denmark the first click to start a region that locates
+     * an object Egg.
      *
      * @param frame
-     * @param point the Opencv {@link org.opencv.core.Point} Wrapper
+     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
      * @return a image with a drawn point circle.
+     * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
      */
-    public Icon drawCircle(final Frame frame, final PointWrapper point) {
-        return new ImageIcon(this.frameActions.circle(frame, point).convertToImg());
+    public final MatWrapper circle(final Frame frame, final PointWrapper pw) {
+        LOG.log(Level.INFO, "Starting..");
+        MatWrapper matWrapper;
+        if (!frame.getRegionsContainingEggs().isEmpty()) {
+            matWrapper = update(frame);
+        } else {
+            matWrapper = new MatWrapper(frame);
+        }
+        return matWrapper.circle(pw);
     }
 
     /**
-     * Draws a rectangle based on two point clicks.
+     * Using the first point plus width and height based on a second point,
+     * creates a rectangle to denmark the region that locates an object Egg.
      *
      * @param frame
-     * @param rectangle the Opencv {@link org.opencv.core.Rect} Wrapper
+     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
      * @return a image with a drawn rectangle.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
-    public Icon drawRectangle(final Frame frame, final RectWrapper rectangle) {
-        return new ImageIcon(this.frameActions.rectangle(frame, rectangle).convertToImg());
+    public final MatWrapper rectangle(final Frame frame, final RectWrapper rw) {
+        LOG.log(Level.INFO, "Starting..");
+        MatWrapper matWrapper;
+        final PointWrapper pointWrapper;
+        final PointWrapper pw2;
+        matWrapper = new MatWrapper(frame);
+        if (!frame.getRegionsContainingEggs().isEmpty()) {
+            matWrapper = update(frame);
+        }
+        pointWrapper = new PointWrapper(
+                new Point(rw.getRegion().getInitialPoint().getX(),
+                        rw.getRegion().getInitialPoint().getY()));
+        pw2 = new PointWrapper(new Point(
+                Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
+                Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
+        frame.getRegionsContainingEggs().add(grid(pointWrapper, pw2));
+        return matWrapper.rectangle(pointWrapper, pw2);
+
     }
 
     /**
-     * Updates the current frame.
+     * Capture the Rect of the grid for identification. Allows to capture the
+     * rect so it can be possible to indentify which grid has a certain egg
+     * inside.
      *
-     * @param frame the frame to update
+     * @param beginGrid the point to begin
+     * @param endGrid the point to end
+     * @return the area {@link Region} of the Grid
+     */
+    public final Region grid(final PointWrapper beginGrid, final PointWrapper endGrid) {
+        LOG.log(Level.INFO, "Capture the Region...");
+        return new Region(beginGrid.getPoint(),
+                (int) (beginGrid.getPoint().getX() - endGrid.getPoint().getX()),
+                (int) (beginGrid.getPoint().getY() - endGrid.getPoint().getY()));
+    }
+
+    /**
+     * Draws dinamically each grid of the regions in the frame
+     *
+     * @param frame
      * @return the updated image with the proper number of grids.
-     * @see FrameUtils#rectangle(cataovo.entities.Frame, cataovo.wrappers.lib.RectWrapper)
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
-    public Icon updateGrids(final Frame frame) {
-        return new ImageIcon(this.frameActions.update(frame).convertToImg());
-    }
-
-    /**
-     * Captures a subgrid based on a {@link cataovo.entities.Region Region}
-     * between two point clicks.
-     *
-     * @param frame
-     * @param begin a point to start calculating the grid.
-     * @param end a point to delimitate the grid
-     * @return a Image within these clicks.
-     */
-    public Icon getSubframe(final Frame frame, final Point begin, final Point end) {
-        final RectWrapper rectWrapper = new RectWrapper(
-                this.frameActions.grid(new PointWrapper(begin), new PointWrapper(end)));
-        final MatWrapper mat = new MatWrapper(frame).submat(rectWrapper);
-        return new ImageIcon(mat.convertToImg());
+    public final MatWrapper update(final Frame frame) {
+        PointWrapper pw1, pw2;
+        MatWrapper mw = new MatWrapper(frame);
+        for (Region r : frame.getRegionsContainingEggs()) {
+            pw1 = new PointWrapper(
+                    new Point(r.getInitialPoint().getX(),
+                            r.getInitialPoint().getY()));
+            pw2 = new PointWrapper(new Point(
+                    Math.abs(r.getInitialPoint().getX() - r.getWidth()),
+                    Math.abs(r.getInitialPoint().getY() - r.getHeight())));
+            mw = mw.rectangle(pw1, pw2);
+        }
+        return mw;
     }
 
     /**
      *
-     * @param frame
+     * @param matWrapper
      * @param rects
+     * @return
+     */
+    public final MatWrapper multipleRects(final MatWrapper matWrapper, Collection<RectWrapper> rects) {
+        PointWrapper beginPoint, endPoint;
+        MatWrapper mw = matWrapper;
+        for (RectWrapper r : rects) {
+            beginPoint = new PointWrapper(
+                    new Point(r.getRegion().getInitialPoint().getX(),
+                            r.getRegion().getInitialPoint().getY()));
+            endPoint = new PointWrapper(new Point(
+                    Math.abs(r.getRegion().getInitialPoint().getX() - r.getRegion().getWidth()),
+                    Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
+            mw = mw.rectangle(beginPoint, endPoint);
+        }
+        return mw;
+    }
+
+    /**
+     *
+     * @param matWrapper
      * @param circles
      * @return
      */
-    public Icon drawPolygons(final Frame frame, final Collection<RectWrapper> rects,
-            final List<List<PointWrapper>> circles) {
-        MatWrapper mat = new MatWrapper(frame);
-        mat = this.frameActions.multipleRects(mat, rects);
-        mat = this.frameActions.multipleCircles(mat, circles);
-        return new ImageIcon(mat.convertToImg());
+    public final MatWrapper multipleCircles(final MatWrapper matWrapper, final List<List<PointWrapper>> circles) {
+        var mw = matWrapper;
+        for (List<PointWrapper> col : circles) {
+            for (PointWrapper c : col) {
+                mw = mw.circle(c);
+            }
+        }
+        return mw;
     }
-
 }

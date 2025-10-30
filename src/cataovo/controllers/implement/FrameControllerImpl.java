@@ -5,7 +5,6 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.controllers.PresentationController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
@@ -13,17 +12,21 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.frameUtils.FrameUtils;
+import cataovo.utils.frameUtils.FrameUtils;
+import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.List;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import cataovo.controllers.FrameController;
 
 /**
  * Implements the frame actions controller.
  *
  * @author Bianca Leopoldo Ramos.
  */
-public class PresentationControllerImpl implements PresentationController {
+public class FrameControllerImpl implements FrameController {
 
     /**
      * Controls the quantity of clicks to base the actions upon.
@@ -33,13 +36,13 @@ public class PresentationControllerImpl implements PresentationController {
      * The initial point to start the actions.
      */
     private Point initialPoint = null;
-    
+
     private final FrameUtils frameUtils;
     private final MainContext mainContext;
-    
-    public PresentationControllerImpl(MainContext mainContext) {
+
+    public FrameControllerImpl(MainContext mainContext) {
         clickCount = 0;
-        frameUtils = new FrameUtils();
+        this.frameUtils = new FrameUtils();
         this.mainContext = mainContext;
     }
 
@@ -79,7 +82,7 @@ public class PresentationControllerImpl implements PresentationController {
      * @throws CloneNotSupportedException
      */
     private Icon paintDotOnFrame(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        return this.frameUtils.drawCircle(currentFrame, new PointWrapper(point));
+        return new ImageIcon(this.frameUtils.circle(currentFrame, new PointWrapper(point)).convertToImg());
     }
 
     /**
@@ -91,7 +94,7 @@ public class PresentationControllerImpl implements PresentationController {
      * @throws CloneNotSupportedException
      */
     private Icon paintGridOnFrame(Region region, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
-        final Icon icon = this.frameUtils.drawRectangle(currentFrame.clone(), new RectWrapper(region));
+        final Icon icon = new ImageIcon(this.frameUtils.rectangle(currentFrame, new RectWrapper(region)).convertToImg());
         mainContext.getCurrentFrame().getRegionsContainingEggs().addAll(currentFrame.getRegionsContainingEggs());
         return icon;
     }
@@ -107,12 +110,12 @@ public class PresentationControllerImpl implements PresentationController {
     public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
         if (currentFrame.getRegionsContainingEggs().isEmpty()) {
-            return this.frameUtils.updateGrids(currentFrame);
+            return new ImageIcon(this.frameUtils.update(currentFrame).convertToImg());
         } else {
             mainContext.getCurrentFrame().getRegionsContainingEggs().remove(
                     (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
-            return this.frameUtils.updateGrids(currentFrame);
+            return new ImageIcon(this.frameUtils.update(currentFrame).convertToImg());
         }
     }
 
@@ -129,21 +132,27 @@ public class PresentationControllerImpl implements PresentationController {
     public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException {
         Icon subframeImage = null;
         if (clickCount == 0 && initialPoint != null) {
-            subframeImage = this.frameUtils.getSubframe(currentFrame, this.initialPoint, pointClick);
+            final RectWrapper rectWrapper = new RectWrapper(
+                    this.frameUtils.grid(
+                            new PointWrapper(this.initialPoint), new PointWrapper(pointClick)));
+            subframeImage = new ImageIcon(new MatWrapper(currentFrame).submat(rectWrapper).convertToImg());
         }
         return subframeImage;
     }
 
     /**
-     * 
+     *
      * @param currentFrame
      * @param rects
      * @param circles
-     * @return 
+     * @return
      */
     @Override
-    public Icon paintFormats(Frame currentFrame, List<RectWrapper> rects, List<List<PointWrapper>> circles) {  
-        return this.frameUtils.drawPolygons(currentFrame, rects, circles);
+    public Icon paintFormats(Frame currentFrame, List<RectWrapper> rects, List<List<PointWrapper>> circles) {
+        MatWrapper mat = new MatWrapper(currentFrame);
+        mat = this.frameUtils.multipleRects(mat, rects);
+        mat = this.frameUtils.multipleCircles(mat, circles);
+        return new ImageIcon(mat.convertToImg());
     }
 
 }
