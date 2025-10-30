@@ -8,7 +8,7 @@ package cataovo.wrappers.opencv;
 import cataovo.entities.Frame;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
-import cataovo.wrappers.conversion.Conversions;
+import cataovo.utils.conversion.Conversions;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;

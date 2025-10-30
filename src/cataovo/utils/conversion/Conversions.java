@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.wrappers.conversion;
+package cataovo.utils.conversion;
 
 import cataovo.utils.enums.FileExtension;
 import cataovo.wrappers.opencv.MatOfBytesWrapper;
