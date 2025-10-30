@@ -7,6 +7,7 @@ package cataovo.wrappers.opencv;
 import cataovo.entities.Point;
 import java.util.List;
 import org.opencv.core.MatOfPoint;
+import org.opencv.imgproc.Imgproc;
 
 /**
  * Wrapps a {@link org.opencv.core.MatOfPoint MatOfPoint}
@@ -31,6 +32,18 @@ public final class MatOfPointWrapper {
 
     public MatOfPoint getMatOfPoint() {
         return matOfPoint;
+    }
+    
+    /**
+     * Get Countour Area
+     * 
+     * @return 
+     */
+    public double getArea() {
+        if (this.matOfPoint.empty()) {
+            return 0;
+        }
+        return Imgproc.contourArea(matOfPoint);
     }
     
 }

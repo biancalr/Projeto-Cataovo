@@ -73,11 +73,11 @@ public class AutomaticImageProcessTest {
 //        System.out.println("-------------------------------------" + img.type());
 //        
 //        Mat im = getChannelImage(img, dstn + frameName + "_5_channel.png");
-////        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversions.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
+////        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Conversions.getInstance().convertToPng(new MatWrapper(img, orign)).get());
 //        
 ////        Mat im = getChannelImage(img, dstn + frameName + "_5_binary.png");
 //
-//        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversions.getInstance().convertMatToPng(new MatWrapper(im, orign)).get());
+//        im = applyBinaryOnImage(dstn + frameName + "_6_binary.png", Conversions.getInstance().convertToPng(new MatWrapper(im, orign)).get());
 //        
 //        im = imageProcess.applyMorphOnImage(dstn + frameName + "_7_morph_1.png", 17, 40, 2, im);
 //        im = imageProcess.applyMorphOnImage(dstn + frameName+ "_8_morph_2.png", 40, 17, 2, im);

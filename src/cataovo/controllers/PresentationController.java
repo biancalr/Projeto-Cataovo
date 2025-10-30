@@ -9,8 +9,9 @@ import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
+import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
-import java.util.Collection;
+import java.util.List;
 import javax.swing.Icon;
 
 /**
@@ -44,7 +45,7 @@ public interface PresentationController {
      * @see cataovo.controllers.FileReaderController#getPointsInFrameFile(java.lang.String, java.lang.String) 
      * @see cataovo.controllers.FileReaderController#getRegionsInFrameFile(java.lang.String, java.lang.String) 
      */
-    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection points);
+    public Icon paintFormats(Frame currentFrame, List<RectWrapper> regions, List<List<PointWrapper>> points);
     
     /**
      * Removes the last demarked {@link cataovo.entities.Region}.

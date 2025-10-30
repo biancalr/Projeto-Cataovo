@@ -7,7 +7,6 @@ package cataovo.automations.evaluate;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.utils.opencvUtils.OpencvUtils;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
 import cataovo.utils.fileUtils.readers.DataUtils;
@@ -28,12 +27,10 @@ public class EvaluateDataPixels extends BasicEvaluate {
     private static final Logger LOG = Logger.getLogger(EvaluateDataPixels.class.getName());
 
     private final DataUtils dataUtils;
-    private final OpencvUtils processUtils;
 
     public EvaluateDataPixels(String fileContentManual, String fileContentAuto, MainContext mainContext) {
         super(fileContentManual, fileContentAuto, mainContext);
         this.dataUtils = new DataUtils();
-        this.processUtils = new OpencvUtils();
     }
 
     @Override
@@ -180,7 +177,7 @@ public class EvaluateDataPixels extends BasicEvaluate {
             
             } else if (!foundEggs.isEmpty() && pontosEncontradosAux.isEmpty() && regioesEncontradas.isEmpty()) {
                 totalEggsInPixels = 0;
-                totalEggsInPixels = foundEggs.stream().map(rem -> (int) processUtils.getArea(new MatOfPointWrapper(rem))).reduce(totalEggsInPixels, Integer::sum);
+                totalEggsInPixels = foundEggs.stream().map(rem -> (int) new MatOfPointWrapper(rem).getArea()).reduce(totalEggsInPixels, Integer::sum);
                 totalOfPixels -= totalEggsInPixels;
                 fp += totalEggsInPixels;
                 LOG.log(Level.INFO, "{0} Ovo(s) encontrado(s) para {1}", new Object[]{0, eggsString.get(0)});
@@ -198,7 +195,7 @@ public class EvaluateDataPixels extends BasicEvaluate {
             // remover todos os pontos pertencentes a ovos encontrados corretamente
             if (!remanescent.isEmpty()) {
                 totalEggsInPixels = 0;
-                totalEggsInPixels = remanescent.stream().map(e -> (int) processUtils.getArea(new MatOfPointWrapper(e))).reduce(totalEggsInPixels, Integer::sum);
+                totalEggsInPixels = remanescent.stream().map(e -> (int) new MatOfPointWrapper(e).getArea()).reduce(totalEggsInPixels, Integer::sum);
                 totalOfPixels -= totalEggsInPixels;
                 fp += totalEggsInPixels;
             }

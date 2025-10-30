@@ -7,11 +7,11 @@ package cataovo.utils.frameUtils;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.utils.opencvUtils.OpencvUtils;
 import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,11 +21,10 @@ import java.util.logging.Logger;
  */
 public class FrameUtils {
 
-    protected static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
-    protected OpencvUtils opencvUtils;
+    private static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
 
-    public FrameUtils(OpencvUtils imageUtils) {
-        this.opencvUtils = imageUtils;
+    public FrameUtils() {
+        
     }
 
     /**
@@ -46,8 +45,7 @@ public class FrameUtils {
         } else {
             matWrapper = new MatWrapper(frame);
         }
-        matWrapper = opencvUtils.circle(pw, matWrapper);
-        return matWrapper;
+        return matWrapper.circle(pw);
     }
 
     /**
@@ -76,9 +74,7 @@ public class FrameUtils {
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
         frame.getRegionsContainingEggs().add(grid(pointWrapper, pw2));
-        matWrapper = opencvUtils.rectangle(
-                pointWrapper, pw2, matWrapper);
-        return matWrapper;
+        return matWrapper.rectangle(pointWrapper, pw2);
 
     }
 
@@ -93,8 +89,8 @@ public class FrameUtils {
      */
     protected Region grid(final PointWrapper beginGrid, final PointWrapper endGrid) {
         LOG.log(Level.INFO, "Capture the Region...");
-        return new Region(beginGrid.getPoint(), 
-                (int) (beginGrid.getPoint().getX() - endGrid.getPoint().getX()), 
+        return new Region(beginGrid.getPoint(),
+                (int) (beginGrid.getPoint().getX() - endGrid.getPoint().getX()),
                 (int) (beginGrid.getPoint().getY() - endGrid.getPoint().getY()));
     }
 
@@ -109,15 +105,14 @@ public class FrameUtils {
     protected MatWrapper update(final Frame frame) {
         PointWrapper pw1, pw2;
         MatWrapper mw = new MatWrapper(frame);
-        for (var r : frame.getRegionsContainingEggs()) {
+        for (Region r : frame.getRegionsContainingEggs()) {
             pw1 = new PointWrapper(
                     new Point(r.getInitialPoint().getX(),
                             r.getInitialPoint().getY()));
             pw2 = new PointWrapper(new Point(
                     Math.abs(r.getInitialPoint().getX() - r.getWidth()),
                     Math.abs(r.getInitialPoint().getY() - r.getHeight())));
-            mw = opencvUtils.rectangle(
-                    pw1, pw2, mw);
+            mw = mw.rectangle(pw1, pw2);
         }
         return mw;
     }
@@ -128,20 +123,17 @@ public class FrameUtils {
      * @param rects
      * @return
      */
-    protected MatWrapper multipleRects(final MatWrapper matWrapper, Collection<RectWrapper> rects) {
+    protected final MatWrapper multipleRects(final MatWrapper matWrapper, Collection<RectWrapper> rects) {
         PointWrapper beginPoint, endPoint;
         MatWrapper mw = matWrapper;
-        for (var r : rects) {
+        for (RectWrapper r : rects) {
             beginPoint = new PointWrapper(
                     new Point(r.getRegion().getInitialPoint().getX(),
                             r.getRegion().getInitialPoint().getY()));
             endPoint = new PointWrapper(new Point(
                     Math.abs(r.getRegion().getInitialPoint().getX() - r.getRegion().getWidth()),
                     Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
-            mw = opencvUtils.rectangle(
-                    beginPoint,
-                    endPoint,
-                    mw);
+            mw = mw.rectangle(beginPoint, endPoint);
         }
         return mw;
     }
@@ -152,14 +144,13 @@ public class FrameUtils {
      * @param circles
      * @return
      */
-    protected MatWrapper multipleCircles(final MatWrapper matWrapper, final Collection<Collection<PointWrapper>> circles) {
+    protected MatWrapper multipleCircles(final MatWrapper matWrapper, final List<List<PointWrapper>> circles) {
         var mw = matWrapper;
-        for (var col : circles) {
-            for (var c : col) {
-                mw = opencvUtils.circle(c, mw);
+        for (List<PointWrapper> col : circles) {
+            for (PointWrapper c : col) {
+                mw = mw.circle(c);
             }
         }
         return mw;
     }
-
 }

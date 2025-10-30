@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  * This class is responsable for the conversion between image formats to show
@@ -31,8 +30,9 @@ public final class Conversions {
      * Logging
      */
     private static final Logger LOG = Logger.getLogger(Conversions.class.getName());
-
+    
     public Conversions() {
+        
     }
 
     /**
@@ -75,11 +75,10 @@ public final class Conversions {
             final FileExtension extension) {
         LOG.log(Level.INFO, "Converting a MAT to: {0}", extension.name());
         final MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
-        boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), 
-                        current.getOpencvMat(), ofBytesWrapper);
+        boolean codeOk;
+        codeOk = current.toMemBuffer(extension, ofBytesWrapper);
         final BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
         return output;
-
     }
 
     /**
@@ -105,10 +104,7 @@ public final class Conversions {
                 LOG.log(Level.SEVERE, "Error while converting a MAT to: " 
                         + extension.toString(), ex);
             }
-
         }
         return output;
-
     }
-
 }

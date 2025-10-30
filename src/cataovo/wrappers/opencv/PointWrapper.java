@@ -23,6 +23,14 @@ public final class PointWrapper {
      * 
      * @param p cataovo.entities.Point
      */
+    public PointWrapper(Point p) {
+        point = p;
+    }
+    
+    /**
+     * 
+     * @param p cataovo.entities.Point
+     */
     public PointWrapper(cataovo.entities.Point p) {
         point = new Point(p.getX(), p.getY());
     }

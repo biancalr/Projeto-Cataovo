@@ -5,18 +5,18 @@
  */
 package cataovo.controllers.implement;
 
+import cataovo.controllers.PresentationController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
 import cataovo.resources.MainContext;
+import cataovo.utils.presentationUtils.PresentationUtils;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
-import java.util.Collection;
+import java.util.List;
 import javax.swing.Icon;
-import cataovo.utils.presentationUtils.PresentationUtils;
-import cataovo.controllers.PresentationController;
 
 /**
  * Implements the frame actions controller.
@@ -142,7 +142,7 @@ public class PresentationControllerImpl implements PresentationController {
      * @return 
      */
     @Override
-    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> rects, Collection circles) {  
+    public Icon paintFormats(Frame currentFrame, List<RectWrapper> rects, List<List<PointWrapper>> circles) {  
         return this.frameUtils.drawPolygons(currentFrame, rects, circles);
     }
 

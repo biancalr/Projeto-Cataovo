@@ -8,12 +8,11 @@ package cataovo.utils.presentationUtils;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.utils.frameUtils.FrameUtils;
-import cataovo.utils.opencvUtils.OpencvUtils;
-import cataovo.wrappers.conversion.Conversions;
 import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -24,11 +23,8 @@ import javax.swing.ImageIcon;
  */
 public class PresentationUtils extends FrameUtils {
 
-    private final Conversions conversion;
-
     public PresentationUtils() {
-        super(new OpencvUtils());
-        conversion = new Conversions();
+        
     }
 
     /**
@@ -39,8 +35,7 @@ public class PresentationUtils extends FrameUtils {
      * @return a image with a drawn point circle.
      */
     public Icon drawCircle(final Frame frame, final PointWrapper point) {
-        return new ImageIcon(this.conversion.convertMatToImg(
-                super.circle(frame, point)).get());
+        return new ImageIcon(super.circle(frame, point).convertToImg());
     }
 
     /**
@@ -51,8 +46,7 @@ public class PresentationUtils extends FrameUtils {
      * @return a image with a drawn rectangle.
      */
     public Icon drawRectangle(final Frame frame, final RectWrapper rectangle) {
-        return new ImageIcon(this.conversion.convertMatToImg(
-                super.rectangle(frame, rectangle)).get());
+        return new ImageIcon(super.rectangle(frame, rectangle).convertToImg());
     }
 
     /**
@@ -63,8 +57,7 @@ public class PresentationUtils extends FrameUtils {
      * @see PresentationUtils#rectangle(cataovo.entities.Frame, cataovo.wrappers.lib.RectWrapper)
      */
     public Icon updateGrids(final Frame frame) {
-        return new ImageIcon(this.conversion.convertMatToImg(
-                super.update(frame)).get());
+        return new ImageIcon(super.update(frame).convertToImg());
     }
 
     /**
@@ -79,10 +72,8 @@ public class PresentationUtils extends FrameUtils {
     public Icon getSubframe(final Frame frame, final Point begin, final Point end) {
         final RectWrapper rectWrapper = new RectWrapper(
                 super.grid(new PointWrapper(begin), new PointWrapper(end)));
-        final MatWrapper matWrapper = opencvUtils
-                .submat(rectWrapper, new MatWrapper(frame));
-        return new ImageIcon(
-                this.conversion.convertMatToImg(matWrapper).get());
+        final MatWrapper mat = new MatWrapper(frame).submat(rectWrapper);
+        return new ImageIcon(mat.convertToImg());
     }
 
     /**
@@ -93,11 +84,11 @@ public class PresentationUtils extends FrameUtils {
      * @return
      */
     public Icon drawPolygons(final Frame frame, final Collection<RectWrapper> rects,
-            final Collection<Collection<PointWrapper>> circles) {
-        MatWrapper matWrapper = new MatWrapper(frame);
-        matWrapper = super.multipleRects(matWrapper, rects);
-        matWrapper = super.multipleCircles(matWrapper, circles);
-        return new ImageIcon(this.conversion.convertMatToImg(matWrapper).get());
+            final List<List<PointWrapper>> circles) {
+        MatWrapper mat = new MatWrapper(frame);
+        mat = super.multipleRects(mat, rects);
+        mat = super.multipleCircles(mat, circles);
+        return new ImageIcon(mat.convertToImg());
     }
 
 }

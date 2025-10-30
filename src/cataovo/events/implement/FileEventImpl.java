@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controllers.implement;
+package cataovo.events.implement;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -18,20 +18,20 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTabbedPane;
-import cataovo.controllers.FileSelectionController;
+import cataovo.events.FileEvent;
 
 /**
  * Controls the interactions with the files from outside the Application.
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FileSelectionControllerImpl implements FileSelectionController {
+public class FileEventImpl implements FileEvent {
 
-    private static final Logger LOG = Logger.getLogger(FileSelectionControllerImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileEventImpl.class.getName());
     private final FileChooserUI fileChooser;
 
-    public FileSelectionControllerImpl(FileChooserUI fileChooserUI) throws DirectoryNotValidException {
-        fileChooser = fileChooserUI;
+    public FileEventImpl(final String fileChooserDirHome) throws DirectoryNotValidException {
+        fileChooser = new FileChooserUI(new File(fileChooserDirHome));
     }
 
     /**
@@ -65,17 +65,17 @@ public class FileSelectionControllerImpl implements FileSelectionController {
      * @throws cataovo.exceptions.ReportNotValidException
      */
     @Override
-    public File onFileSelectionEvent(boolean isCurrentTabProcessing, String actionCommand, JTabbedPane parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException {
+    public File onFileSelectionEvent(boolean isCurrentTabProcessing, String actionCommand, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException {
         if (!isCurrentTabProcessing) {
             switch (actionCommand) {
                 case Constants.ITEM_ACTION_COMMAND_OPEN_PALETTE_PT_BR -> {
-                    return actionCommandOpenFolder(isADirectoryOnly, parent);
+                    return actionCommandOpenFolder(isADirectoryOnly);
                 }
                 case Constants.ITEM_ACTION_COMMAND_SELECT_DESTINATION_FOLDER_PT_BR -> {
-                    return actionCommandSetSavingFolder(isADirectoryOnly, parent);
+                    return actionCommandSetSavingFolder(isADirectoryOnly);
                 }
                 case Constants.ITEM_ACTION_COMMAND_SELECT_REPORT_PT_BR -> {
-                    return actionCommandSelectReport(isADirectoryOnly, parent);
+                    return actionCommandSelectReport(isADirectoryOnly);
                 }
                 default -> {
                     LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
@@ -98,11 +98,11 @@ public class FileSelectionControllerImpl implements FileSelectionController {
      * @throws DirectoryNotValidException
      * @throws ImageNotValidException
      */
-    private File actionCommandOpenFolder(boolean isADirectoryOnly, JTabbedPane tabbedPane) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException, HeadlessException {
+    private File actionCommandOpenFolder(boolean isADirectoryOnly) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException, HeadlessException {
         FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.setFileFilter(null);
-        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, tabbedPane);
+        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, null);
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
             return file;
@@ -118,13 +118,13 @@ public class FileSelectionControllerImpl implements FileSelectionController {
      * @throws DirectoryNotValidException
      * @throws HeadlessException
      */
-    private File actionCommandSelectReport(final boolean isADirectoryOnly, final JTabbedPane parent) throws DirectoryNotValidException, HeadlessException, ReportNotValidException {
+    private File actionCommandSelectReport(final boolean isADirectoryOnly) throws DirectoryNotValidException, HeadlessException, ReportNotValidException {
         FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.addChoosableFileFilter(new FileFilterExtensions(FileExtension.CSV));
         chooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
         chooser.setExtensionType(FileExtension.CSV);
-        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, parent);
+        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, null);
         if (isAValidFileReportOnPalette(file)) {
             return file;
         } else {
@@ -148,12 +148,12 @@ public class FileSelectionControllerImpl implements FileSelectionController {
      * @return
      * @throws DirectoryNotValidException
      */
-    private File actionCommandSetSavingFolder(final boolean isADirectoryOnly, final JTabbedPane tabbedPane) throws DirectoryNotValidException {
+    private File actionCommandSetSavingFolder(final boolean isADirectoryOnly) throws DirectoryNotValidException {
         LOG.log(Level.INFO, "Setting a new saving Folder.");
         FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.setFileFilter(null);
-        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, tabbedPane);
+        File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, null);
         if (file != null && file.exists()) {
             // Set the folder where the result will be saved.
             LOG.log(Level.INFO, "A new saving Folder {0}", file);

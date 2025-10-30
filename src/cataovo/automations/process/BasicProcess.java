@@ -5,7 +5,6 @@
 package cataovo.automations.process;
 
 import cataovo.entities.Frame;
-import cataovo.utils.opencvUtils.OpencvUtils;
 import cataovo.utils.Constants;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -33,11 +32,6 @@ public abstract class BasicProcess implements Callable<String> {
     private final String destination;
 
     /**
-     * Contains the methods to process a frame.
-     */
-    private final OpencvUtils imageProcess;
-
-    /**
      * The thread responsable for the automatic processing.
      *
      * @param frame
@@ -46,7 +40,6 @@ public abstract class BasicProcess implements Callable<String> {
     public BasicProcess(Frame frame, String destination) {
         this.frame = frame;
         this.destination = destination;
-        this.imageProcess = new OpencvUtils();
     }
 
     /**
@@ -79,9 +72,5 @@ public abstract class BasicProcess implements Callable<String> {
     
     protected String getDestination() {
         return destination;
-    }
-
-    public OpencvUtils imageTransform() {
-        return imageProcess;
     }
 }

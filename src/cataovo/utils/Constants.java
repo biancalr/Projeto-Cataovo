@@ -11,6 +11,9 @@ package cataovo.utils;
  * @author Bianca Leopoldo Ramos
  */
 public class Constants {
+    
+    public static final double[] WHITE = new double[]{255};
+    public static final double[] BLACK = new double[]{0};
 
     /**
      * APPLICATION FOLDER

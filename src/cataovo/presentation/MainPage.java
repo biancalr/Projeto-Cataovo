@@ -5,14 +5,16 @@
  */
 package cataovo.presentation;
 
-import cataovo.controllers.FileSelectionController;
 import cataovo.controllers.PageController;
 import cataovo.controllers.PresentationController;
-import cataovo.controllers.implement.FileSelectionControllerImpl;
+import cataovo.events.implement.FileEventImpl;
 import cataovo.controllers.implement.PageControllerImpl;
 import cataovo.controllers.implement.PresentationControllerImpl;
 import cataovo.domain.Event;
 import cataovo.entities.Point;
+import cataovo.events.AutomaticEvent;
+import cataovo.events.EvaluationEvent;
+import cataovo.events.ManualEvent;
 import cataovo.events.implement.AutomaticEventImpl;
 import cataovo.events.implement.EvaluationEventImpl;
 import cataovo.events.implement.ManualEventImpl;
@@ -27,7 +29,6 @@ import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.fileUtils.readers.FileUtils;
 import cataovo.utils.mathUtils.PercentUtils;
-import cataovo.wrappers.UI.FileChooserUI;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -40,9 +41,7 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 import org.opencv.core.Core;
-import cataovo.events.AutomaticEvent;
-import cataovo.events.EvaluationEvent;
-import cataovo.events.ManualEvent;
+import cataovo.events.FileEvent;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -56,20 +55,19 @@ public class MainPage extends javax.swing.JFrame {
 
     private final String DIR_HOME = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
 
-    private final FileUtils fileUtils = new FileUtils();
-
     private File savingFolder = null;
+    
+    private FileUtils fileUtils = null;
+    private MainContext mainContext = null;
 
     private PageController pageController = null;
     private PresentationController presentationController = null;
-    private FileSelectionController selectionController = null;
+    private FileEvent fileEvent = null;
 
     private AutomaticEvent autoEvent = null;
     private EvaluationEvent evalEvent = null;
     private ManualEvent manualEvent = null;
-
-    private FileChooserUI fileChooserUI = null;
-    private MainContext mainContext = null;
+    
 
     /**
      * Creates new form MainPage
@@ -78,6 +76,7 @@ public class MainPage extends javax.swing.JFrame {
         LOG.log(Level.INFO, "Initializing application");
         try {
             this.mainContext = new MainContext();
+            this.fileUtils = new FileUtils();
             this.initComponents();
 
             this.resetInitialComponents();
@@ -85,12 +84,11 @@ public class MainPage extends javax.swing.JFrame {
 
             LOG.log(Level.INFO, "Selecting home directory {}", DIR_HOME);
             this.savingFolder = mainContext.getFileFolder(new File(DIR_HOME));
-            this.fileChooserUI = new FileChooserUI(new File(DIR_HOME));
-
-            this.selectionController = new FileSelectionControllerImpl(fileChooserUI);
+            
             this.pageController = new PageControllerImpl(mainContext);
             this.presentationController = new PresentationControllerImpl(mainContext);
 
+            this.fileEvent = new FileEventImpl(DIR_HOME);
             this.autoEvent = new AutomaticEventImpl(mainContext);
             this.evalEvent = new EvaluationEventImpl(mainContext);
             this.manualEvent = new ManualEventImpl(mainContext);
@@ -1052,7 +1050,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
-            final File file = selectionController.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), jTabbedPane1, true);
+            final File file = fileEvent.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), true);
 
             if (file != null) {
                 mainContext.choosePalette(file);
@@ -1098,7 +1096,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            final var newFolder = selectionController.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), jTabbedPane1, true);
+            final var newFolder = fileEvent.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), true);
             if (newFolder != null) {
                 this.savingFolder = newFolder;
                 JOptionPane.showMessageDialog(jPanel1, "Diretório de salvamento foi alterado com sucesso.");
@@ -1226,7 +1224,7 @@ public class MainPage extends javax.swing.JFrame {
             this.jTabbedPane2.setSelectedIndex(2); // abre a aba dos ovos encontrados desenhados
             mensagem = "O diretório foi criado sob o nome: " + event.getFolder() + Constants.QUEBRA_LINHA + "Total de ovos: " + event.getResult();
             JOptionPane.showMessageDialog(jPanel1, mensagem);
-            this.savingFolder = new File(event.getResult());
+            this.savingFolder = new File(event.getFolder());
             mainContext.getPanelTabHelper().setCurrentTabProcessing(false);
             pageController.onNextFrameInAutomatic(jLabel4,
                     jTabbedPane2,
@@ -1331,7 +1329,7 @@ public class MainPage extends javax.swing.JFrame {
                 throw new TabNotValidToEvaluationException(Constants.ERROR_TAB_NOT_VALID_TO_EVALUATE_ENG_1);
             }
 
-            final File file = this.selectionController.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), jTabbedPane1, false);
+            final File file = this.fileEvent.onFileSelectionEvent(mainContext.getPanelTabHelper().isCurrentTabProcessing(), evt.getActionCommand(), false);
 
             if (file != null) {
                 mainContext.setReportOrdered(file);
