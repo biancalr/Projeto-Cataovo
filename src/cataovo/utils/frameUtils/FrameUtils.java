@@ -7,7 +7,6 @@ package cataovo.utils.frameUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
-import cataovo.utils.frameUtils.FrameActions;
 import cataovo.wrappers.opencv.MatWrapper;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
@@ -21,10 +20,12 @@ import javax.swing.ImageIcon;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FrameUtils extends FrameActions {
+public class FrameUtils {
 
+    private final FrameActions frameActions;
+    
     public FrameUtils() {
-        
+        this.frameActions = new FrameActions();
     }
 
     /**
@@ -35,7 +36,7 @@ public class FrameUtils extends FrameActions {
      * @return a image with a drawn point circle.
      */
     public Icon drawCircle(final Frame frame, final PointWrapper point) {
-        return new ImageIcon(super.circle(frame, point).convertToImg());
+        return new ImageIcon(this.frameActions.circle(frame, point).convertToImg());
     }
 
     /**
@@ -46,7 +47,7 @@ public class FrameUtils extends FrameActions {
      * @return a image with a drawn rectangle.
      */
     public Icon drawRectangle(final Frame frame, final RectWrapper rectangle) {
-        return new ImageIcon(super.rectangle(frame, rectangle).convertToImg());
+        return new ImageIcon(this.frameActions.rectangle(frame, rectangle).convertToImg());
     }
 
     /**
@@ -57,7 +58,7 @@ public class FrameUtils extends FrameActions {
      * @see FrameUtils#rectangle(cataovo.entities.Frame, cataovo.wrappers.lib.RectWrapper)
      */
     public Icon updateGrids(final Frame frame) {
-        return new ImageIcon(super.update(frame).convertToImg());
+        return new ImageIcon(this.frameActions.update(frame).convertToImg());
     }
 
     /**
@@ -71,7 +72,7 @@ public class FrameUtils extends FrameActions {
      */
     public Icon getSubframe(final Frame frame, final Point begin, final Point end) {
         final RectWrapper rectWrapper = new RectWrapper(
-                super.grid(new PointWrapper(begin), new PointWrapper(end)));
+                this.frameActions.grid(new PointWrapper(begin), new PointWrapper(end)));
         final MatWrapper mat = new MatWrapper(frame).submat(rectWrapper);
         return new ImageIcon(mat.convertToImg());
     }
@@ -86,8 +87,8 @@ public class FrameUtils extends FrameActions {
     public Icon drawPolygons(final Frame frame, final Collection<RectWrapper> rects,
             final List<List<PointWrapper>> circles) {
         MatWrapper mat = new MatWrapper(frame);
-        mat = super.multipleRects(mat, rects);
-        mat = super.multipleCircles(mat, circles);
+        mat = this.frameActions.multipleRects(mat, rects);
+        mat = this.frameActions.multipleCircles(mat, circles);
         return new ImageIcon(mat.convertToImg());
     }
 
