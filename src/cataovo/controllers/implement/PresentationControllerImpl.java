@@ -12,7 +12,7 @@ import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
 import cataovo.resources.MainContext;
-import cataovo.utils.presentationUtils.PresentationUtils;
+import cataovo.utils.frameUtils.FrameUtils;
 import cataovo.wrappers.opencv.PointWrapper;
 import cataovo.wrappers.opencv.RectWrapper;
 import java.util.List;
@@ -34,12 +34,12 @@ public class PresentationControllerImpl implements PresentationController {
      */
     private Point initialPoint = null;
     
-    private final PresentationUtils frameUtils;
+    private final FrameUtils frameUtils;
     private final MainContext mainContext;
     
     public PresentationControllerImpl(MainContext mainContext) {
         clickCount = 0;
-        frameUtils = new PresentationUtils();
+        frameUtils = new FrameUtils();
         this.mainContext = mainContext;
     }
 
