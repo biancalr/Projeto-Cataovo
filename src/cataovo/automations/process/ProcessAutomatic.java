@@ -68,6 +68,7 @@ public class ProcessAutomatic extends BasicProcess {
                     35, 17, 2);
 
             // contours
+            LOG.log(Level.INFO, "Drawing contours...");
             final Map<Integer, List<List<Point>>> result = current.drawContours(dstny + Constants.CONTOURS_PNG,
                     new MatWrapper(getFrame()), 800, 5000);
 
@@ -83,8 +84,8 @@ public class ProcessAutomatic extends BasicProcess {
         final StringBuffer builder = new StringBuffer();
 
         result.entrySet().forEach(entry -> {
-            var key = entry.getKey();
-            var val = entry.getValue();
+            Integer key = entry.getKey();
+            List<List<Point>> val = entry.getValue();
 
             builder.append(Integer.toString(key));
 

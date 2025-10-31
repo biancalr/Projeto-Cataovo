@@ -6,24 +6,16 @@
 package cataovo.wrappers.opencv;
 
 import cataovo.entities.Frame;
-import cataovo.utils.Constants;
-import cataovo.utils.enums.FileExtension;
 import cataovo.utils.conversion.Conversions;
-import java.awt.Color;
+import cataovo.utils.enums.FileExtension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -42,6 +34,7 @@ public final class MatWrapper {
     private Mat mat;
     private String location;
     private final Conversions conversions;
+    private final MatHelper helper;
 
     public MatWrapper() {
         this.location = null;
@@ -49,6 +42,7 @@ public final class MatWrapper {
         this.HEIGHT = 0;
         this.mat = new Mat(new Size(WIDTH, HEIGHT), DEPTH);
         this.conversions = new Conversions();
+        this.helper = new MatHelper();
     }
 
     public MatWrapper(final Mat m, final String location) {
@@ -57,6 +51,7 @@ public final class MatWrapper {
         this.WIDTH = this.mat.width();
         this.HEIGHT = this.mat.height();
         this.conversions = new Conversions();
+        this.helper = new MatHelper();
     }
 
     public MatWrapper(final Frame frame) {
@@ -65,6 +60,7 @@ public final class MatWrapper {
         this.WIDTH = this.mat.width();
         this.HEIGHT = this.mat.height();
         this.conversions = new Conversions();
+        this.helper = new MatHelper();
     }
 
     public String getLocation() {
@@ -185,19 +181,6 @@ public final class MatWrapper {
     }
 
     /**
-     * Saves the resulted image from any step.
-     *
-     * @param dstn the image transformed.
-     * @param savingPath directory where the transformed image will be saved.
-     * @return <code>True</code> if the saving was ok, <code>False</code>
-     * otherwise.
-     */
-    private void saveImage(Mat dstn, String savingPath) throws IOException {
-        final BufferedImage image = new MatWrapper(dstn, savingPath).convertToPng();
-        ImageIO.write(image, FileExtension.PNG.toString().toLowerCase(), new File(savingPath));
-    }
-
-    /**
      *
      * @param savingPath
      * @param ksize_width
@@ -206,15 +189,10 @@ public final class MatWrapper {
      * @throws IOException
      */
     public MatWrapper applyBlur(final String savingPath, final int ksize_width, final int ksize_height) throws IOException {
-        Mat toBlur = this.mat.clone();
-        saveImage(toBlur, savingPath.replace(Constants.BLUR_PNG, Constants.ORIGINAL_PNG));
-        Mat dstn = Mat.zeros(toBlur.size(), CvType.CV_8UC1);
-        Imgproc.cvtColor(toBlur, dstn, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.blur(dstn, dstn, new Size(ksize_width, ksize_height));
-        saveImage(dstn, savingPath);
-        MatWrapper temp = this;
-        temp.setOpencvMat(dstn);
-        return temp;
+        MatWrapper aux = this;
+        this.setOpencvMat(
+                this.helper.applyBlur(this.mat.clone(), savingPath, ksize_width, ksize_height));
+        return aux;
     }
 
     /**
@@ -224,22 +202,8 @@ public final class MatWrapper {
      * @throws IOException
      */
     public MatWrapper applyBinary(final String savingPath) throws IOException {
-        final var buffImgToBinary = convertToPng();
-        Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC1);
-        for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
-            for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
-                Color colores = new Color(buffImgToBinary.getRGB(i, j));
-                double pixelColor = colores.getRed();
-                if (pixelColor > 75) {
-                    dstn.put(j, i, Constants.WHITE);
-                } else {
-                    dstn.put(j, i, Constants.BLACK);
-                }
-            }
-        }
-        saveImage(dstn, savingPath);
         MatWrapper temp = this;
-        temp.setOpencvMat(dstn);
+        temp.setOpencvMat(this.helper.applyBinary(convertToPng(), savingPath));
         return temp;
     }
 
@@ -253,13 +217,8 @@ public final class MatWrapper {
      * @throws IOException
      */
     public MatWrapper applyMorph(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation) throws IOException {
-        final Mat result = this.mat.clone();
-        final Mat dstn = Mat.zeros(result.size(), result.type());
-        final Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(structuringElementWidth, structuringElementHeight));
-        Imgproc.morphologyEx(result.clone(), dstn, morphologicalOperation, structuringElement);
-        saveImage(dstn, savingPath);
         MatWrapper temp = this;
-        temp.setOpencvMat(dstn);
+        temp.setOpencvMat(this.helper.applyMorph(this.mat.clone(), savingPath, structuringElementWidth, structuringElementHeight, morphologicalOperation));
         return temp;
     }
 
@@ -273,48 +232,7 @@ public final class MatWrapper {
      * @throws IOException
      */
     public Map<Integer, List<List<cataovo.entities.Point>>> drawContours(String savingPath, MatWrapper imageToDraw, int minSizeArea, int maxSizeArea) throws IOException {
-        int numOfContours = 0;
-        Mat result = imageToDraw.getOpencvMat();
-        final List<MatOfPoint> contours = findContours(this.mat.clone());
-        final List<MatOfPoint> foundContours = new ArrayList<>();
-        for (int i = 0; i < contours.size(); i++) {
-            double contourArea = new MatOfPointWrapper(contours.get(i).toList().stream().map(p -> {
-                PointWrapper pointWrapper = new PointWrapper(p);
-                return pointWrapper.getPoint();
-            }).collect(Collectors.toList())).getArea();
-
-            if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
-                numOfContours++;
-                if (contourArea > 3000) {
-                    numOfContours++;
-                }
-                foundContours.add(contours.get(i));
-
-                Imgproc.drawContours(result, contours, i, new Scalar(0, 200, 0), 2, 8, new Mat(), 0, new Point(0, 0));
-            }
-        }
-
-        final var list = foundContours.stream().map(c -> c.toList().stream().map(p -> {
-            PointWrapper pointWrapper = new PointWrapper(p);
-            return pointWrapper.getPoint();
-        }).collect(Collectors.toList())).toList();
-
-        saveImage(result, savingPath);
-        return Map.of(numOfContours, list);
-    }
-
-    /**
-     * Look for object detecting each boundary from the image
-     *
-     * @param src the image to find the contours.
-     * @return the list of found contours
-     * @see #drawContoursOnImage(java.lang.String, org.opencv.core.Mat,
-     * org.opencv.core.Mat, int, int)
-     */
-    public List<MatOfPoint> findContours(Mat src) {
-        List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(src, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-        return contours;
+        return this.helper.drawContours(this.mat.clone(), savingPath, imageToDraw, minSizeArea, maxSizeArea);
     }
 
     /**

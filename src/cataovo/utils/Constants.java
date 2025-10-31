@@ -179,7 +179,7 @@ public class Constants {
     /**
      * PERCENTAGE OF TRUE POSITIVE
      */
-    public static final int CALCULATE_METHOD_TRUE_POSITIVE = 0;
+    public static final int CALCULATE_METHOD_RECALL = 0;
     /**
      * PERCENTAGE OF FALSE POSITIVE
      */
@@ -200,6 +200,17 @@ public class Constants {
      * PERCENTAGE OF ACCURACY
      */
     public static final int CALCULATE_METHOD_ACCURACY = 5;
+    
+    /**
+     * PERCENTAGE OF SPECIFICITY
+     */
+    public static final int CALCULATE_METHOD_SPECIFICITY = 6;
+    
+    /**
+     * PERCENTAGE OF PRECISION
+     */
+    public static final int CALCULATE_METHOD_F1_SCORE = 7;
+    
     
     /**
      * Type value indicating that the <code>JFileChooser</code> supports an

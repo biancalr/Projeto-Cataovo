@@ -30,7 +30,7 @@ public final class Frame implements Cloneable, Serializable {
      * The list of the regions wich indicates an egg of mosquito. A demarked
      * region must contain an egg in it
      */
-    private Set<Region> regionsContainingEggs;
+    private Set<Region> regions;
 
     /**
      * The file of the frame;
@@ -47,8 +47,8 @@ public final class Frame implements Cloneable, Serializable {
         if (fileIsAValidImageFrom(filePath)) {
             this.paletteFrame = new File(filePath);
             this.name = chopName(filePath);
-            if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new HashSet<>();
+            if (this.regions == null) {
+                this.regions = new HashSet<>();
             }
         } else {
             throw new ImageNotValidException(Constants.ERROR_IMAGE_NOT_VALID_ENG_1);
@@ -60,7 +60,7 @@ public final class Frame implements Cloneable, Serializable {
      * Empty Constructor
      */
     public Frame() {
-        this.regionsContainingEggs = new HashSet<>();
+        this.regions = new HashSet<>();
         this.name = "";
     }
 
@@ -84,16 +84,16 @@ public final class Frame implements Cloneable, Serializable {
      *
      * @return the regions with eggs in it
      */
-    public Set<Region> getRegionsContainingEggs() {
-        return regionsContainingEggs;
+    public Set<Region> getRegions() {
+        return regions;
     }
 
     /**
      *
-     * @param regionsContainingEggs regions with eggs in it.
+     * @param regions regions with eggs in it.
      */
-    public void setRegionsContainingEggs(Set<Region> regionsContainingEggs) {
-        this.regionsContainingEggs = regionsContainingEggs;
+    public void setRegions(Set<Region> regions) {
+        this.regions = regions;
     }
 
     /**
@@ -119,10 +119,10 @@ public final class Frame implements Cloneable, Serializable {
      * Empty. 0 otherwise.
      */
     public int getTotalNumberOfEggsFrame() {
-        if (this.regionsContainingEggs == null || regionsContainingEggs.isEmpty()) {
+        if (this.regions == null || regions.isEmpty()) {
             return 0;
         } else {
-            return regionsContainingEggs.size();
+            return regions.size();
         }
     }
 
@@ -131,7 +131,7 @@ public final class Frame implements Cloneable, Serializable {
         StringBuffer sb = new StringBuffer();
         sb.append(",")
                 .append(name)
-                .append(regionsContainingEggs.toString());
+                .append(regions.toString());
         return sb.toString();
     }
 
@@ -147,14 +147,14 @@ public final class Frame implements Cloneable, Serializable {
 
         Frame frame = (Frame) obj;
         return Objects.equals(frame.name, name)
-                && Objects.equals(frame.regionsContainingEggs, regionsContainingEggs);
+                && Objects.equals(frame.regions, regions);
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 11 * hash + Objects.hashCode(this.name);
-        hash = 11 * hash + Objects.hashCode(this.regionsContainingEggs);
+        hash = 11 * hash + Objects.hashCode(this.regions);
         return hash;
     }
 

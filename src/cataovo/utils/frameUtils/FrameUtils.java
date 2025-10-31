@@ -40,7 +40,7 @@ public class FrameUtils {
     public final MatWrapper circle(final Frame frame, final PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
         MatWrapper matWrapper;
-        if (!frame.getRegionsContainingEggs().isEmpty()) {
+        if (!frame.getRegions().isEmpty()) {
             matWrapper = update(frame);
         } else {
             matWrapper = new MatWrapper(frame);
@@ -64,7 +64,7 @@ public class FrameUtils {
         final PointWrapper pointWrapper;
         final PointWrapper pw2;
         matWrapper = new MatWrapper(frame);
-        if (!frame.getRegionsContainingEggs().isEmpty()) {
+        if (!frame.getRegions().isEmpty()) {
             matWrapper = update(frame);
         }
         pointWrapper = new PointWrapper(
@@ -73,7 +73,7 @@ public class FrameUtils {
         pw2 = new PointWrapper(new Point(
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
-        frame.getRegionsContainingEggs().add(grid(pointWrapper, pw2));
+        frame.getRegions().add(grid(pointWrapper, pw2));
         return matWrapper.rectangle(pointWrapper, pw2);
 
     }
@@ -105,7 +105,7 @@ public class FrameUtils {
     public final MatWrapper update(final Frame frame) {
         PointWrapper pw1, pw2;
         MatWrapper mw = new MatWrapper(frame);
-        for (Region r : frame.getRegionsContainingEggs()) {
+        for (Region r : frame.getRegions()) {
             pw1 = new PointWrapper(
                     new Point(r.getInitialPoint().getX(),
                             r.getInitialPoint().getY()));

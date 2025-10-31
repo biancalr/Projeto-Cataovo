@@ -94,7 +94,7 @@ public class FrameControllerImpl implements FrameController {
      */
     private Icon paintGridOnFrame(Region region, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
         final Icon icon = new ImageIcon(this.frameUtils.rectangle(currentFrame, new RectWrapper(region)).convertToImg());
-        mainContext.getCurrentFrame().getRegionsContainingEggs().addAll(currentFrame.getRegionsContainingEggs());
+        mainContext.getCurrentFrame().getRegions().addAll(currentFrame.getRegions());
         return icon;
     }
 
@@ -108,11 +108,11 @@ public class FrameControllerImpl implements FrameController {
     @Override
     public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
-        if (currentFrame.getRegionsContainingEggs().isEmpty()) {
+        if (currentFrame.getRegions().isEmpty()) {
             return new ImageIcon(this.frameUtils.update(currentFrame).convertToImg());
         } else {
-            mainContext.getCurrentFrame().getRegionsContainingEggs().remove(
-                    (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
+            mainContext.getCurrentFrame().getRegions().remove(
+                    (Region) currentFrame.getRegions().toArray()[currentFrame.getRegions().size() - 1]
             );
             return new ImageIcon(this.frameUtils.update(currentFrame).convertToImg());
         }

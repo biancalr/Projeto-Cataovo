@@ -5,59 +5,78 @@
 package cataovo.utils.mathUtils;
 
 import cataovo.utils.Constants;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 /**
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
 public class PercentUtils {
 
+    /**
+     * 
+     * @param method
+     * @param strValue1
+     * @param strValue2
+     * @return 
+     */
     public String getPercentageOf(final int method, final String strValue1, final String strValue2) {
-        // TVP = VP / (FN+VP)
-        // TFP = FP / (VN+FP)
-        // TVN = VN / (FP+VN)
-        // TFN = FN / (VP+FN)
         float value1 = Float.parseFloat(strValue1);
         float value2 = Float.parseFloat(strValue2);
-        final PercentCalculate calcUtils = new PercentCalculate();
+        final PercentCalculate calculate = new PercentCalculate();
 
         switch (method) {
-            case Constants.CALCULATE_METHOD_TRUE_POSITIVE -> { // TVP = VP / (FN+VP)
-                return calcUtils.calculate(PercentMethods.RECALL, value1, value2, null, null);
-            }
-            case Constants.CALCULATE_METHOD_FALSE_POSITIVE -> { // TFP = FP / (VN+FP)
-                return calcUtils.calculate(PercentMethods.BASIC_FORMULA, value1, value2, null, null);
-            }
-            case Constants.CALCULATE_METHOD_TRUE_NEGATIVE -> { // TVN = VN / (FP+VN)
-                return calcUtils.calculate(PercentMethods.BASIC_FORMULA, value1, value2, null, null);
-            }
-            case Constants.CALCULATE_METHOD_FALSE_NEGATIVE -> { // TFN = FN / (VP+FN)
-                return calcUtils.calculate(PercentMethods.BASIC_FORMULA, value1, value2, null, null);
+            case Constants.CALCULATE_METHOD_RECALL -> { // TVP = VP / (FN+VP)
+                return calculate.calculate(PercentMethods.RECALL, value1, value2);
             }
             case Constants.CALCULATE_METHOD_PRECISION -> {
-                return calcUtils.calculate(PercentMethods.PRECISION, value1, value2, null, null);
+                return calculate.calculate(PercentMethods.PRECISION, value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_SPECIFICITY -> {
+                return calculate.calculate(PercentMethods.SPECIFICITY, value1, value2);
             }
             default -> {
-                throw new AssertionError();
+                return "";
             }
         }
     }
 
-    public String getPercentageOf(final int method, final String strValue1, final String strValue2, final String strValue3, final String strValue4) {
-        float value1 = Integer.parseInt(strValue1);
-        float value2 = Integer.parseInt(strValue2);
-        float value3 = Integer.parseInt(strValue3);
-        float value4 = Integer.parseInt(strValue4);
-        final PercentCalculate calcUtils = new PercentCalculate();
+    /**
+     * 
+     * @param method
+     * @param truePositive
+     * @param trueNegative
+     * @param falsePositive
+     * @param falseNegative
+     * @return 
+     */
+    public String getPercentageOf(final int method, final String truePositive, final String trueNegative, final String falsePositive, final String falseNegative) {
+        float truePositiveNumber = Integer.parseInt(truePositive);
+        float trueNegativeNumber = Integer.parseInt(trueNegative);
+        float falsePositiveNumber = Integer.parseInt(falsePositive);
+        float falseNegativeNumber = Integer.parseInt(falseNegative);
 
+        final float result = getPercentageOf(method, truePositiveNumber, trueNegativeNumber, falsePositiveNumber, falseNegativeNumber);
+        final DecimalFormat decimalFormat = new DecimalFormat(Constants.DECIMAL_FORMAT);
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+
+        return decimalFormat.format(result);
+    }
+
+    private float getPercentageOf(final int method, float truePositiveNumber, float trueNegativeNumber, float falsePositiveNumber, float falseNegativeNumber) throws AssertionError {
         switch (method) {
             case Constants.CALCULATE_METHOD_ACCURACY -> {
-                return calcUtils.calculate(PercentMethods.ACCURACY, value1, value2, value3, value4);
+                return (truePositiveNumber + trueNegativeNumber) / (truePositiveNumber + trueNegativeNumber + falsePositiveNumber + falseNegativeNumber);
+            }
+            case Constants.CALCULATE_METHOD_F1_SCORE -> {
+                float precision = Float.parseFloat(getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, Float.toString(truePositiveNumber), Float.toString(falsePositiveNumber)).replace(",", "."));
+                float recall = Float.parseFloat(getPercentageOf(Constants.CALCULATE_METHOD_RECALL, Float.toString(truePositiveNumber), Float.toString(falseNegativeNumber)).replace(",", "."));
+                return 2 * ((precision * recall) / (precision + recall));
             }
             default -> {
-                throw new AssertionError();
+                return 0;
             }
         }
-
     }
 }

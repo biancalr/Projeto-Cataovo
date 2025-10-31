@@ -48,12 +48,11 @@ public class SaveEvaluationMode extends BasicSave {
         sb.append("Falso Negativo: ").append(resultLineSplitted[1]).append(Constants.QUEBRA_LINHA);
         sb.append("Verdadeiro Negativo: ").append(resultLineSplitted[3]).append(Constants.QUEBRA_LINHA);
         sb.append(Constants.QUEBRA_LINHA);
-        sb.append("Recall: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, resultLineSplitted[0], resultLineSplitted[1])).append(Constants.QUEBRA_LINHA);
-        sb.append("Falso Positivo: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_POSITIVE, resultLineSplitted[2], resultLineSplitted[3])).append(Constants.QUEBRA_LINHA);
-        sb.append("Falso Negativo: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_NEGATIVE, resultLineSplitted[1], resultLineSplitted[0])).append(Constants.QUEBRA_LINHA);
-        sb.append("Verdadeiro Negativo: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_NEGATIVE, resultLineSplitted[3], resultLineSplitted[2])).append(Constants.QUEBRA_LINHA);
+        sb.append("Recall: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_RECALL, resultLineSplitted[0], resultLineSplitted[1])).append(Constants.QUEBRA_LINHA);
         sb.append("Acurácia: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_ACCURACY, resultLineSplitted[0], resultLineSplitted[3], resultLineSplitted[2], resultLineSplitted[1])).append(Constants.QUEBRA_LINHA);
         sb.append("Precisão: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, resultLineSplitted[0], resultLineSplitted[2])).append(Constants.QUEBRA_LINHA);
+        sb.append("Especificidade: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_SPECIFICITY, resultLineSplitted[3], resultLineSplitted[2])).append(Constants.QUEBRA_LINHA);
+        sb.append("F1 Score: ").append(percentCalculation.getPercentageOf(Constants.CALCULATE_METHOD_F1_SCORE, resultLineSplitted[0], resultLineSplitted[3], resultLineSplitted[2], resultLineSplitted[1])).append(Constants.QUEBRA_LINHA);
         LOG.info(sb.toString());
         return sb.toString();
     }

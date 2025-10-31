@@ -40,8 +40,8 @@ public final class SaveManualMode extends BasicSave {
         getPalette().getFrames().stream().forEach((f) -> {
             sb.append(Constants.QUEBRA_LINHA);
             sb.append(f.getName());
-            if (!f.getRegionsContainingEggs().isEmpty()) {
-                f.getRegionsContainingEggs().stream().map((r) -> {
+            if (!f.getRegions().isEmpty()) {
+                f.getRegions().stream().map((r) -> {
                     sb.append(",");
                     sb.append(r.getInitialPoint().getX());
                     return r;
