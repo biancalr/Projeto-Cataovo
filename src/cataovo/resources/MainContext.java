@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.filechooser.FileSystemView;
 
 /**
  * Resources used in the applications as a whole.

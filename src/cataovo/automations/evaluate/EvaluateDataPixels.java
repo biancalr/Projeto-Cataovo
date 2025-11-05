@@ -9,7 +9,7 @@ import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
-import cataovo.utils.fileUtils.readers.DataUtils;
+import cataovo.utils.frameUtils.FrameUtils;
 import cataovo.wrappers.opencv.MatOfPointWrapper;
 import cataovo.wrappers.opencv.MatWrapper;
 import java.util.ArrayList;
@@ -26,11 +26,11 @@ public class EvaluateDataPixels extends BasicEvaluate {
 
     private static final Logger LOG = Logger.getLogger(EvaluateDataPixels.class.getName());
 
-    private final DataUtils dataUtils;
+    private final FrameUtils frameUtils;
 
     public EvaluateDataPixels(String fileContentManual, String fileContentAuto, MainContext mainContext) {
         super(fileContentManual, fileContentAuto, mainContext);
-        this.dataUtils = new DataUtils();
+        this.frameUtils = new FrameUtils();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EvaluateDataPixels extends BasicEvaluate {
         float[] metrics = new float[4];
 
         //Separar a as regioes pela vírgula
-        final List<Region> regions = new ArrayList<>(dataUtils.split(Constants.RECT, regionsInFrame.split(Constants.SEPARATOR)));
+        final List<Region> regions = new ArrayList<>(frameUtils.split(Constants.RECT, regionsInFrame.split(Constants.SEPARATOR)));
         final List<Region> regionsAux = new CopyOnWriteArrayList<>(regions);
         //Separa as áreas dos ovos pela cerquilha
         final List<String> eggsString = new CopyOnWriteArrayList<>(List.of(pointsInFrame.split(Constants.OBJECT_SEPARATOR)));
@@ -84,7 +84,7 @@ public class EvaluateDataPixels extends BasicEvaluate {
             for (int e = 1; e < eggsString.size(); e++) {
                 eggLine = eggsString.get(e);
                 // Separar as coordenadas de um ovo pela vírgula
-                egg = dataUtils.split(Constants.CIRCLE, eggLine.split(Constants.SEPARATOR));
+                egg = frameUtils.split(Constants.CIRCLE, eggLine.split(Constants.SEPARATOR));
                 foundEggs.add(new CopyOnWriteArrayList<>(egg));
                 totalPointsOfSingleEgg = egg.size();
                 LOG.log(Level.INFO, "Total of points {0}", egg.size());

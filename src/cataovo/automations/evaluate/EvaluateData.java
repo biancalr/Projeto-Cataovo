@@ -9,7 +9,7 @@ import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
-import cataovo.utils.fileUtils.readers.DataUtils;
+import cataovo.utils.frameUtils.FrameUtils;
 import cataovo.wrappers.opencv.MatWrapper;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,11 +24,11 @@ public class EvaluateData extends BasicEvaluate {
 
     private static final Logger LOG = Logger.getLogger(EvaluateData.class.getName());
 
-    private final DataUtils dataUtils;
+    private final FrameUtils frameUtils;
 
     public EvaluateData(String fileContentManual, String fileContentAuto, MainContext mainContext) {
         super(fileContentManual, fileContentAuto, mainContext);
-        this.dataUtils = new DataUtils();
+        this.frameUtils = new FrameUtils();
     }
 
     /**
@@ -52,7 +52,7 @@ public class EvaluateData extends BasicEvaluate {
         final MatWrapper currentFrame = new MatWrapper(getMainContext().getCurrentFrame());
 
         //Separar a as regioes pela vírgula
-        final List<Region> regions = dataUtils.split(Constants.RECT, regionsInFrame.split(Constants.SEPARATOR));
+        final List<Region> regions = frameUtils.split(Constants.RECT, regionsInFrame.split(Constants.SEPARATOR));
         regionsCounter = regions.size();
         //Separa as áreas dos ovos pela cerquilha
         eggs = new CopyOnWriteArrayList<>(List.of(pointsInFrame.split(Constants.OBJECT_SEPARATOR)));
@@ -69,7 +69,7 @@ public class EvaluateData extends BasicEvaluate {
             for (int e = 1; e < eggs.size(); e++) {
                 String eggLine = eggs.get(e);
                 // Separar os pontos do ovo pela vírgula
-                points = dataUtils.split(Constants.CIRCLE, eggLine.split(Constants.SEPARATOR));
+                points = frameUtils.split(Constants.CIRCLE, eggLine.split(Constants.SEPARATOR));
                 Region rect;
                 int totalPontos = points.size();
                 LOG.log(Level.INFO, "Total of points {0}", points.size());

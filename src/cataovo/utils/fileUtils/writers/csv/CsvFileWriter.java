@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.utils.fileUtils.writers.csv.csvWriter;
+package cataovo.utils.fileUtils.writers.csv;
 
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
