@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  * Resources used in the applications as a whole.
@@ -36,9 +37,15 @@ public class MainContext {
     private final PanelTabHelper panelTabHelper;
     // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
     private String[] reports;
+    private final String homeDir = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+
 
     public MainContext() throws DirectoryNotValidException {
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
+    }
+
+    public String getHomeDir() {
+        return homeDir;
     }
 
     public Palette getPalette() {

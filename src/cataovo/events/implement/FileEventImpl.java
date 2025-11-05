@@ -9,6 +9,7 @@ import cataovo.events.FileEvent;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
+import cataovo.resources.MainContext;
 import cataovo.resources.fileChooser.FileFilterExtensions;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
@@ -29,8 +30,8 @@ public class FileEventImpl implements FileEvent {
     private static final Logger LOG = Logger.getLogger(FileEventImpl.class.getName());
     private final FileChooserUI fileChooser;
 
-    public FileEventImpl(final String fileChooserDirHome) throws DirectoryNotValidException {
-        fileChooser = new FileChooserUI(new File(fileChooserDirHome));
+    public FileEventImpl(final MainContext mainContext) throws DirectoryNotValidException {
+        fileChooser = new FileChooserUI(new File(mainContext.getHomeDir()));
     }
 
     /**

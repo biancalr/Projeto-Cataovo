@@ -53,8 +53,6 @@ public class MainPage extends javax.swing.JFrame {
 
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
 
-    private final String DIR_HOME = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
-
     private File savingFolder = null;
 
     private FileUtils fileUtils = null;
@@ -81,13 +79,13 @@ public class MainPage extends javax.swing.JFrame {
             this.resetInitialComponents();
             this.centralizeComponent();
 
-            LOG.log(Level.INFO, "Selecting home directory {}", DIR_HOME);
-            this.savingFolder = mainContext.getFileFolder(new File(DIR_HOME));
+            LOG.log(Level.INFO, "Selecting home directory {}", this.mainContext.getHomeDir());
+            this.savingFolder = mainContext.getFileFolder(new File(this.mainContext.getHomeDir()));
 
             this.pageController = new PageControllerImpl(mainContext);
             this.frameController = new FrameControllerImpl(mainContext);
 
-            this.fileEvent = new FileEventImpl(DIR_HOME);
+            this.fileEvent = new FileEventImpl(mainContext);
             this.autoEvent = new AutomaticEventImpl(mainContext);
             this.evalEvent = new EvaluationEventImpl(mainContext);
             this.manualEvent = new ManualEventImpl(mainContext);
@@ -329,7 +327,7 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     public void resetSavingFolder() throws DirectoryNotValidException {
-        this.savingFolder = mainContext.getFileFolder(new File(DIR_HOME));
+        this.savingFolder = mainContext.getFileFolder(new File(this.mainContext.getHomeDir()));
     }
 
     /**
