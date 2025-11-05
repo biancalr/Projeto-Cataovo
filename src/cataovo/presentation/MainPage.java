@@ -72,7 +72,7 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         LOG.log(Level.INFO, "Initializing application");
         try {
-            this.mainContext = new MainContext();
+            this.mainContext = new MainContext(FileSystemView.getFileSystemView().getHomeDirectory().getPath());
             this.fileUtils = new FileUtils();
             this.initComponents();
 

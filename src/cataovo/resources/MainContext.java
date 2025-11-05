@@ -37,10 +37,11 @@ public class MainContext {
     private final PanelTabHelper panelTabHelper;
     // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
     private String[] reports;
-    private final String homeDir = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+    private String homeDir = null;
 
 
-    public MainContext() throws DirectoryNotValidException {
+    public MainContext(final String homeDir) throws DirectoryNotValidException {
+        this.homeDir = homeDir;
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
 
