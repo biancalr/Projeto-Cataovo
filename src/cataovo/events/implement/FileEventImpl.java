@@ -54,7 +54,6 @@ public class FileEventImpl implements FileEvent {
      * </p>
      *
      * @param actionCommand comand that defines a dialog showing actions
-     * @param parent
      * @param isADirectoryOnly <code>True</code> if the selection mode is a
      * <code>DIRECTORY_ONLY</code> or <code>False</code> if the selection mode
      * is a <code>FILES_AND_DIRECTORIES</code>
