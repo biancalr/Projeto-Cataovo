@@ -26,11 +26,11 @@ import java.io.InputStreamReader;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FileUtils {
+public class CsvFileReader {
 
-    private static final Logger LOG = Logger.getLogger(FileUtils.class.getName());
+    private static final Logger LOG = Logger.getLogger(CsvFileReader.class.getName());
 
-    public FileUtils() {
+    public CsvFileReader() {
     }
 
     public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {

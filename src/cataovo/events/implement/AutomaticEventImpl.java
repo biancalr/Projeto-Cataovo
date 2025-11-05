@@ -14,7 +14,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
-import cataovo.utils.fileUtils.readers.FileUtils;
+import cataovo.utils.fileUtils.readers.CsvFileReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +43,7 @@ public class AutomaticEventImpl implements AutomaticEvent {
 
     private static final Logger LOG = Logger.getLogger(AutomaticEventImpl.class.getName());
 
-    private final FileUtils reader = new FileUtils();
+    private final CsvFileReader reader = new CsvFileReader();
     private final MainContext mainContext;
 
     private Event event;

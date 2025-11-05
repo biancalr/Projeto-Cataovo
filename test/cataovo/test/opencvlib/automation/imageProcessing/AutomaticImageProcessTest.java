@@ -6,7 +6,7 @@ package cataovo.test.opencvlib.automation.imageProcessing;
 
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
-import cataovo.utils.fileUtils.writers.csv.CsvFileWriter;
+import cataovo.utils.fileUtils.writers.CsvFileWriter;
 import cataovo.utils.conversion.Conversions;
 import cataovo.wrappers.opencv.MatWrapper;
 import java.awt.Color;

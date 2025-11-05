@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.utils.fileUtils.writers.csv;
+package cataovo.utils.fileUtils.writers;
 
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
 import cataovo.utils.Constants;
-import cataovo.utils.fileUtils.writers.WriteFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class CsvFileWriter implements WriteFile{
+public class CsvFileWriter {
 
     /**
      * Logging for CsvFileWriter
@@ -36,9 +35,7 @@ public class CsvFileWriter implements WriteFile{
      * @param folderLocation
      * @return the filepath's relatory.
      * @throws cataovo.exceptions.FileCsvWriterException
-     * @see #createContent()
      */
-    @Override
     public String createFile(final StringBuffer content, final String fileLocation, final String folderLocation) throws FileCsvWriterException {
         StringBuffer sb = new StringBuffer();
         File directory = new File(folderLocation);
@@ -71,7 +68,6 @@ public class CsvFileWriter implements WriteFile{
      * @return
      * @throws AutomationExecutionException 
      */
-    @Override
     public StringBuffer verifyAndAppendFileAreadyExistent(final String createdFile, final String palettePathName) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         File f = new File(createdFile);

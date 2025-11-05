@@ -9,11 +9,10 @@ import cataovo.exceptions.AutomationExecutionException;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import cataovo.utils.enums.ProcessingMode;
-import cataovo.utils.fileUtils.writers.csv.CsvFileWriter;
+import cataovo.utils.fileUtils.writers.CsvFileWriter;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import cataovo.utils.fileUtils.writers.WriteFile;
 
 /**
  *
@@ -24,7 +23,7 @@ public abstract class BasicSave implements Callable<String> {
     /**
      * Csv File WriteFile
      */
-    private final WriteFile csvFileWriter;
+    private final CsvFileWriter csvFileWriter;
     /**
      * Logging for CsvFileWriter
      */

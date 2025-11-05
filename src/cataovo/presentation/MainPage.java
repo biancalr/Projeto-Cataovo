@@ -28,7 +28,7 @@ import cataovo.exceptions.TabNotValidToEvaluationException;
 import cataovo.resources.MainContext;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
-import cataovo.utils.fileUtils.readers.FileUtils;
+import cataovo.utils.fileUtils.readers.CsvFileReader;
 import cataovo.utils.mathUtils.PercentUtils;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -55,7 +55,7 @@ public class MainPage extends javax.swing.JFrame {
 
     private File savingFolder = null;
 
-    private FileUtils fileUtils = null;
+    private CsvFileReader fileUtils = null;
     private MainContext mainContext = null;
 
     private PageController pageController = null;
@@ -73,7 +73,7 @@ public class MainPage extends javax.swing.JFrame {
         LOG.log(Level.INFO, "Initializing application");
         try {
             this.mainContext = new MainContext(FileSystemView.getFileSystemView().getHomeDirectory().getPath());
-            this.fileUtils = new FileUtils();
+            this.fileUtils = new CsvFileReader();
             this.initComponents();
 
             this.resetInitialComponents();
