@@ -59,9 +59,9 @@ public class EvaluationEventImpl implements EvaluationEvent {
 
             task = executorService.submit(automation);
             String evaluationResult = task.get();
-            executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
             LOG.log(Level.INFO, "Calculating results in evaluation {0}", Arrays.toString(evaluationResult.split(Constants.QUEBRA_LINHA)));
             event = new Event(saveReport(palette, savingDirectory, fileExtension, tabName, evaluationResult), evaluationResult);
+            executorService.shutdown();
             return event;
         } catch (InterruptedException | ExecutionException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);

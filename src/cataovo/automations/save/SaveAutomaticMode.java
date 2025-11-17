@@ -12,13 +12,17 @@ import cataovo.exceptions.AutomationExecutionException;
 import cataovo.utils.Constants;
 import cataovo.utils.enums.FileExtension;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,18 +104,20 @@ public final class SaveAutomaticMode extends BasicSave {
      */
     private StringBuffer processFrameImages(Queue<Frame> frames, String destination) throws ExecutionException, InterruptedException {
         StringBuffer result = new StringBuffer();
-        Future<String> task;
-        BasicProcess framesProcessor;
-        ExecutorService executorService;
-        for (Frame frame : frames) {
-            executorService = Executors.newSingleThreadExecutor();
-            framesProcessor = new ProcessAutomatic(frame, destination);
-            task = executorService.submit(framesProcessor);
-            synchronized (task) {
-                result.append(task.get());
+        Collection<BasicProcess> framesProcessor = new ArrayList<>();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        frames.forEach(frame -> framesProcessor.add(new ProcessAutomatic(frame, destination)));
+        final List<Future<String>> process = executor.invokeAll(framesProcessor);
+        
+        process.forEach(p -> {
+            try {
+                result.append(p.get(1, TimeUnit.MILLISECONDS));
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                LOG.log(Level.SEVERE, null, ex);
             }
-            executorService.awaitTermination(1, TimeUnit.MICROSECONDS);
-        }
+        });
+        
         return result;
     }
 
@@ -149,14 +155,14 @@ public final class SaveAutomaticMode extends BasicSave {
 
         Queue<Frame> subQueue = new LinkedList<>();
         Object[] auxToSplit = toSplit.toArray();
-        int limit = calculatRange(slotRangeControl, range, auxToSplit.length);
+        int limit = updateRange(slotRangeControl, range, auxToSplit.length);
         if (slotRangeControl != limit) {
             for (int i = this.slotRangeControl; i < limit; i++) {
                 Object object = auxToSplit[i];
                 subQueue.offer((Frame) object);
             }
         }
-        slotRangeControl = calculatRange(slotRangeControl, range, auxToSplit.length);
+        slotRangeControl = updateRange(slotRangeControl, range, auxToSplit.length);
         return subQueue;
     }
 
@@ -166,7 +172,7 @@ public final class SaveAutomaticMode extends BasicSave {
      * @param length
      * @return
      */
-    private int calculatRange(int begin, int range, int length) {
+    private int updateRange(int begin, int range, int length) {
         return (begin + range) <= length ? (begin + range) : length;
     }
 }

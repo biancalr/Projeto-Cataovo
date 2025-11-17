@@ -80,7 +80,7 @@ public class MainPage extends javax.swing.JFrame {
             this.centralizeComponent();
 
             LOG.log(Level.INFO, "Selecting home directory {}", this.mainContext.getHomeDir());
-            this.savingFolder = mainContext.getFileFolder(new File(this.mainContext.getHomeDir()));
+            resetSavingFolder();
 
             this.pageController = new PageControllerImpl(mainContext);
             this.frameController = new FrameControllerImpl(mainContext);
@@ -326,7 +326,7 @@ public class MainPage extends javax.swing.JFrame {
         return numberOfEvaluationReports;
     }
 
-    public void resetSavingFolder() throws DirectoryNotValidException {
+    public final void resetSavingFolder() throws DirectoryNotValidException {
         this.savingFolder = mainContext.getFileFolder(new File(this.mainContext.getHomeDir()));
     }
 
@@ -1243,8 +1243,9 @@ public class MainPage extends javax.swing.JFrame {
                 mainContext.setReports(new String[2]);
                 cleanTabs();
                 cleanTexts();
+                resetSavingFolder();
             }
-        } catch (Exception ex) {
+        } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }

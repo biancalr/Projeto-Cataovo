@@ -56,30 +56,30 @@ public class AutomaticEventImpl implements AutomaticEvent {
 
     @Override
     public Event execute(final Palette currentPalette, final String savingFolderPath, final String tabName) throws DirectoryNotValidException, AutomationExecutionException {
+        String result = "";
+        BasicSave automation;
+        final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
+        Future<String> task;
+        mainContext.getPanelTabHelper().setCurrentTabProcessing(true);
+        
         try {
-            List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
-            String result = "";
-            BasicSave automation;
-            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
-            Future<String> task;
-            ExecutorService executorService;
-
-            mainContext.getPanelTabHelper().setCurrentTabProcessing(true);
+            final List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
+            final ExecutorService executorService = Executors.newFixedThreadPool(splitted.size());
 
             for (Palette palette : splitted) {
-                executorService = Executors.newSingleThreadExecutor();
+
                 automation = new SaveAutomaticMode(
                         palette,
                         savingFolderPath,
                         FileExtension.CSV,
                         tabName, dateTime);
                 task = executorService.submit(automation);
+                executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
                 synchronized (task) {
                     result = task.get();
                 }
-                executorService.awaitTermination(1, TimeUnit.MICROSECONDS);
             }
-
+            executorService.shutdown();
             this.slotRangeControl = 0;
             event = new Event(result, wrapProcess(result));
             return event;
